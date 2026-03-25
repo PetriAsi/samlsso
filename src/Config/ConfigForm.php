@@ -285,7 +285,9 @@ class ConfigForm    //NOSONAR complexity by design.
                                                 configEntity::ENCRYPT_NAMEID,
                                                 configEntity::SIGN_AUTHN,
                                                 configEntity::SIGN_SLO_REQ,
-                                                configEntity::SIGN_SLO_RES]];
+                                                configEntity::SIGN_SLO_RES],
+                      'scim_warning'        => [configEntity::SCIM_ACTIVE,
+                                                configEntity::SCIM_TOKEN]];
         // Parse config fields
         // https://github.com/DonutsNL/samlsso/issues/27
         // Make sure all tabs are present for twig.
@@ -351,6 +353,7 @@ class ConfigForm    //NOSONAR complexity by design.
             'acsUrl'                    =>  PLUGIN_SAMLSSO_WEBDIR.SamlSsoController::ACS_ROUTE.'/'.$fields[ConfigEntity::ID][ConfigItem::VALUE],
             'metaUrl'                   =>  PLUGIN_SAMLSSO_WEBDIR.SamlSsoController::META_ROUTE.'/'.$fields[ConfigEntity::ID][ConfigItem::VALUE],
             'sloUrl'                    =>  PLUGIN_SAMLSSO_WEBDIR.SamlSsoController::SLO_ROUTE.'/'.$fields[ConfigEntity::ID][ConfigItem::VALUE],
+            'scimUrl'                   =>  PLUGIN_SAMLSSO_WEBDIR.SamlSsoController::SCIM_ROUTE.'/'.$fields[ConfigEntity::ID][ConfigItem::VALUE],
             'inputOptionsBool'          =>  [ 1                                 => __('Yes', PLUGIN_NAME),
                                               0                                 => __('No', PLUGIN_NAME)],
             'inputOptionsNameFormat'    =>  [Saml2Const::NAMEID_UNSPECIFIED     => __('Unspecified', PLUGIN_NAME),

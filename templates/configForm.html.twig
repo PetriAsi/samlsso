@@ -100,6 +100,17 @@
                    aria-controls="logging" 
                    aria-selected="false"><b>{{ __('Logging') }}</b></a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link"
+                   id="scim-tab" 
+                   data-bs-toggle="tab" 
+                   href="#scim" 
+                   data-bs-target="#scim" 
+                   type="button" 
+                   role="tab" 
+                   aria-controls="scim" 
+                   aria-selected="false"><b>{{ __('SCIM', plugin) }} {{ scim_warning }}</b></a>
+            </li>
         </ul>
         <div class="tab-content flex-fill glpisaml" id="myTabContent">
            <!-- ################################################################################-->
@@ -828,6 +839,65 @@
                                 </tr>
                                 {% endfor %}
                             </table>
+                        </div>
+                    </div>
+                </div>
+            <!-- SCIM details -->
+            <div class="tab-pane fade" id="scim" role="tabpanel" aria-labelledby="scim-tab">
+                <div class="card-body">
+                    <div class="row g-2">
+                        <!-- scim_active -->
+                        <div>
+                            {% set error_helper %}
+                                {% if inputfields.scim_active.errors == true %}
+                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.scim_active.errors }}</div>
+                                {% endif %}
+                            {% endset %}
+                            {{ fields.sliderField(
+                                inputfields.scim_active.field,
+                                inputfields.scim_active.value,
+                                inputfields.scim_active.formtitle,
+                                {
+                                    'add_field_html': error_helper,
+                                    helper: inputfields.scim_active.formexplain,
+                                }
+                            ) }}
+                        </div>
+
+                        <!-- scim_token -->
+                        <div>
+                            {% set error_helper %}
+                                {% if inputfields.scim_token.errors == true %}
+                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.scim_token.errors }}</div>
+                                {% endif %}
+                            {% endset %}
+                            {{ fields.textField(
+                                inputfields.scim_token.field,
+                                inputfields.scim_token.value,
+                                inputfields.scim_token.formtitle,
+                                {
+                                    'add_field_html': error_helper,
+                                    helper: inputfields.scim_token.formexplain,
+                                }
+                            ) }}
+                        </div>
+
+                        <!-- SCIM URL -->
+                        <div>
+                            {% set clipboad %}
+                                <span class='btn btn-ghost-info' onclick="copyClip('ScimUrl')" onkeydown="copyClip('ScimUrl')">Copy SCIM Url to clipboard</span>
+                            {% endset %}
+                            {{ fields.textField(
+                                'ScimUrl', 
+                                scimUrl, 
+                                'SCIM Endpoint URL',
+                                {
+                                    'id': 'ScimUrl',
+                                    'disabled':true,
+                                    'add_field_html': clipboad,
+                                    helper: __('This is the SCIM endpoint URL you need to provide to your Identity Provider to enable user and group provisioning.'),
+                                }
+                            ) }}
                         </div>
                     </div>
                 </div>

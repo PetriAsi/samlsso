@@ -513,6 +513,26 @@ class ConfigItem    //NOSONAR
                             ConfigItem::handleAsBool($var, ConfigEntity::LOWERCASE_URL));
     }
 
+    protected function scim_active(mixed $var): array //NOSONAR
+    {
+        return array_merge([ConfigItem::FORMEXPLAIN   => __('Enable SCIM (System for Cross-domain Identity Management) for this configuration. This will allow external Identity Providers to provision users and groups in GLPI.', PLUGIN_NAME),
+                            ConfigItem::FORMTITLE     => __('SCIM ACTIVE', PLUGIN_NAME),
+                            ConfigItem::FIELD         => __function__,
+                            ConfigItem::VALIDATOR     => __method__,],
+                            ConfigItem::handleAsBool($var, ConfigEntity::SCIM_ACTIVE));
+    }
+
+    protected function scim_token(mixed $var): array //NOSONAR
+    {
+        return [ConfigItem::FORMEXPLAIN => __('The Bearer token required for SCIM authentication. This token must be provided by the Identity Provider in the Authorization header.', PLUGIN_NAME),
+                ConfigItem::FORMTITLE => __('SCIM BEARER TOKEN', PLUGIN_NAME),
+                ConfigItem::EVAL      => ConfigItem::VALID,
+                ConfigItem::VALUE     => (string) $var,
+                ConfigItem::VALIDATOR => __method__,
+                ConfigItem::FIELD     => __function__,
+                ConfigItem::ERRORS    => false];
+    }
+
     // Make sure we always return the correct boolean datatype.
     protected function handleAsBool(mixed $var, $field = null): array
     {

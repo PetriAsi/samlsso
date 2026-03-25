@@ -465,6 +465,8 @@ class Config extends CommonDBTM
             `validate_xml`                  tinyint NOT NULL DEFAULT '0',
             `validate_destination`          tinyint NOT NULL DEFAULT '0',
             `lowercase_url_encoding`        tinyint NOT NULL DEFAULT '0',
+            `scim_active`                   tinyint NOT NULL DEFAULT '0',
+            `scim_token`                    VARCHAR(255) NULL,
             `comment`                       text NULL,
             `is_active`                     tinyint NOT NULL DEFAULT '0',
             `is_deleted`                    tinyint NOT NULL default '0',
@@ -487,6 +489,20 @@ class Config extends CommonDBTM
             $DB->doQuery($query) or die($DB->error());
 
             Session::addMessageAfterRedirect("🆗 Updated: $table layout.");
+        }
+
+        // Add SCIM columns if they dont exist
+        if($DB->tableExists($table)){
+            if(!$DB->fieldExists($table, 'scim_active')){
+                $migration->displayMessage("Adding scim_active column to $table");
+                $query = "ALTER TABLE `$table` ADD `scim_active` tinyint NOT NULL DEFAULT '0' AFTER `lowercase_url_encoding`";
+                $DB->doQuery($query) or die($DB->error());
+            }
+            if(!$DB->fieldExists($table, 'scim_token')){
+                $migration->displayMessage("Adding scim_token column to $table");
+                $query = "ALTER TABLE `$table` ADD `scim_token` VARCHAR(255) NULL AFTER `scim_active`";
+                $DB->doQuery($query) or die($DB->error());
+            }
         }
     }
 

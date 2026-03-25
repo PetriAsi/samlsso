@@ -90,6 +90,8 @@ class ConfigEntity extends ConfigItem
     public const XML_VALIDATION  = 'validate_xml';                           // Validate XML messages
     public const DEST_VALIDATION = 'validate_destination';                   // relax destination validation
     public const LOWERCASE_URL   = 'lowercase_url_encoding';                 // lowercaseUrlEncoding
+    public const SCIM_ACTIVE     = 'scim_active';                            // Enable SCIM for this configuration
+    public const SCIM_TOKEN      = 'scim_token';                             // Bearer token for SCIM authentication
     public const COMMENT         = 'comment';                                // Field for comments on configuration page
     public const IS_ACTIVE       = 'is_active';                              // Toggle SAML config active or disabled
     public const IS_DELETED      = 'is_deleted';

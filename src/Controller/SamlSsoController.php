@@ -55,6 +55,7 @@ use GlpiPlugin\Samlsso\RuleSaml;                                        // Requi
 use GlpiPlugin\Samlsso\LoginState;                                      //
 use GlpiPlugin\Samlsso\LoginFlow\Acs;                                   // Required to call the ACS object
 use GlpiPlugin\Samlsso\LoginFlow\Meta;                                  // Required to call Exclude object
+use GlpiPlugin\Samlsso\LoginFlow\Scim;                                  // Required to call the SCIM object
 use GlpiPlugin\Samlsso\Config\ConfigForm;                               // Required to call Config object
 use GlpiPlugin\Samlsso\LoginFlow\LoginFlowForm;                         //
 
@@ -100,6 +101,20 @@ final class SamlSsoController extends AbstractController
     public function meta(Request $request): Response                    // What to do if route is invoked.
     {
         return (new Meta)->getSPMeta($request);                         // Call the SPMeta handler.
+    }
+
+
+    ####################################################################
+    // SCIM route
+    public const SCIM_ROUTE     = 'front/scim';                         // Route being registered by __class__
+    public const SCIM_PARAM     = '/{idpId}';
+    public const SCIM_NAME      = 'samlsso_SCIM';                       // Route name
+
+    #[SecurityStrategy(Firewall::STRATEGY_NO_CHECK)]                    // Decorator to disable authentication check
+    #[Route(self::SCIM_ROUTE.self::SCIM_PARAM, name: self::SCIM_NAME)]  // Decorator to register route to controller
+    public function scim(Request $request): Response                    // What to do if route is invoked.
+    {
+        return (new Scim)->init($request);                              // Call the SCIM handler.
     }
 
 
