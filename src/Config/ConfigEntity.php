@@ -273,7 +273,7 @@ class ConfigEntity extends ConfigItem
         $classConstants = ConfigEntity::getConstants();
         // Fetch database columns;
         $table = SamlConfig::getTable();
-        foreach ($DB->listColumns($table) as $data) {
+        foreach ($DB->listFields($table) as $data) {
             $fields[$data['Field']] = [
                 ConfigItem::FIELD       => $data['Field'],
                 ConfigItem::TYPE        => $data['Type'],
