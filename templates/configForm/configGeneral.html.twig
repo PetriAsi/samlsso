@@ -6,10 +6,10 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.name.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.name.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.name.errors }}</div>
                     {% endif %}
                     {% if buttonsHiddenWarn == true %}
-                        <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8)">⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visable again.</div>
+                        <div class="form-text text-helper" style="color:rgb(180, 120, 8)">⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visable again.</div>
                     {% endif %}
                 {% endset %}
 
@@ -28,10 +28,10 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.conf_icon.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.conf_icon.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.conf_icon.errors }}</div>
                     {% endif %}
                     {% if buttonsHiddenWarn == true %}
-                        <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8)">⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visable again.</div>
+                        <div class="form-text text-helper" style="color:rgb(180, 120, 8)">⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visable again.</div>
                     {% endif %}
                 {% endset %}
                 {{ fields.textField(
@@ -49,10 +49,10 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.conf_domain.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.conf_domain.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.conf_domain.errors }}</div>
                     {% endif %}
                     {% if buttonsHiddenWarn == true %}
-                        <div id="textHelper" class="form-text" style="color:rgb(3, 126, 26)">🔒 Userdomain is configured. Users can trigger a Saml Login by providing their {username}@{userdomain} in the glpi username
+                        <div class="form-text text-helper" style="color:rgb(3, 126, 26)">🔒 Userdomain is configured. Users can trigger a Saml Login by providing their {username}@{userdomain} in the glpi username
                                                                                                 field and pressing the login button. The password field is ignored and can be left blank. This is a more secure option that
                                                                                                 wont expose configured IDPs.
                         </div>
@@ -74,7 +74,7 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.comment.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.comment.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.comment.errors }}</div>
                     {% endif %}
                 {% endset %}
                 {{ fields.textareaField(
@@ -93,7 +93,7 @@
                 <div>
                 {% set error_helper %}
                     {% if inputfields.is_active.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.is_active.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.is_active.errors }}</div>
                     {% endif %}
                 {% endset %}
                 {{ fields.sliderField(
@@ -111,7 +111,7 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.debug.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.debug.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.debug.errors }}</div>
                     {% endif %}
                 {% endset %}
                 {{ fields.sliderField(
@@ -125,5 +125,8 @@
                 ) }}
             </div>
         </div>
+    </div>
+</div>
+       </div>
     </div>
 </div>

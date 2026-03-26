@@ -4,7 +4,7 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.enforce_sso.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.enforce_sso.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.enforce_sso.errors }}</div>
                 {% endif %}
             {% endset %}
             {{ fields.sliderField(
@@ -22,10 +22,10 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.strict.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.strict.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.strict.errors }}</div>
                 {% endif %}
                 {% if inputfields.strict.value == false %}
-                            <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">⚠️ Your environment is at risk, make sure strict is enabled!</div>
+                            <div class="form-text text-helper" style="color:rgb(180, 120, 8);">⚠️ Your environment is at risk, make sure strict is enabled!</div>
                 {% endif %}
             {% endset %}
             {{ fields.sliderField(
@@ -43,7 +43,7 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.user_jit.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.user_jit.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.user_jit.errors }}</div>
                 {% endif %}
             {% endset %}
             {{ fields.sliderField(
@@ -61,7 +61,7 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.security_nameidencrypted.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.security_nameidencrypted.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.security_nameidencrypted.errors }}</div>
                 {% endif %}
             {% endset %}
             {{ fields.sliderField(
@@ -81,7 +81,7 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.security_authnrequestssigned.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.security_authnrequestssigned.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.security_authnrequestssigned.errors }}</div>
                 {% endif %}
             {% endset %}
             {{ fields.sliderField(
@@ -101,7 +101,7 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.security_logoutrequestsigned.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.security_logoutrequestsigned.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.security_logoutrequestsigned.errors }}</div>
                 {% endif %}
             {% endset %}
             {{ fields.sliderField(
@@ -121,7 +121,7 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.security_logoutresponsesigned.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.security_logoutresponsesigned.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.security_logoutresponsesigned.errors }}</div>
                 {% endif %}
             {% endset %}
             {{ fields.sliderField(

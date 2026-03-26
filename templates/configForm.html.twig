@@ -122,10 +122,10 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.name.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.name.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.name.errors }}</div>
                                 {% endif %}
                                 {% if buttonsHiddenWarn == true %}
-                                    <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8)">⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visable again.</div>
+                                    <div class="form-text text-helper" style="color:rgb(180, 120, 8)">⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visable again.</div>
                                 {% endif %}
                             {% endset %}
 
@@ -144,10 +144,10 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.conf_icon.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.conf_icon.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.conf_icon.errors }}</div>
                                 {% endif %}
                                 {% if buttonsHiddenWarn == true %}
-                                    <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8)">⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visable again.</div>
+                                    <div class="form-text text-helper" style="color:rgb(180, 120, 8)">⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visable again.</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.textField(
@@ -165,10 +165,10 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.conf_domain.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.conf_domain.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.conf_domain.errors }}</div>
                                 {% endif %}
                                 {% if buttonsHiddenWarn == true %}
-                                    <div id="textHelper" class="form-text" style="color:rgb(3, 126, 26)">🔒 Userdomain is configured. Users can trigger a Saml Login by providing their {username}@{userdomain} in the glpi username field and pressing the login button. The password field is ignored and can be left blank. This is a more secure option that wont expose configured IDPs.
+                                    <div class="form-text text-helper" style="color:rgb(3, 126, 26)">🔒 Userdomain is configured. Users can trigger a Saml Login by providing their {username}@{userdomain} in the glpi username field and pressing the login button. The password field is ignored and can be left blank. This is a more secure option that wont expose configured IDPs.
                                     </div>
                                 {% endif %}
                             {% endset %}
@@ -188,7 +188,7 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.comment.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.comment.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.comment.errors }}</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.textareaField(
@@ -207,7 +207,7 @@
                          <div>
                             {% set error_helper %}
                                 {% if inputfields.is_active.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.is_active.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.is_active.errors }}</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.sliderField(
@@ -225,7 +225,7 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.debug.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.debug.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.debug.errors }}</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.sliderField(
@@ -251,7 +251,7 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.compress_requests.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.compress_requests.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.compress_requests.errors }}</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.sliderField(
@@ -269,7 +269,7 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.compress_responses.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.compress_responses.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.compress_responses.errors }}</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.sliderField(
@@ -287,11 +287,11 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.proxied.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.proxied.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.proxied.errors }}</div>
                                 {% endif %}
                                 {% if inputfields.proxied.value == true %}
                                     {% if inputfields.strict.value == true %}
-                                        <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">⚠️ Beware, misaligned proxy schemes might break the samlValidation in strict mode.<br>(<b>https</b>://external)=>(<b>http</b>://internal)</div>
+                                        <div class="form-text text-helper" style="color:rgb(180, 120, 8);">⚠️ Beware, misaligned proxy schemes might break the samlValidation in strict mode.<br>(<b>https</b>://external)=>(<b>http</b>://internal)</div>
                                     {% endif %}
                                 {% endif %}
                             {% endset %}
@@ -310,10 +310,10 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.validate_xml.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.validate_xml.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.validate_xml.errors }}</div>
                                 {% endif %}
                                 {% if inputfields.strict.value == false %}
-                                    <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">⚠️ Strict is disabled, validate xml setting will not do anything.</div>
+                                    <div class="form-text text-helper" style="color:rgb(180, 120, 8);">⚠️ Strict is disabled, validate xml setting will not do anything.</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.sliderField(
@@ -331,7 +331,7 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.validate_destination.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.validate_destination.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.validate_destination.errors }}</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.sliderField(
@@ -349,7 +349,7 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.lowercase_url_encoding.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.lowercase_url_encoding.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.lowercase_url_encoding.errors }}</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.sliderField(
@@ -452,21 +452,21 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.sp_private_key.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.sp_private_key.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.sp_private_key.errors }}</div>
                             {% endif %}
                             {% if inputfields.sp_certificate.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.sp_certificate.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.sp_certificate.errors }}</div>
                             {% endif %}
                             {# make sure validate is an array/object before accessing nested keys #}
                             {% set sp_validate = inputfields.sp_certificate.validate|default({}) %}
                             {% if sp_validate.subject.CN|default(false) == true %}
-                                <div id="textHelper" class="form-text" style="color:rgb(71, 180, 8);">🆗 Valid certificate found: {{ sp_validate.subject.CN|default('') }}</div>
+                                <div class="form-text text-helper" style="color:rgb(71, 180, 8);">🆗 Valid certificate found: {{ sp_validate.subject.CN|default('') }}</div>
                             {% endif %}
                             {% if sp_validate.validations.validTo|default(false) == true %}
-                                <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">{{ sp_validate.validations.validTo|default('') }}</div>
+                                <div class="form-text text-helper" style="color:rgb(180, 120, 8);">{{ sp_validate.validations.validTo|default('') }}</div>
                             {% endif %}
                             {% if sp_validate.validations.validFrom|default(false) == true %}
-                                <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">{{ sp_validate.validations.validFrom|default('') }}</div>
+                                <div class="form-text text-helper" style="color:rgb(180, 120, 8);">{{ sp_validate.validations.validFrom|default('') }}</div>
                             {% endif %}
                         {% endset %}
                         
@@ -496,7 +496,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.sp_nameid_format.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.sp_nameid_format.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.sp_nameid_format.errors }}</div>
                             {% endif %}
                         {% endset %}
 
@@ -522,7 +522,7 @@
                      <div>
                         {% set error_helper %}
                             {% if inputfields.idp_entity_id.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_entity_id.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.idp_entity_id.errors }}</div>
                             {% endif %}
                         {% endset %}
 
@@ -541,7 +541,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.idp_single_sign_on_service.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_single_sign_on_service.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.idp_single_sign_on_service.errors }}</div>
                             {% endif %}
                         {% endset %}
 
@@ -560,7 +560,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.idp_single_logout_service.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_single_logout_service.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.idp_single_logout_service.errors }}</div>
                             {% endif %}
                         {% endset %}
 
@@ -579,16 +579,16 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.idp_certificate.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_certificate.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.idp_certificate.errors }}</div>
                             {% endif %}
                             {% if inputfields.idp_certificate.validate.subject.CN == true %}
-                                <div id="textHelper" class="form-text" style="color:rgb(71, 180, 8);">🆗 Valid Certificate found: {{ inputfields.idp_certificate.validate.subject.CN }}</div>
+                                <div class="form-text text-helper" style="color:rgb(71, 180, 8);">🆗 Valid Certificate found: {{ inputfields.idp_certificate.validate.subject.CN }}</div>
                             {% endif %}
                             {% if inputfields.idp_certificate.validate.validations.validTo == true %}
-                                <div id="textHelper" class="form-text" style="color:rgb(180, 140, 8);">{{ inputfields.idp_certificate.validate.validations.validTo }}</div>
+                                <div class="form-text text-helper" style="color:rgb(180, 140, 8);">{{ inputfields.idp_certificate.validate.validations.validTo }}</div>
                             {% endif %}
                             {% if inputfields.idp_certificate.validate.validations.validFrom == true %}
-                                <div id="textHelper" class="form-text" style="color:rgb(180, 140, 8);">{{ inputfields.idp_certificate.validate.validations.validFrom }}</div>
+                                <div class="form-text text-helper" style="color:rgb(180, 140, 8);">{{ inputfields.idp_certificate.validate.validations.validFrom }}</div>
                             {% endif %}
                         {% endset %}
 
@@ -635,7 +635,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.requested_authn_context_comparison.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.requested_authn_context_comparison.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.requested_authn_context_comparison.errors }}</div>
                             {% endif %}
                         {% endset %}
 
@@ -663,7 +663,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.enforce_sso.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.enforce_sso.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.enforce_sso.errors }}</div>
                             {% endif %}
                         {% endset %}
                         {{ fields.sliderField(
@@ -681,10 +681,10 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.strict.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.strict.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.strict.errors }}</div>
                             {% endif %}
                             {% if inputfields.strict.value == false %}
-                                        <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">⚠️ Your environment is at risk, make sure strict is enabled!</div>
+                                        <div class="form-text text-helper" style="color:rgb(180, 120, 8);">⚠️ Your environment is at risk, make sure strict is enabled!</div>
                             {% endif %}
                         {% endset %}
                         {{ fields.sliderField(
@@ -702,7 +702,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.user_jit.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.user_jit.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.user_jit.errors }}</div>
                             {% endif %}
                         {% endset %}
                         {{ fields.sliderField(
@@ -720,7 +720,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.security_nameidencrypted.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.security_nameidencrypted.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.security_nameidencrypted.errors }}</div>
                             {% endif %}
                         {% endset %}
                         {{ fields.sliderField(
@@ -740,7 +740,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.security_authnrequestssigned.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.security_authnrequestssigned.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.security_authnrequestssigned.errors }}</div>
                             {% endif %}
                         {% endset %}
                         {{ fields.sliderField(
@@ -760,7 +760,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.security_logoutrequestsigned.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.security_logoutrequestsigned.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.security_logoutrequestsigned.errors }}</div>
                             {% endif %}
                         {% endset %}
                         {{ fields.sliderField(
@@ -780,7 +780,7 @@
                     <div>
                         {% set error_helper %}
                             {% if inputfields.security_logoutresponsesigned.errors == true %}
-                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.security_logoutresponsesigned.errors }}</div>
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.security_logoutresponsesigned.errors }}</div>
                             {% endif %}
                         {% endset %}
                         {{ fields.sliderField(
@@ -851,7 +851,7 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.scim_active.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.scim_active.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.scim_active.errors }}</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.sliderField(
@@ -869,7 +869,7 @@
                         <div>
                             {% set error_helper %}
                                 {% if inputfields.scim_token.errors == true %}
-                                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.scim_token.errors }}</div>
+                                    <div class="form-text text-helper" style="color:red;">{{ inputfields.scim_token.errors }}</div>
                                 {% endif %}
                             {% endset %}
                             {{ fields.textField(

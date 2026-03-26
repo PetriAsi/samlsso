@@ -64,19 +64,19 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.sp_private_key.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.sp_private_key.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.sp_private_key.errors }}</div>
                 {% endif %}
                 {% if inputfields.sp_certificate.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.sp_certificate.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.sp_certificate.errors }}</div>
                 {% endif %}
                 {% if inputfields.sp_certificate.validate.subject.CN == true %}
-                    <div id="textHelper" class="form-text" style="color:rgb(71, 180, 8);">🆗 Valid certificate found: {{ inputfields.sp_certificate.validate.subject.CN }}</div>
+                    <div class="form-text text-helper" style="color:rgb(71, 180, 8);">🆗 Valid certificate found: {{ inputfields.sp_certificate.validate.subject.CN }}</div>
                 {% endif %}
                 {% if inputfields.sp_certificate.validate.validations.validTo == true %}
-                    <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">{{ inputfields.sp_certificate.validate.validations.validTo }}</div>
+                    <div class="form-text text-helper" style="color:rgb(180, 120, 8);">{{ inputfields.sp_certificate.validate.validations.validTo }}</div>
                 {% endif %}
                 {% if inputfields.sp_certificate.validate.validations.validFrom == true %}
-                    <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">{{ inputfields.sp_certificate.validate.validations.validFrom }}</div>
+                    <div class="form-text text-helper" style="color:rgb(180, 120, 8);">{{ inputfields.sp_certificate.validate.validations.validFrom }}</div>
                 {% endif %}
             {% endset %}
             
@@ -106,7 +106,7 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.sp_nameid_format.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.sp_nameid_format.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.sp_nameid_format.errors }}</div>
                 {% endif %}
             {% endset %}
 

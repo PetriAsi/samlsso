@@ -6,7 +6,7 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.compress_requests.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.compress_requests.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.compress_requests.errors }}</div>
                     {% endif %}
                 {% endset %}
                 {{ fields.sliderField(
@@ -24,7 +24,7 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.compress_responses.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.compress_responses.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.compress_responses.errors }}</div>
                     {% endif %}
                 {% endset %}
                 {{ fields.sliderField(
@@ -42,11 +42,11 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.proxied.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.proxied.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.proxied.errors }}</div>
                     {% endif %}
                     {% if inputfields.proxied.value == true %}
                         {% if inputfields.strict.value == true %}
-                            <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">⚠️ Make sure the proxy scheme matches the server scheme.<br>(<b>https</b>://external)=>(<b>https</b>://internal)</div>
+                            <div class="form-text text-helper" style="color:rgb(180, 120, 8);">⚠️ Make sure the proxy scheme matches the server scheme.<br>(<b>https</b>://external)=>(<b>https</b>://internal)</div>
                         {% endif %}
                     {% endif %}
                 {% endset %}
@@ -65,10 +65,10 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.validate_xml.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.validate_xml.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.validate_xml.errors }}</div>
                     {% endif %}
                     {% if inputfields.strict.value == false %}
-                        <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">⚠️ Strict is disabled, validate xml setting will not do anything.</div>
+                        <div class="form-text text-helper" style="color:rgb(180, 120, 8);">⚠️ Strict is disabled, validate xml setting will not do anything.</div>
                     {% endif %}
                 {% endset %}
                 {{ fields.sliderField(
@@ -86,7 +86,7 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.validate_destination.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.validate_destination.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.validate_destination.errors }}</div>
                     {% endif %}
                 {% endset %}
                 {{ fields.sliderField(
@@ -104,7 +104,7 @@
             <div>
                 {% set error_helper %}
                     {% if inputfields.lowercase_url_encoding.errors == true %}
-                        <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.lowercase_url_encoding.errors }}</div>
+                        <div class="form-text text-helper" style="color:red;">{{ inputfields.lowercase_url_encoding.errors }}</div>
                     {% endif %}
                 {% endset %}
                 {{ fields.sliderField(

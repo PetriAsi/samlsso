@@ -4,7 +4,7 @@
             <div>
             {% set error_helper %}
                 {% if inputfields.idp_entity_id.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_entity_id.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.idp_entity_id.errors }}</div>
                 {% endif %}
             {% endset %}
 
@@ -23,14 +23,14 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.idp_single_sign_on_service.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_single_sign_on_service.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.idp_single_sign_on_service.errors }}</div>
                 {% endif %}
             {% endset %}
 
             {{ fields.textField( 
                 inputfields.idp_single_sign_on_service.field, 
                 inputfields.idp_single_sign_on_service.value, 
-                inputfields.idp_single_sign_on_service.formtitle ~ helper|raw, 
+                inputfields.idp_single_sign_on_service.formtitle, 
                 {
                     'add_field_html': error_helper,
                     helper: inputfields.idp_single_sign_on_service.formexplain,
@@ -42,14 +42,14 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.idp_single_logout_service.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_single_logout_service.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.idp_single_logout_service.errors }}</div>
                 {% endif %}
             {% endset %}
 
             {{ fields.textField( 
                 inputfields.idp_single_logout_service.field, 
                 inputfields.idp_single_logout_service.value, 
-                inputfields.idp_single_logout_service.formtitle ~ helper|raw, 
+                inputfields.idp_single_logout_service.formtitle, 
                 {
                     'add_field_html': error_helper,
                     helper: inputfields.idp_single_logout_service.formexplain,
@@ -61,16 +61,16 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.idp_certificate.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_certificate.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.idp_certificate.errors }}</div>
                 {% endif %}
                 {% if inputfields.idp_certificate.validate.subject.CN == true %}
-                    <div id="textHelper" class="form-text" style="color:rgb(71, 180, 8);">🆗 Valid Certificate found: {{ inputfields.idp_certificate.validate.subject.CN }}</div>
+                    <div class="form-text text-helper" style="color:rgb(71, 180, 8);">🆗 Valid Certificate found: {{ inputfields.idp_certificate.validate.subject.CN }}</div>
                 {% endif %}
                 {% if inputfields.idp_certificate.validate.validations.validTo == true %}
-                    <div id="textHelper" class="form-text" style="color:rgb(180, 140, 8);">{{ inputfields.idp_certificate.validate.validations.validTo }}</div>
+                    <div class="form-text text-helper" style="color:rgb(180, 140, 8);">{{ inputfields.idp_certificate.validate.validations.validTo }}</div>
                 {% endif %}
                 {% if inputfields.idp_certificate.validate.validations.validFrom == true %}
-                    <div id="textHelper" class="form-text" style="color:rgb(180, 140, 8);">{{ inputfields.idp_certificate.validate.validations.validFrom }}</div>
+                    <div class="form-text text-helper" style="color:rgb(180, 140, 8);">{{ inputfields.idp_certificate.validate.validations.validFrom }}</div>
                 {% endif %}
             {% endset %}
 
@@ -117,7 +117,7 @@
         <div>
             {% set error_helper %}
                 {% if inputfields.requested_authn_context_comparison.errors == true %}
-                    <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.requested_authn_context_comparison.errors }}</div>
+                    <div class="form-text text-helper" style="color:red;">{{ inputfields.requested_authn_context_comparison.errors }}</div>
                 {% endif %}
             {% endset %}
 
@@ -125,7 +125,7 @@
                 inputfields.requested_authn_context_comparison.field,
                 inputfields.requested_authn_context_comparison.value,
                 inputOptionsAuthnCompare,
-                inputfields.requested_authn_context_comparison.formtitle ~ helper|raw, 
+                inputfields.requested_authn_context_comparison.formtitle, 
                 {
                     'add_field_html': error_helper,
                     helper: inputfields.requested_authn_context_comparison.formexplain,
