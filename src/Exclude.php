@@ -351,69 +351,84 @@ class Exclude extends CommonDropdown
             $DB->doQuery($query) or die($DB->error());
             Session::addMessageAfterRedirect("🆗 Installed: $table.");
             // insert default excludes;
-            $query = <<<SQL
-                INSERT INTO `$table`(name, comment, action, ClientAgent, ExcludePath)
-                VALUES('Bypass Cron.php', 'backport configuration', '1', '', '/front/cron.php');
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+            $DB->insert($table, [
+                'name'         => 'Bypass Cron.php',
+                'comment'      => 'backport configuration',
+                'action'       => 1,
+                'ClientAgent'  => '',
+                'ExcludePath'  => '/front/cron.php'
+            ]);
 
             // insert default excludes;
-            $query = <<<SQL
-                INSERT INTO `$table`(name, comment, action, ClientAgent, ExcludePath)
-                VALUES('Bypass Inventory.php', '', '1', '', 'front/inventory.php');
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+            $DB->insert($table, [
+                'name'         => 'Bypass Inventory.php',
+                'comment'      => '',
+                'action'       => 1,
+                'ClientAgent'  => '',
+                'ExcludePath'  => 'front/inventory.php'
+            ]);
 
             // insert default excludes;
-            $query = <<<SQL
-                INSERT INTO `$table`(name, comment, action, ClientAgent, ExcludePath)
-                VALUES('Bypass ldap_mass_sync.php', '', '1', '', 'ldap_mass_sync.php');
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+            $DB->insert($table, [
+                'name'         => 'Bypass ldap_mass_sync.php',
+                'comment'      => '',
+                'action'       => 1,
+                'ClientAgent'  => '',
+                'ExcludePath'  => 'ldap_mass_sync.php'
+            ]);
 
             // insert default excludes;
-            $query = <<<SQL
-                INSERT INTO `$table`(name, comment, action, ClientAgent, ExcludePath)
-                VALUES('Bypass apirest.php', '', '1', '', 'apirest.php');
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+            $DB->insert($table, [
+                'name'         => 'Bypass apirest.php',
+                'comment'      => '',
+                'action'       => 1,
+                'ClientAgent'  => '',
+                'ExcludePath'  => 'apirest.php'
+            ]);
 
             // insert default excludes;
-            $query = <<<SQL
-                INSERT INTO `$table`(name, comment, action, ClientAgent, ExcludePath)
-                VALUES('Bypass all fusioninventory files', '', '1', '', '/fusioninventory/');
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
-            
+            $DB->insert($table, [
+                'name'         => 'Bypass all fusioninventory files',
+                'comment'      => '',
+                'action'       => 1,
+                'ClientAgent'  => '',
+                'ExcludePath'  => '/fusioninventory/'
+            ]);
 
             // insert default excludes;
             // https://codeberg.org/QuinQuies/glpisaml/issues/36
-            $query = <<<SQL
-                INSERT INTO `$table`(name, comment, action, ClientAgent, ExcludePath)
-                VALUES('Bypass dashboard.php', '', '1', '', 'dashboard.php');
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+            $DB->insert($table, [
+                'name'         => 'Bypass dashboard.php',
+                'comment'      => '',
+                'action'       => 1,
+                'ClientAgent'  => '',
+                'ExcludePath'  => 'dashboard.php'
+            ]);
         }
 
         // Version 1.2.3 add exclude for GLPI11
         // https://github.com/DonutsNL/samlsso/issues/32
         $result = $DB->request(['FROM' => Exclude::getTable(), 'WHERE' => [Exclude::EXCLUDEPATH => '/ajax/webhook.php']]) or die($DB->error());
-        if(!$result->numrows() > 0){
-             $query = <<<SQL
-                INSERT INTO `$table`(name, comment, action, ClientAgent, ExcludePath)
-                VALUES('Bypass webhook.php', '', '1', '', '/ajax/webhook.php');
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+        if(!$result->count() > 0){
+             $DB->insert($table, [
+                'name'         => 'Bypass webhook.php',
+                'comment'      => '',
+                'action'       => 1,
+                'ClientAgent'  => '',
+                'ExcludePath'  => '/ajax/webhook.php'
+            ]);
         }
 
         // https://github.com/DonutsNL/samlsso/issues/36
         $result = $DB->request(['FROM' => Exclude::getTable(), 'WHERE' => [Exclude::EXCLUDEPATH => '/api.php']]) or die($DB->error());
-        if(!$result->numrows() > 0){
-             $query = <<<SQL
-                INSERT INTO `$table`(name, comment, action, ClientAgent, ExcludePath)
-                VALUES('Bypass api.php', '', '1', '', '/api.php');
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+        if(!$result->count() > 0){
+             $DB->insert($table, [
+                'name'         => 'Bypass api.php',
+                'comment'      => '',
+                'action'       => 1,
+                'ClientAgent'  => '',
+                'ExcludePath'  => '/api.php'
+            ]);
         }
 
         Session::addMessageAfterRedirect("🆗 Inserted default excludes.");

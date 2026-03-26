@@ -272,19 +272,17 @@ class ConfigEntity extends ConfigItem
         // Fetch config item constants;
         $classConstants = ConfigEntity::getConstants();
         // Fetch database columns;
-        $sql = 'SHOW COLUMNS FROM '.SamlConfig::getTable();
-        if ($result = $DB->doQuery($sql)) {
-            while ($data = $result->fetch_assoc()) {
-                $fields[$data['Field']] = [
-                    ConfigItem::FIELD       => $data['Field'],
-                    ConfigItem::TYPE        => $data['Type'],
-                    ConfigItem::NULL        => $data['Null'],
-                    ConfigItem::CONSTANT    => ($key = array_search($data['Field'], $classConstants)) ? "ConfigEntity::$key" : 'UNDEFINED',
-                    ConfigItem::VALUE       => (isset($this->fields[$data['Field']])) ? $this->fields[$data['Field']] : null,
-                ];
-                // Evaluate and merge results.
-                $fields[$data['Field']] = array_merge($fields[$data['Field']], $this->evaluateItem($data['Field'], (isset($this->fields[$data['Field']])) ? $this->fields[$data['Field']] : ''));
-            }
+        $table = SamlConfig::getTable();
+        foreach ($DB->listColumns($table) as $data) {
+            $fields[$data['Field']] = [
+                ConfigItem::FIELD       => $data['Field'],
+                ConfigItem::TYPE        => $data['Type'],
+                ConfigItem::NULL        => $data['Null'],
+                ConfigItem::CONSTANT    => ($key = array_search($data['Field'], $classConstants)) ? "ConfigEntity::$key" : 'UNDEFINED',
+                ConfigItem::VALUE       => (isset($this->fields[$data['Field']])) ? $this->fields[$data['Field']] : null,
+            ];
+            // Evaluate and merge results.
+            $fields[$data['Field']] = array_merge($fields[$data['Field']], $this->evaluateItem($data['Field'], (isset($this->fields[$data['Field']])) ? $this->fields[$data['Field']] : ''));
         }
         // Validate spcert and key if provided
         $fields = $this->validateAdvancedConfig($fields);

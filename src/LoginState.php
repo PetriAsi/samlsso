@@ -774,34 +774,8 @@ class LoginState extends CommonDBTM
 
         // https://github.com/DonutsNL/samlsso/issues/58
         // Add missing indexes to the state table for performance.
-        // ALTER TABLE glpi_plugin_samlsso_loginstates ADD INDEX sessionId_idx (sessionId);
         if ($DB->tableExists($table)) {
-            // Use the GLPI DB object to check for the index existence properly
-            // prevent ERROR 1061 (42000): Duplicate key name errors.
-            $index_exists = $DB->request([
-                'SELECT' => 'INDEX_NAME',
-                'FROM'   => 'information_schema.STATISTICS',
-                'WHERE'  => [
-                    'TABLE_SCHEMA' => $DB->dbdefault,
-                    'TABLE_NAME'   => $table,
-                    'COLUMN_NAME'  => 'sessionId'
-                ]
-            ]);
-            // if no index exists create one.
-            if ($index_exists->count() == 0) {
-                // Create statement
-                $query = "ALTER TABLE `$table` ADD INDEX `sessionId_idx` (`sessionId`)";
-                // Perform the query.
-                if ($DB->query($query)) {
-                    Session::addMessageAfterRedirect("🆗 Added index to: $table");
-                } else {
-                    // Handle error without killing the whole application
-                    Session::addMessageAfterRedirect("⚠️ Failed to add index: " . $DB->error(), false, ERROR);
-                }
-            } else {
-                // Do nothing
-                Session::addMessageAfterRedirect("🆗 Index already exists, skipping.");
-            }
+            $migration->addIndex($table, 'sessionId', 'sessionId_idx');
         }
 
         // Clean old cookies
@@ -818,12 +792,13 @@ class LoginState extends CommonDBTM
         }
 
         // Clean table
-        if ( $DB->tableExists($table)) {
-                $query = <<<SQL
-                    UPDATE $table SET location = '' where id > 0;
-                SQL;
-                $DB->doQuery($query) or die($DB->error());
-                Session::addMessageAfterRedirect("🆗 Cleaned: $table.");
+        if ($DB->tableExists($table)) {
+            $DB->update(
+                $table,
+                ['location' => ''],
+                ['id' => ['>', 0]]
+            );
+            Session::addMessageAfterRedirect("🆗 Cleaned: $table.");
         } // We silently ignore errors. Most common cause for an error is if the field already exists.
     }
 

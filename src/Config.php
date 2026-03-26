@@ -480,28 +480,21 @@ class Config extends CommonDBTM
         }
 
         // Alter column width for conf_domain
-        if($DB->tableExists($table)){
+        if ($DB->tableExists($table)) {
             $migration->displayMessage("Updating table layout for $table");
-            $query = <<<SQL
-                ALTER TABLE $table
-                MODIFY COLUMN `conf_domain` varchar(255) null;
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
-
+            $migration->changeField($table, 'conf_domain', 'conf_domain', 'varchar(255) NULL');
             Session::addMessageAfterRedirect("🆗 Updated: $table layout.");
         }
 
         // Add SCIM columns if they dont exist
-        if($DB->tableExists($table)){
-            if(!$DB->fieldExists($table, 'scim_active')){
+        if ($DB->tableExists($table)) {
+            if (!$DB->fieldExists($table, 'scim_active')) {
                 $migration->displayMessage("Adding scim_active column to $table");
-                $query = "ALTER TABLE `$table` ADD `scim_active` tinyint NOT NULL DEFAULT '0' AFTER `lowercase_url_encoding`";
-                $DB->doQuery($query) or die($DB->error());
+                $migration->addField($table, 'scim_active', 'tinyint', ['value' => 0, 'after' => 'lowercase_url_encoding']);
             }
-            if(!$DB->fieldExists($table, 'scim_token')){
+            if (!$DB->fieldExists($table, 'scim_token')) {
                 $migration->displayMessage("Adding scim_token column to $table");
-                $query = "ALTER TABLE `$table` ADD `scim_token` VARCHAR(255) NULL AFTER `scim_active`";
-                $DB->doQuery($query) or die($DB->error());
+                $migration->addField($table, 'scim_token', 'string', ['after' => 'scim_active']);
             }
         }
     }
