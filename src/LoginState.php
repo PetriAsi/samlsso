@@ -782,7 +782,7 @@ class LoginState extends CommonDBTM
                 'SELECT' => 'INDEX_NAME',
                 'FROM'   => 'information_schema.STATISTICS',
                 'WHERE'  => [
-                    'TABLE_SCHEMA' => $_SESSION['glpidbname'] ?? DBConnection::getDefaultDatabase(),
+                    'TABLE_SCHEMA' => $DB->dbdefault,
                     'TABLE_NAME'   => $table,
                     'COLUMN_NAME'  => 'sessionId'
                 ]
