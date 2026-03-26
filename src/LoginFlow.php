@@ -719,27 +719,25 @@ class LoginFlow extends CommonDBTM
         // Create the base table if it does not yet exist;
         // Do not update this table for later versions, use the migration class;
         if (!$DB->tableExists($table)) {
-            // Create table
-            $query = <<<SQL
-            CREATE TABLE IF NOT EXISTS `$table` (
-                `id`                        int {$default_key_sign} NOT NULL AUTO_INCREMENT,
-                `debug`                     tinyint NOT NULL DEFAULT 0,
-                `enforced`                  tinyint NOT NULL DEFAULT 0,
-                `forcedIdp`                 int DEFAULT -1,
-                `enableGetterLogin`         tinyint NOT NULL DEFAULT 0,
-                `hideGlpiLogin`             tinyint NOT NULL DEFAULT 0,
-                `hideSamlButtons`           tinyint NOT NULL DEFAULT 0,
-                `hideUsername`              tinyint NOT NULL DEFAULT 0,
-                `useCustomLoginTemplate`    varchar(255) NULL,
-                `byPassString`              varchar(255) DEFAULT '1',
-                `byPassVar`                 varchar(255) DEFAULT 'bypass',
-                `enableIdpLogout`           tinyint NOT NULL DEFAULT 0,
-                `enforceReAuthAfterIdle`    int NOT NULL DEFAULT -1,                        // Time in minutes that session is allowed to idle before forcing reAuth
-                `blockAfterEnfocedLogout`   int NOT NULL DEFAULT -1,                        // Time to block user after he/she was forcefully logged out.
-                PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=COMPRESSED;
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+            $migration->addTable($table, [
+                'id'                      => ['type' => 'int', 'notnull' => true, 'autoincrement' => true],
+                'debug'                   => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'enforced'                => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'forcedIdp'               => ['type' => 'int', 'null' => true, 'value' => -1],
+                'enableGetterLogin'       => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'hideGlpiLogin'           => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'hideSamlButtons'         => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'hideUsername'            => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'useCustomLoginTemplate'  => ['type' => 'string', 'null' => true],
+                'byPassString'            => ['type' => 'string', 'null' => true, 'value' => '1'],
+                'byPassVar'               => ['type' => 'string', 'null' => true, 'value' => 'bypass'],
+                'enableIdpLogout'         => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'enforceReAuthAfterIdle'  => ['type' => 'int', 'notnull' => true, 'value' => -1],
+                'blockAfterEnfocedLogout' => ['type' => 'int', 'notnull' => true, 'value' => -1],
+            ], [
+                'engine' => 'InnoDB',
+                'row_format' => 'COMPRESSED'
+            ]);
             Session::addMessageAfterRedirect("🆗 Installed: $table.");
         }
     }

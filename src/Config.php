@@ -436,46 +436,45 @@ class Config extends CommonDBTM
         // Do not update this table for later versions, use the migration class;
         if (!$DB->tableExists($table)) {
             $migration->displayMessage("Installing $table");
-            $query = <<<SQL
-            CREATE TABLE `$table` (
-            `id`                            INT {$default_key_sign} NOT NULL auto_increment,
-            `name`                          VARCHAR(255) NOT NULL,
-            `conf_domain`                   VARCHAR(50) NOT NULL,
-            `conf_icon`                     VARCHAR(50) NOT NULL,
-            `enforce_sso`                   tinyint NOT NULL DEFAULT '0',
-            `proxied`                       tinyint NOT NULL DEFAULT '0',
-            `strict`                        tinyint NOT NULL DEFAULT '0',
-            `debug`                         tinyint NOT NULL DEFAULT '0',
-            `user_jit`                      tinyint NOT NULL DEFAULT '0',
-            `sp_certificate`                TEXT NOT NULL,
-            `sp_private_key`                TEXT NOT NULL,
-            `sp_nameid_format`              VARCHAR(128) NOT NULL,
-            `idp_entity_id`                 VARCHAR(128) NOT NULL,
-            `idp_single_sign_on_service`    VARCHAR(128) NOT NULL,
-            `idp_single_logout_service`     VARCHAR(128) NOT NULL,
-            `idp_certificate`               TEXT NOT NULL,
-            `requested_authn_context`       TEXT NOT NULL,
-            `requested_authn_context_comparison` VARCHAR(25) NOT NULL,
-            `security_nameidencrypted`      tinyint NOT NULL DEFAULT '0',
-            `security_authnrequestssigned`  tinyint NOT NULL DEFAULT '0',
-            `security_logoutrequestsigned`  tinyint NOT NULL DEFAULT '0',
-            `security_logoutresponsesigned` tinyint NOT NULL DEFAULT '0',
-            `compress_requests`             tinyint NOT NULL DEFAULT '0',
-            `compress_responses`            tinyint NOT NULL DEFAULT '0',
-            `validate_xml`                  tinyint NOT NULL DEFAULT '0',
-            `validate_destination`          tinyint NOT NULL DEFAULT '0',
-            `lowercase_url_encoding`        tinyint NOT NULL DEFAULT '0',
-            `scim_active`                   tinyint NOT NULL DEFAULT '0',
-            `scim_token`                    VARCHAR(255) NULL,
-            `comment`                       text NULL,
-            `is_active`                     tinyint NOT NULL DEFAULT '0',
-            `is_deleted`                    tinyint NOT NULL default '0',
-            `date_creation`                 timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-            `date_mod`                      timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=COMPRESSED;
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+            $migration->addTable($table, [
+                'id'                                 => ['type' => 'int', 'notnull' => true, 'autoincrement' => true],
+                'name'                               => ['type' => 'string', 'notnull' => true],
+                'conf_domain'                        => ['type' => 'string', 'null' => true],
+                'conf_icon'                          => ['type' => 'string', 'notnull' => true],
+                'enforce_sso'                        => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'proxied'                            => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'strict'                             => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'debug'                              => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'user_jit'                           => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'sp_certificate'                     => ['type' => 'text', 'notnull' => true],
+                'sp_private_key'                     => ['type' => 'text', 'notnull' => true],
+                'sp_nameid_format'                   => ['type' => 'string', 'notnull' => true, 'len' => 128],
+                'idp_entity_id'                      => ['type' => 'string', 'notnull' => true, 'len' => 128],
+                'idp_single_sign_on_service'         => ['type' => 'string', 'notnull' => true, 'len' => 128],
+                'idp_single_logout_service'          => ['type' => 'string', 'notnull' => true, 'len' => 128],
+                'idp_certificate'                    => ['type' => 'text', 'notnull' => true],
+                'requested_authn_context'            => ['type' => 'text', 'notnull' => true],
+                'requested_authn_context_comparison' => ['type' => 'string', 'notnull' => true, 'len' => 25],
+                'security_nameidencrypted'           => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'security_authnrequestssigned'       => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'security_logoutrequestsigned'       => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'security_logoutresponsesigned'      => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'compress_requests'                  => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'compress_responses'                 => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'validate_xml'                       => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'validate_destination'               => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'lowercase_url_encoding'             => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'scim_active'                        => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'scim_token'                         => ['type' => 'string', 'null' => true],
+                'comment'                            => ['type' => 'text', 'null' => true],
+                'is_active'                          => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'is_deleted'                         => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'date_creation'                      => ['type' => 'datetime', 'null' => true],
+                'date_mod'                           => ['type' => 'datetime', 'null' => true],
+            ], [
+                'engine' => 'InnoDB',
+                'row_format' => 'COMPRESSED'
+            ]);
             Session::addMessageAfterRedirect("🆗 Installed: $table.");
         }
 

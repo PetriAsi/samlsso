@@ -458,7 +458,7 @@
                                 <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.sp_certificate.errors }}</div>
                             {% endif %}
                             {# make sure validate is an array/object before accessing nested keys #}
-+                           {% set sp_validate = inputfields.sp_certificate.validate|default({}) %}
+                            {% set sp_validate = inputfields.sp_certificate.validate|default({}) %}
                             {% if sp_validate.subject.CN|default(false) == true %}
                                 <div id="textHelper" class="form-text" style="color:rgb(71, 180, 8);">🆗 Valid certificate found: {{ sp_validate.subject.CN|default('') }}</div>
                             {% endif %}

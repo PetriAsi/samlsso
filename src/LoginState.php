@@ -707,28 +707,27 @@ class LoginState extends CommonDBTM
         // Do not update this table for later versions, use the migration class;
         if (!$DB->tableExists($table)) {
             // Create table
-            $query = <<<SQL
-            CREATE TABLE IF NOT EXISTS `$table` (
-                `id`                        int {$default_key_sign} NOT NULL AUTO_INCREMENT,
-                `userId`                    int {$default_key_sign} NOT NULL,
-                `userName`                  varchar(255) NULL,
-                `sessionId`                 varchar(255) NOT NULL,
-                `sessionName`               varchar(255) NOT NULL,
-                `glpiAuthed`                tinyint {$default_key_sign} NULL,
-                `samlAuthed`                tinyint {$default_key_sign} NULL,
-                `loginTime`                 timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `lastClickTime`             timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `location`                  longtext NOT NULL,
-                `enforceLogoff`             tinyint {$default_key_sign} NULL,
-                `idpId`                     int NULL,
-                `serverParams`              text NULL,
-                `requestParams`             text NULL,
-                `loggedOff`                 tinyint {$default_key_sign} NULL,
-                `phase`                     text NULL,
-                PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=COMPRESSED;
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+            $migration->addTable($table, [
+                'id'            => ['type' => 'int', 'notnull' => true, 'autoincrement' => true],
+                'userId'        => ['type' => 'int', 'notnull' => true],
+                'userName'      => ['type' => 'string', 'null' => true],
+                'sessionId'     => ['type' => 'string', 'notnull' => true],
+                'sessionName'   => ['type' => 'string', 'notnull' => true],
+                'glpiAuthed'    => ['type' => 'tinyint', 'null' => true],
+                'samlAuthed'    => ['type' => 'tinyint', 'null' => true],
+                'loginTime'     => ['type' => 'datetime', 'notnull' => true],
+                'lastClickTime' => ['type' => 'datetime', 'notnull' => true],
+                'location'      => ['type' => 'longtext', 'notnull' => true],
+                'enforceLogoff' => ['type' => 'tinyint', 'null' => true],
+                'idpId'         => ['type' => 'int', 'null' => true],
+                'serverParams'  => ['type' => 'text', 'null' => true],
+                'requestParams' => ['type' => 'text', 'null' => true],
+                'loggedOff'     => ['type' => 'tinyint', 'null' => true],
+                'phase'         => ['type' => 'text', 'null' => true],
+            ], [
+                'engine' => 'InnoDB',
+                'row_format' => 'COMPRESSED'
+            ]);
             Session::addMessageAfterRedirect("🆗 Installed: $table.");
         }
 

@@ -335,20 +335,19 @@ class Exclude extends CommonDropdown
         // Create the base table if it does not yet exist;
         // Do not update this table for later versions, use the migration class;
         if (!$DB->tableExists($table)) {
-            $query = <<<SQL
-            CREATE TABLE IF NOT EXISTS `$table` (
-                `id`                        int {$default_key_sign} NOT NULL AUTO_INCREMENT,
-                `name`                      varchar(255) DEFAULT NULL,
-                `comment`                   text,
-                `date_creation`             timestamp NULL DEFAULT NULL,
-                `date_mod`                  timestamp NULL DEFAULT NULL,
-                `ClientAgent`               text      NOT NULL,
-                `ExcludePath`               text      NOT NULL,
-                `action`                    tinyint unsigned NOT NULL DEFAULT '0',
-                PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=COMPRESSED;
-            SQL;
-            $DB->doQuery($query) or die($DB->error());
+            $migration->addTable($table, [
+                'id'            => ['type' => 'int', 'notnull' => true, 'autoincrement' => true],
+                'name'          => ['type' => 'string', 'null' => true],
+                'comment'       => ['type' => 'text', 'null' => true],
+                'date_creation' => ['type' => 'datetime', 'null' => true],
+                'date_mod'      => ['type' => 'datetime', 'null' => true],
+                'ClientAgent'   => ['type' => 'text', 'notnull' => true],
+                'ExcludePath'   => ['type' => 'text', 'notnull' => true],
+                'action'        => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+            ], [
+                'engine' => 'InnoDB',
+                'row_format' => 'COMPRESSED'
+            ]);
             Session::addMessageAfterRedirect("🆗 Installed: $table.");
             // insert default excludes;
             $DB->insert($table, [
