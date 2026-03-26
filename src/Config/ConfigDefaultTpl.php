@@ -199,6 +199,10 @@ s2DsGVGfjX/LlC5WK63pBfsK3tttiIWXaOmAz29C2279l/WrZFWHQyy0DOHBQYtb
                  ConfigEntity::COMPRESS_RES     => true,
                  ConfigEntity::XML_VALIDATION   => true,
                  ConfigEntity::LOWERCASE_URL    => true,
+                 ConfigEntity::XML_VALIDATION   => true,
+                 ConfigEntity::LOWERCASE_URL    => true,
+                 ConfigEntity::SCIM_ACTIVE      => false,
+                 ConfigEntity::SCIM_TOKEN       => '',
                  ConfigEntity::COMMENT          => 'Azure example configuration, see: https://learn.microsoft.com/en-us/entra/identity/saas-apps/saml-toolkit-tutorial',
                  ConfigEntity::IS_ACTIVE        => false
         ];
