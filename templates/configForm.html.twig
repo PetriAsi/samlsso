@@ -871,7 +871,7 @@
                                         </thead>
                                         <tbody>
                                             <tr><td><code>name</code></td><td><code>NameID</code></td><td><code>userName</code></td></tr>
-                                            <tr><td><code>authid</code></td><td><code>.../objectidentifier</code></td><td><code>externalId</code></td></tr>
+                                            {# <tr><td><code>authid</code></td><td><code>.../objectidentifier</code></td><td><code>externalId</code></td></tr> #}
                                             <tr><td><code>_useremails</code></td><td><code>.../emailaddress</code></td><td><code>emails</code></td></tr>
                                             <tr><td><code>realname</code></td><td><code>.../surname</code></td><td><code>name.familyName</code></td></tr>
                                             <tr><td><code>firstname</code></td><td><code>.../givenname</code></td><td><code>name.givenName</code></td></tr>
@@ -883,9 +883,9 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <p class="x-small text-muted mt-3 mb-0">
+                                {# <p class="x-small text-muted mt-3 mb-0">
                                     <i class="fas fa-lightbulb"></i> {{ __('Tip: Mapping "externalId" (SCIM) or "objectidentifier" (SAML) to "authid" ensures users remain linked even if their username or email changes.', plugin) }}
-                                </p>
+                                </p> #}
                             </div>
                         </div>
                     </div>

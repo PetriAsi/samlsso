@@ -165,9 +165,9 @@ class Scim
         $externalId = $data['externalId'] ?? null;
         $userName = $data['userName'] ?? null;
         
-        if ($externalId && $user->getFromDBByCrit(['authid' => $externalId])) {
+        /* if ($externalId && $user->getFromDBByCrit(['authid' => $externalId])) {
             return new JsonResponse(['error' => 'User already exists'], Response::HTTP_CONFLICT);
-        }
+        } */
         if ($userName && $user->getFromDBbyName($userName)) {
             return new JsonResponse(['error' => 'User already exists'], Response::HTTP_CONFLICT);
         }
@@ -228,7 +228,7 @@ class Scim
             'firstname' => $data['name']['givenName'] ?? '',
             '_useremails' => isset($data['emails']) ? array_column($data['emails'], 'value') : [],
             'is_active' => $data['active'] ?? 1,
-            'authid'    => $data['externalId'] ?? ($data['userName'] ?? ''),
+            // 'authid'    => $data['externalId'] ?? ($data['userName'] ?? ''),
             'authtype'  => 4, // External
         ];
     }
@@ -242,7 +242,7 @@ class Scim
             'schemas'    => ['urn:ietf:params:scim:schemas:core:2.0:User'],
             'id'         => (string) $user->fields['id'],
             'userName'   => $user->fields['name'],
-            'externalId' => $user->fields['authid'],
+            // 'externalId' => $user->fields['authid'],
             'name'       => [
                 'familyName' => $user->fields['realname'],
                 'givenName'  => $user->fields['firstname'],

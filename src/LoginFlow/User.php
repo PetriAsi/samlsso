@@ -92,7 +92,7 @@ class User
     public const ENTITY_ID          = 'entities_id';
     public const ENTITY_DEFAULT     = '_entities_id_default';
     public const AUTHTYPE           = 'authtype';
-    public const AUTHID             = 'authid';
+    // public const AUTHID             = 'authid';
     public const SYNCDATE           = 'date_sync';  //Y-m-d H:i:s
     public const SAMLGROUPS         = 'samlClaimedGroups';
     public const SAMLJOBTITLE       = 'samlClaimedJobTitle';
@@ -118,7 +118,7 @@ class User
     public const SCHEMA_COUNTRY              = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/country';         //
     public const SCHEMA_CITY                 = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/city';            //
     public const SCHEMA_STREET               = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/streetaddress';   //
-    public const SCHEMA_EXTERNALID           = 'http://schemas.microsoft.com/identity/claims/objectidentifier';         // Used as permanent external ID (authid)
+    // public const SCHEMA_EXTERNALID           = 'http://schemas.microsoft.com/identity/claims/objectidentifier';         // Used as permanent external ID (authid)
     public const SCHEMA_GROUPS               = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/groups';        // Used in assignment rules - Optional
     public const SCHEMA_NAME                 = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name';            // Entra claim not used
     public const SCHEMA_TENANTID             = 'http://schemas.microsoft.com/identity/claims/tenantid';                 // Entra claim not used
@@ -153,8 +153,8 @@ class User
         $user = new glpiUser();
         if(!$user->getFromDBbyName($name)       &&      // Try to locate by name->NameId, continue on ! fail.
            !$user->getFromDBbyEmail($email)     &&      // Try to locate by email->emailaddress, continue on ! fail.
-           !$user->getFromDBbyEmail($name)      &&      // Try to locate by email->emailaddress, continue on ! fail.
-           !$user->getFromDBByCrit(['authid' => $name])     ){      // Try to locate by authId->NameId, continue on ! fail.        // User IS NOT found.
+           !$user->getFromDBbyEmail($name)      /*&&      // Try to locate by email->emailaddress, continue on ! fail.
+           !$user->getFromDBByCrit(['authid' => $name])*/     ){      // Try to locate by authId->NameId, continue on ! fail.        // User IS NOT found.
 
             // Try to perform Just In Time (JIT) user creation;
             return $this->performJIT($userFields);
@@ -397,7 +397,7 @@ class User
                                 'getUserInputFieldsFromSamlClaim',
                                 var_export($response, true));
         }
-        $user[User::AUTHID] = $user[User::NAME];
+        // $user[User::AUTHID] = $user[User::NAME];
             
         // If the string #EXT# is found, a guest account is used thats not
         // owned by the Entra IdP handling this request. This is not supported.
