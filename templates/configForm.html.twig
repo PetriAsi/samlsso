@@ -452,31 +452,31 @@
                         <div class="col-md-5">
                             <div class="alert alert-info shadow-sm">
                                 <h5><i class="fas fa-info-circle"></i> {{ __('SAML Attribute Mapping Reference', plugin) }}</h5>
-                                <p class="small text-muted">{{ __('Use these internal GLPI field names when configuring Attribute Mapping/Claims in your IdP:', plugin) }}</p>
+                                <p class="small text-muted">{{ __('Use these internal GLPI field names and corresponding SAML Claim URLs when configuring your IdP:', plugin) }}</p>
                                 <div class="table-responsive">
                                     <table class="table table-sm table-striped small align-middle mb-0">
                                         <thead>
                                             <tr>
                                                 <th>{{ __('GLPI Field', plugin) }}</th>
+                                                <th>{{ __('SAML Claim / Schema URL', plugin) }}</th>
                                                 <th>{{ __('Description', plugin) }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr><td><code>name</code></td><td>{{ __('Login / Username', plugin) }} (<b>{{ __('Required', plugin) }}</b>)</td></tr>
-                                            <tr><td><code>_useremails</code></td><td>{{ __('Email address', plugin) }}</td></tr>
-                                            <tr><td><code>realname</code></td><td>{{ __('Surname / Last name', plugin) }}</td></tr>
-                                            <tr><td><code>firstname</code></td><td>{{ __('First name', plugin) }}</td></tr>
-                                            <tr><td><code>phone</code></td><td>{{ __('Phone number', plugin) }}</td></tr>
-                                            <tr><td><code>mobile</code></td><td>{{ __('Mobile number', plugin) }}</td></tr>
-                                            <tr><td><code>jobtitle</code></td><td>{{ __('Job title', plugin) }}</td></tr>
-                                            <tr><td><code>registration_number</code></td><td>{{ __('Employee ID / Reg. number', plugin) }}</td></tr>
-                                            <tr><td><code>location</code></td><td>{{ __('Location', plugin) }}</td></tr>
-                                            <tr><td><code>groups</code></td><td>{{ __('Group membership (for rules)', plugin) }}</td></tr>
+                                            <tr><td><code>name</code></td><td><code>NameID</code></td><td>{{ __('Login / Username', plugin) }} (<b>{{ __('Required', plugin) }}</b>)</td></tr>
+                                            <tr><td><code>_useremails</code></td><td><code>.../emailaddress</code></td><td>{{ __('Email address', plugin) }}</td></tr>
+                                            <tr><td><code>realname</code></td><td><code>.../surname</code></td><td>{{ __('Surname / Last name', plugin) }}</td></tr>
+                                            <tr><td><code>firstname</code></td><td><code>.../givenname</code></td><td>{{ __('First name', plugin) }}</td></tr>
+                                            <tr><td><code>phone</code></td><td><code>.../telephonenumber</code></td><td>{{ __('Phone number', plugin) }}</td></tr>
+                                            <tr><td><code>mobile</code></td><td><code>.../mobilephone</code></td><td>{{ __('Mobile number', plugin) }}</td></tr>
+                                            <tr><td><code>jobtitle</code></td><td><code>.../jobtitle</code></td><td>{{ __('Job title', plugin) }}</td></tr>
+                                            <tr><td><code>location</code></td><td><code>.../locality</code></td><td>{{ __('Location (City/Street)', plugin) }}</td></tr>
+                                            <tr><td><code>groups</code></td><td><code>.../claims/groups</code></td><td>{{ __('Group membership (for rules)', plugin) }}</td></tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <p class="x-small text-muted mt-3 mb-0">
-                                    <i class="fas fa-lightbulb"></i> {{ __('Tip: Use JIT Import Rules to map other attributes or assign profiles/entities based on these values.', plugin) }}
+                                    <i class="fas fa-lightbulb"></i> {{ __('Note: Schema URLs are shortened for readability. Most follow the http://schemas.xmlsoap.org/ws/2005/05/identity/claims/ format.', plugin) }}
                                 </p>
                             </div>
                         </div>
