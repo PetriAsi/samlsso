@@ -153,8 +153,7 @@ class User
         if(!$user->getFromDBbyName($name)       &&      // Try to locate by name->NameId, continue on ! fail.
            !$user->getFromDBbyEmail($email)     &&      // Try to locate by email->emailaddress, continue on ! fail.
            !$user->getFromDBbyEmail($name)      &&      // Try to locate by email->emailaddress, continue on ! fail.
-           !$user->getFromDBbyAuthid($name)     ){      // Try to locate by authId->NameId, continue on ! fail.
-        // User IS NOT found.
+           !$user->getFromDBByCrit(['authid' => $name])     ){      // Try to locate by authId->NameId, continue on ! fail.        // User IS NOT found.
 
             // Try to perform Just In Time (JIT) user creation;
             return $this->performJIT($userFields);

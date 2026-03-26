@@ -165,7 +165,7 @@ class Scim
         $externalId = $data['externalId'] ?? null;
         $userName = $data['userName'] ?? null;
         
-        if ($externalId && $user->getFromDBbyAuthid($externalId)) {
+        if ($externalId && $user->getFromDBByCrit(['authid' => $externalId])) {
             return new JsonResponse(['error' => 'User already exists'], Response::HTTP_CONFLICT);
         }
         if ($userName && $user->getFromDBbyName($userName)) {
