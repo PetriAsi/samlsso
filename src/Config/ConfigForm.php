@@ -72,8 +72,11 @@ class ConfigForm    //NOSONAR complexity by design.
      * @return string   String containing HTML form with values or redirect into added form.
      */
     public function invoke(Request $request){
+        ob_start();
         $this->displayUIHeader();
         Search::show(Config::class);
+        Html::footer();
+        return ob_get_clean();
     }
 
     /**
@@ -96,14 +99,23 @@ class ConfigForm    //NOSONAR complexity by design.
         if( !$inputBag->has('update')     &&
             !$inputBag->has('delete')     ){                                // IF the update is empy load a given template for initial form.
 
+            ob_start();
             $this->displayUIHeader();
-            return $this->showForm($id, $options);                  // Return the form
+            echo $this->showForm($id, $options)->getContent();
+            Html::footer();
+            return new Response(ob_get_clean());
     
         // Add new item
         }elseif($inputBag->has('update')  &&                                // IF we received an update
                 $id == -1                 ){                                    // AND ID param is empty
+            ob_start();
             $this->displayUIHeader();
-            return $this->addSamlConfig($inputBag->getIterator());  // Call Create handler
+            $response = $this->addSamlConfig($inputBag->getIterator());
+            if ($response instanceof Response) {
+                echo $response->getContent();
+            }
+            Html::footer();
+            return new Response(ob_get_clean());
 
         // Update an item
         }elseif($inputBag->has('update')  &&                                    // IF update is set
@@ -115,8 +127,11 @@ class ConfigForm    //NOSONAR complexity by design.
                 $id > 0                   ){                                    // AND $id is higer then 0
            return $this->deleteSamlConfig($inputBag->getIterator());
         }else{
+            ob_start();
             $this->displayUIHeader();
-            return new Response('No valid instructions received');
+            echo 'No valid instructions received';
+            Html::footer();
+            return new Response(ob_get_clean());
         }
     }
 

@@ -90,16 +90,20 @@ class RuleSaml extends Rule
         return Profile::getIcon();
     }
 
-    public function invoke()
+    public function invoke(): string
     {
+        ob_start();
         $rulecollection = new RuleSamlCollection();
         include_once  GLPI_ROOT . "/front/rule.common.php";                                      // NOSONAR - Cant be included with USE.
+        return (string) ob_get_clean();
     }
 
-    public function invokeForm()
+    public function invokeForm(): string
     {
+        ob_start();
         $rulecollection = new RuleSamlCollection();
         include_once  GLPI_ROOT . "/front/rule.common.form.php";                                 // NOSONAR - Cant be included with USE.
+        return (string) ob_get_clean();
     }
 
 

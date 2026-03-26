@@ -64,13 +64,16 @@ class LoginFlowForm    //NOSONAR complexity by design.
      * Called by the controller to load the
      * configFlow list (top lvl).
      */
-    public function init(): void
+    public function init(): string
     {
+        ob_start();
         Html::header(__('Identity providers'),
                      SamlSsoController::FLOWFORM_ROUTE,
                      SamlSsoController::FLOWFORM_PNAME,
                      LoginFlow::class);
         Search::show(LoginFlow::class);
+        Html::footer();
+        return (string) ob_get_clean();
     }
 
 
