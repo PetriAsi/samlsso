@@ -165,6 +165,10 @@ function plugin_samlsso_install() : bool                                        
             }
         } // Should never be emtpy, but not handling that.
     } // Should never be emtpy, but not handling that.
+
+    // Execute the migration to apply changes to the database
+    $migration->executeMigration();
+
     return true;
 }
 
