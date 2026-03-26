@@ -91,6 +91,17 @@
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link"
+                   id="scim-tab" 
+                   data-bs-toggle="tab" 
+                   href="#scim" 
+                   data-bs-target="#scim" 
+                   type="button" 
+                   role="tab" 
+                   aria-controls="scim" 
+                   aria-selected="false"><b>{{ __('SCIM', plugin) }} [NEW] {{ scim_warning }}</b></a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link"
                    id="logging-tab" 
                    data-bs-toggle="tab" 
                    href="#logging" 
@@ -99,17 +110,6 @@
                    role="tab" 
                    aria-controls="logging" 
                    aria-selected="false"><b>{{ __('Logging') }}</b></a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link"
-                   id="scim-tab" 
-                   data-bs-toggle="tab" 
-                   href="#scim" 
-                   data-bs-target="#scim" 
-                   type="button" 
-                   role="tab" 
-                   aria-controls="scim" 
-                   aria-selected="false"><b>{{ __('SCIM', plugin) }} {{ scim_warning }}</b></a>
             </li>
         </ul>
         <div class="tab-content flex-fill glpisaml" id="myTabContent">
