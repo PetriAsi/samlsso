@@ -775,7 +775,7 @@ class LoginState extends CommonDBTM
         // https://github.com/DonutsNL/samlsso/issues/58
         // Add missing indexes to the state table for performance.
         if ($DB->tableExists($table)) {
-            $migration->addIndex($table, 'sessionId', 'sessionId_idx');
+            $migration->addKey($table, 'sessionId', 'sessionId_idx');
         }
 
         // Clean old cookies
