@@ -123,6 +123,41 @@ class RuleSaml extends Rule
             $criterias['_useremails']['linkfield']  = '';
             $criterias['_useremails']['virtual']    = true;
             $criterias['_useremails']['id']         = '_useremails';
+
+            $criterias['samlClaimedGroups']['table']      = '';
+            $criterias['samlClaimedGroups']['field']      = '';
+            $criterias['samlClaimedGroups']['name']       = __('SAML Groups', PLUGIN_NAME);
+            $criterias['samlClaimedGroups']['linkfield']  = '';
+            $criterias['samlClaimedGroups']['virtual']    = true;
+            $criterias['samlClaimedGroups']['id']         = 'samlClaimedGroups';
+
+            $criterias['samlClaimedJobTitle']['table']      = '';
+            $criterias['samlClaimedJobTitle']['field']      = '';
+            $criterias['samlClaimedJobTitle']['name']       = __('SAML Job Title', PLUGIN_NAME);
+            $criterias['samlClaimedJobTitle']['linkfield']  = '';
+            $criterias['samlClaimedJobTitle']['virtual']    = true;
+            $criterias['samlClaimedJobTitle']['id']         = 'samlClaimedJobTitle';
+
+            $criterias['country']['table']      = '';
+            $criterias['country']['field']      = '';
+            $criterias['country']['name']       = __('SAML Country', PLUGIN_NAME);
+            $criterias['country']['linkfield']  = '';
+            $criterias['country']['virtual']    = true;
+            $criterias['country']['id']         = 'country';
+
+            $criterias['city']['table']      = '';
+            $criterias['city']['field']      = '';
+            $criterias['city']['name']       = __('SAML City', PLUGIN_NAME);
+            $criterias['city']['linkfield']  = '';
+            $criterias['city']['virtual']    = true;
+            $criterias['city']['id']         = 'city';
+
+            $criterias['street']['table']      = '';
+            $criterias['street']['field']      = '';
+            $criterias['street']['name']       = __('SAML Street', PLUGIN_NAME);
+            $criterias['street']['linkfield']  = '';
+            $criterias['street']['virtual']    = true;
+            $criterias['street']['id']         = 'street';
             
         }
         return $criterias;
