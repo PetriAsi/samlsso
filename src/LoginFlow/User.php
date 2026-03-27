@@ -452,6 +452,9 @@ class User
             // Groups to be passed to the rules engine
             $user[User::SAMLGROUPS] = isset($claims[User::SCHEMA_GROUPS]) ? $claims[User::SCHEMA_GROUPS] : [];
 
+            // Log groups for debugging
+            Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, "SAML Groups found in claim: " . var_export($user[User::SAMLGROUPS], true) . "\n");
+
             // Firstname
             if(isset($claims[User::SCHEMA_FIRSTNAME][0]) ||
                isset($claims[User::SCHEMA_GIVENNAME][0]) ){
