@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.7
+ *  @version    1.2.8
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -438,6 +438,15 @@ class ConfigItem    //NOSONAR
                             ConfigItem::FIELD         => __function__,
                             ConfigItem::VALIDATOR     => __method__,],
                             ConfigItem::handleAsBool($var, ConfigEntity::JIT_ADD_PROFILES));
+    }
+
+    protected function user_sync(mixed $var): array //NOSONAR
+    {
+        return array_merge([ConfigItem::FORMEXPLAIN     => __('If enabled, samlSSO will update realname, firstname, email, mobile and phone from SAML claims on every login for existing users.'),
+                            ConfigItem::FORMTITLE     => __('SYNC USER FIELDS', PLUGIN_NAME),
+                            ConfigItem::FIELD         => __function__,
+                            ConfigItem::VALIDATOR     => __method__,],
+                            ConfigItem::handleAsBool($var, ConfigEntity::USER_SYNC));
     }
 
     protected function security_nameidencrypted(mixed $var): array //NOSONAR

@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.7
+ *  @version    1.2.8
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -73,6 +73,7 @@ class ConfigEntity extends ConfigItem
     public const DEBUG           = 'debug';                                  // Enable debug logging
     public const USER_JIT        = 'user_jit';                               // Enable Just In Time user creation
     public const JIT_ADD_PROFILES = 'jit_add_profiles';                      // Add SAML rule profiles without removing existing profile assignments
+    public const USER_SYNC       = 'user_sync';                              // Sync user fields from SAML claims on every login for existing users
     public const SP_CERTIFICATE  = 'sp_certificate';                         // Service provider certificate
     public const SP_KEY          = 'sp_private_key';                         // Service provider certificate key
     public const SP_NAME_FORMAT  = 'sp_nameid_format';                       // Service provider nameID formatting

@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.7
+ *  @version    1.2.8
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -99,6 +99,9 @@ class User
     public const SAMLCOUNTRY        = 'country';
     public const SAMLCITY           = 'city';
     public const SAMLSTREET         = 'street';
+    public const JIT_USER_STATE          = 'jitUserState';
+    public const JIT_USER_STATE_NEW      = 'new';
+    public const JIT_USER_STATE_EXISTING = 'existing';
 
 
     /**
@@ -177,7 +180,20 @@ class User
             }
 
             // Run rules for existing user
-            $this->processRules($userFields, (int)$user->fields[User::USERID]);
+            $this->processRules($userFields, (int)$user->fields[User::USERID], false);
+
+            // Sync user fields from SAML claims if enabled
+            $syncConfigEntity = new ConfigEntity((new LoginState())->getIdpId());
+            if ((bool) $syncConfigEntity->getField(ConfigEntity::USER_SYNC)) {
+                $syncFields = ['id' => $user->fields[User::USERID]];
+                foreach ([User::REALNAME, User::FIRSTNAME, User::EMAIL, User::MOBILE, User::PHONE] as $field) {
+                    if (array_key_exists($field, $userFields) && !empty($userFields[$field])) {
+                        $syncFields[$field] = $userFields[$field];
+                    }
+                }
+                $user->update(Sanitizer::sanitize($syncFields));
+            }
+
             // Refresh user fields in case rules updated them (e.g. default entity)
             $user->getFromDB($user->fields[User::USERID]);
 
@@ -197,9 +213,10 @@ class User
      * 
      * @param array $userFields
      * @param int $userId
+     * @param bool $isNewUser  True when the user was just created via JIT, false for an existing user.
      * @return void
      */
-    private function processRules(array $userFields, int $userId): void
+    private function processRules(array $userFields, int $userId, bool $isNewUser = false): void
     {
         $ruleCollection = new RuleSamlCollection();
         $matchInput = [
@@ -208,7 +225,8 @@ class User
             User::SAMLJOBTITLE   => $userFields[User::SAMLJOBTITLE] ?? false,
             User::SAMLCOUNTRY    => $userFields[User::SAMLCOUNTRY] ?? false,
             User::SAMLCITY       => $userFields[User::SAMLCITY] ?? false,
-            User::SAMLSTREET     => $userFields[User::SAMLSTREET] ?? false
+            User::SAMLSTREET     => $userFields[User::SAMLSTREET] ?? false,
+            User::JIT_USER_STATE => $isNewUser ? User::JIT_USER_STATE_NEW : User::JIT_USER_STATE_EXISTING,
         ];
         // Uses a hook to call $this->updateUser() if a rule was found.
         $ruleCollection->processAllRules($matchInput, [User::USERSID => $userId], []);
@@ -236,7 +254,7 @@ class User
                                                 request a GLPI administrator to review the logs and correct the problem or
                                                 request the administrator to create a GLPI user manually.", PLUGIN_NAME));
             }else{
-                $this->processRules($userFields, (int)$id);
+                $this->processRules($userFields, (int)$id, true);
             }
 
             // Return the freshly created user!

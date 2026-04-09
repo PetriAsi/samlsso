@@ -730,6 +730,24 @@
                             }
                         ) }}
                     </div>
+
+                    <!-- user_sync -->
+                    <div>
+                        {% set error_helper %}
+                            {% if inputfields.user_sync.errors == true %}
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.user_sync.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.user_sync.field,
+                            inputfields.user_sync.value,
+                            inputfields.user_sync.formtitle,
+                            {
+                                'add_field_html': error_helper,
+                                helper: inputfields.user_sync.formexplain,
+                            }
+                        ) }}
+                    </div>
                     
                     <!-- security_nameidencrypted -->
                     <div>

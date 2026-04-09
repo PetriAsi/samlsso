@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: samlSSO 1.2.7\n"
+"Project-Id-Version: samlSSO 1.2.8\n"
 "Report-Msgid-Bugs-To: https://github.com/DonutsNL/samlSSO/issues\n"
 "POT-Creation-Date: 2025-11-27 12:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -337,6 +337,16 @@ msgstr ""
 
 #: src/Config/ConfigItem.php:435
 msgid "JIT ADD PROFILES"
+msgstr ""
+
+#: src/Config/ConfigItem.php:445
+msgid ""
+"If enabled, samlSSO will update realname, firstname, email, mobile and phone "
+"from SAML claims on every login for existing users."
+msgstr ""
+
+#: src/Config/ConfigItem.php:446
+msgid "SYNC USER FIELDS"
 msgstr ""
 
 #: src/Config/ConfigItem.php:436
@@ -980,4 +990,36 @@ msgstr ""
 
 #: src/Exclude.php:188
 msgid "To be excluded path"
+msgstr ""
+
+#: src/RuleSaml.php:129
+msgid "SAML Groups"
+msgstr ""
+
+#: src/RuleSaml.php:136
+msgid "SAML Job Title"
+msgstr ""
+
+#: src/RuleSaml.php:143
+msgid "SAML Country"
+msgstr ""
+
+#: src/RuleSaml.php:150
+msgid "SAML City"
+msgstr ""
+
+#: src/RuleSaml.php:157
+msgid "SAML Street"
+msgstr ""
+
+#: src/RuleSaml.php:164
+msgid "JIT User State"
+msgstr ""
+
+#: src/RuleSaml.php:170
+msgid "New user (JIT creation)"
+msgstr ""
+
+#: src/RuleSaml.php:171
+msgid "Existing user (update)"
 msgstr ""

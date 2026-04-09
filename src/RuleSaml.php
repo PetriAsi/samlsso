@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.7
+ *  @version    1.2.8
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -158,7 +158,19 @@ class RuleSaml extends Rule
             $criterias['street']['linkfield']  = '';
             $criterias['street']['virtual']    = true;
             $criterias['street']['id']         = 'street';
-            
+
+            $criterias['jitUserState']['table']      = '';
+            $criterias['jitUserState']['field']      = '';
+            $criterias['jitUserState']['name']       = __('JIT User State', PLUGIN_NAME);
+            $criterias['jitUserState']['linkfield']  = '';
+            $criterias['jitUserState']['virtual']    = true;
+            $criterias['jitUserState']['id']         = 'jitUserState';
+            $criterias['jitUserState']['type']       = 'dropdown_array';
+            $criterias['jitUserState']['array']      = [
+                'new'      => __('New user (JIT creation)', PLUGIN_NAME),
+                'existing' => __('Existing user (update)', PLUGIN_NAME),
+            ];
+
         }
         return $criterias;
     }

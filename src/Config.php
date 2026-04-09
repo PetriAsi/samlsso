@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.7
+ *  @version    1.2.8
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -447,6 +447,7 @@ class Config extends CommonDBTM
                 'debug'                              => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
                 'user_jit'                           => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
                 'jit_add_profiles'                   => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'user_sync'                          => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
                 'sp_certificate'                     => ['type' => 'text', 'notnull' => true],
                 'sp_private_key'                     => ['type' => 'text', 'notnull' => true],
                 'sp_nameid_format'                   => ['type' => 'string', 'notnull' => true, 'len' => 128],
@@ -503,6 +504,14 @@ class Config extends CommonDBTM
             if (!$DB->fieldExists($table, 'jit_add_profiles')) {
                 $migration->displayMessage("Adding jit_add_profiles column to $table");
                 $migration->addField($table, 'jit_add_profiles', 'tinyint', ['value' => 0, 'after' => 'user_jit']);
+            }
+        }
+
+        // Add user_sync column if it does not exist
+        if ($DB->tableExists($table)) {
+            if (!$DB->fieldExists($table, 'user_sync')) {
+                $migration->displayMessage("Adding user_sync column to $table");
+                $migration->addField($table, 'user_sync', 'tinyint', ['value' => 0, 'after' => 'jit_add_profiles']);
             }
         }
     }
