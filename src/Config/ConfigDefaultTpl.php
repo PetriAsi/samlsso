@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.5
+ *  @version    1.2.7
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -65,6 +65,7 @@ class ConfigDefaultTpl {
                  ConfigEntity::STRICT           => false,
                  ConfigEntity::DEBUG            => false,
                  ConfigEntity::USER_JIT         => true,
+                 ConfigEntity::JIT_ADD_PROFILES  => false,
                  ConfigEntity::SP_CERTIFICATE   => '-----BEGIN CERTIFICATE-----
 MIIF1TCCA72gAwIBAgIUB6hrJz15hIkxxAtAhtzJA6GQjt0wDQYJKoZIhvcNAQEL
 BQAwejELMAkGA1UEBhMCTkwxEjAQBgNVBAgMCUZsZXZvbGFuZDEPMA0GA1UEBwwG

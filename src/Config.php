@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.5
+ *  @version    1.2.7
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -446,6 +446,7 @@ class Config extends CommonDBTM
                 'strict'                             => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
                 'debug'                              => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
                 'user_jit'                           => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
+                'jit_add_profiles'                   => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
                 'sp_certificate'                     => ['type' => 'text', 'notnull' => true],
                 'sp_private_key'                     => ['type' => 'text', 'notnull' => true],
                 'sp_nameid_format'                   => ['type' => 'string', 'notnull' => true, 'len' => 128],
@@ -494,6 +495,14 @@ class Config extends CommonDBTM
             if (!$DB->fieldExists($table, 'scim_token')) {
                 $migration->displayMessage("Adding scim_token column to $table");
                 $migration->addField($table, 'scim_token', 'string', ['after' => 'scim_active']);
+            }
+        }
+
+        // Add jit_add_profiles column if it does not exist
+        if ($DB->tableExists($table)) {
+            if (!$DB->fieldExists($table, 'jit_add_profiles')) {
+                $migration->displayMessage("Adding jit_add_profiles column to $table");
+                $migration->addField($table, 'jit_add_profiles', 'tinyint', ['value' => 0, 'after' => 'user_jit']);
             }
         }
     }

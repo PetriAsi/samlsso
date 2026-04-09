@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.5
+ *  @version    1.2.7
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -176,6 +176,11 @@ class User
                                             reactivate your account.", PLUGIN_NAME));
             }
 
+            // Run rules for existing user
+            $this->processRules($userFields, (int)$user->fields[User::USERID]);
+            // Refresh user fields in case rules updated them (e.g. default entity)
+            $user->getFromDB($user->fields[User::USERID]);
+
             // Check if the user has any profiles assigned
             if (count(Profile_User::getForUser($user->fields[User::USERID])) === 0) {
                 LoginFlow::PrintFatalLoginError(__("Your SSO login was successful but no GLPI profile was assigned to your account. Please contact your GLPI administrator to assign a profile to your account.", PLUGIN_NAME));
@@ -185,6 +190,28 @@ class User
             // for session initialization!.
             return $user;
         }
+    }
+
+    /**
+     * Helper to process SAML rules for a user.
+     * 
+     * @param array $userFields
+     * @param int $userId
+     * @return void
+     */
+    private function processRules(array $userFields, int $userId): void
+    {
+        $ruleCollection = new RuleSamlCollection();
+        $matchInput = [
+            User::EMAIL          => $userFields[User::EMAIL] ?? [],
+            User::SAMLGROUPS     => $userFields[User::SAMLGROUPS] ?? [],
+            User::SAMLJOBTITLE   => $userFields[User::SAMLJOBTITLE] ?? false,
+            User::SAMLCOUNTRY    => $userFields[User::SAMLCOUNTRY] ?? false,
+            User::SAMLCITY       => $userFields[User::SAMLCITY] ?? false,
+            User::SAMLSTREET     => $userFields[User::SAMLSTREET] ?? false
+        ];
+        // Uses a hook to call $this->updateUser() if a rule was found.
+        $ruleCollection->processAllRules($matchInput, [User::USERSID => $userId], []);
     }
 
     private function performJIT(array $userFields): glpiUser {
@@ -209,15 +236,7 @@ class User
                                                 request a GLPI administrator to review the logs and correct the problem or
                                                 request the administrator to create a GLPI user manually.", PLUGIN_NAME));
             }else{
-                $ruleCollection = new RuleSamlCollection();
-                $matchInput = [User::EMAIL          => $userFields[User::EMAIL],
-                               User::SAMLGROUPS     => $userFields[User::SAMLGROUPS],
-                               User::SAMLJOBTITLE   => $userFields[User::SAMLJOBTITLE],
-                               User::SAMLCOUNTRY    => $userFields[User::SAMLCOUNTRY],
-                               User::SAMLCITY       => $userFields[User::SAMLCITY],
-                               User::SAMLSTREET     => $userFields[User::SAMLSTREET]];
-                // Uses a hook to call $this->updateUser() if a rule was found.
-                $ruleCollection->processAllRules($matchInput, [User::USERSID => $id], []);
+                $this->processRules($userFields, (int)$id);
             }
 
             // Return the freshly created user!
@@ -300,18 +319,23 @@ class User
             if(!$profileUser->add($rights)){
                 Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT was not able to assign profile with config:'.var_export($rights, true)."\n\n" . "\n", true));
             }else{
-                // Delete all default profile assignments
-                Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT remove all default profiles from newly created user:'."\n"));
-                $profileUser = new Profile_User();
-                if($pid = $profileUser->getForUser($update[User::USERSID])){
-                    foreach($pid as $key => $data){
-                        if ($data['profiles_id'] != $rights[User::PROFILESID]) {
-                            $profileUser->delete(['id' => $key]);
+                // Delete all default profile assignments unless jit_add_profiles is enabled.
+                $jitConfigEntity = new ConfigEntity((new LoginState())->getIdpId());
+                if (!(bool) $jitConfigEntity->getField(ConfigEntity::JIT_ADD_PROFILES)) {
+                    Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT remove all default profiles from newly created user:'."\n"));
+                    $profileUser = new Profile_User();
+                    if($pid = $profileUser->getForUser($update[User::USERSID])){
+                        foreach($pid as $key => $data){
+                            if ($data['profiles_id'] != $rights[User::PROFILESID]) {
+                                $profileUser->delete(['id' => $key]);
+                            }
                         }
+                        Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('Done'."\n"));
+                    } else {
+                        Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('failed'."\n"));
                     }
-                    Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('Done'."\n"));
                 } else {
-                    Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('failed'."\n"));
+                    Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT jitAddProfiles enabled, skipping removal of existing profile assignments.'."\n"));
                 }
                 Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT assigned profile with config:'.var_export($rights, true)."\n\n" . "\n", true));
             }

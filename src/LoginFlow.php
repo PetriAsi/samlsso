@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    Samlsso
- *  @version    1.2.5
+ *  @version    1.2.7
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -87,6 +87,7 @@ class LoginFlow extends CommonDBTM
     public const EN_IDP_LOGOUT      =   'enableIdpLogout';
     public const ENF_AUTH_AFTER     =   'enforceReAuthAfterIdle';       // Time in minutes that session is allowed to idle before forcing reAuth
     public const BLK_AFTER_LOGOUT   =   'blockAfterEnfocedLogout';      // Time to block user after he/she was forcefully logged out.
+    public const JIT_ADD_PROFILES   =   'jit_add_profiles';             // Just in time add profiles to users that are authenticated by SAML and keep existing profiles in tact.
 
     // https://codeberg.org/QuinQuies/glpisaml/issues/37
     public const POSTFIELD   = 'samlIdpId';

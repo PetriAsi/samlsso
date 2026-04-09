@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.5
+ *  @version    1.2.7
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -429,6 +429,15 @@ class ConfigItem    //NOSONAR
                             ConfigItem::FIELD         => __function__,
                             ConfigItem::VALIDATOR     => __method__,],
                             ConfigItem::handleAsBool($var, ConfigEntity::USER_JIT));
+    }
+
+    protected function jit_add_profiles(mixed $var): array //NOSONAR
+    {
+        return array_merge([ConfigItem::FORMEXPLAIN     => __('If enabled, samlSSO will add SAML rule assigned profiles to already existing users without removing their current profile assignments. Requires JIT user creation to be enabled.'),
+                            ConfigItem::FORMTITLE     => __('JIT ADD PROFILES', PLUGIN_NAME),
+                            ConfigItem::FIELD         => __function__,
+                            ConfigItem::VALIDATOR     => __method__,],
+                            ConfigItem::handleAsBool($var, ConfigEntity::JIT_ADD_PROFILES));
     }
 
     protected function security_nameidencrypted(mixed $var): array //NOSONAR

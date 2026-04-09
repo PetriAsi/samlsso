@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.5
+ *  @version    1.2.7
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -297,6 +297,7 @@ class ConfigForm    //NOSONAR complexity by design.
                       'security_warning'    => [configEntity::ENFORCE_SSO,
                                                 configEntity::STRICT,
                                                 configEntity::USER_JIT,
+                                                configEntity::JIT_ADD_PROFILES,
                                                 configEntity::ENCRYPT_NAMEID,
                                                 configEntity::SIGN_AUTHN,
                                                 configEntity::SIGN_SLO_REQ,
