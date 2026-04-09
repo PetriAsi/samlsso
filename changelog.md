@@ -1,3 +1,8 @@
+**V1.2.7**
+- Feature: Added `jit_add_profiles` per-IDP configuration option. When enabled, SAML rule assigned profiles are added to existing users without removing their current profile assignments.
+- Improvement: Added `jit_add_profiles` toggle to the Security tab of the IDP configuration form.
+- Migration: Added `jit_add_profiles` database column to `glpi_plugin_samlsso_configs` table (fresh installs and upgrades).
+
 **V1.2.6**
 - Improve generation scripts in tools directory to include more info.
 - Improvement: Added index to logging table via installation/upgrade as suggested by @Neozlag

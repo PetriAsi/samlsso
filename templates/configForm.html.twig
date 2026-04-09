@@ -712,6 +712,24 @@
                             }
                         ) }}
                     </div>
+
+                    <!-- jit_add_profiles -->
+                    <div>
+                        {% set error_helper %}
+                            {% if inputfields.jit_add_profiles.errors == true %}
+                                <div class="form-text text-helper" style="color:red;">{{ inputfields.jit_add_profiles.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.jit_add_profiles.field,
+                            inputfields.jit_add_profiles.value,
+                            inputfields.jit_add_profiles.formtitle,
+                            {
+                                'add_field_html': error_helper,
+                                helper: inputfields.jit_add_profiles.formexplain,
+                            }
+                        ) }}
+                    </div>
                     
                     <!-- security_nameidencrypted -->
                     <div>

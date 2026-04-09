@@ -9,7 +9,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: samlSSO 1.2.5\n"
+"Project-Id-Version: samlSSO 1.2.7\n"
 "Report-Msgid-Bugs-To: https://github.com/DonutsNL/samlSSO/issues\n"
 "POT-Creation-Date: 2025-11-27 12:28+0100\n"
 "PO-Revision-Date: 2025-11-27 11:38+0000\n"
@@ -391,6 +391,20 @@ msgstr ""
 #: src/Config/ConfigItem.php:428
 msgid "JIT USER CREATION"
 msgstr "CREACIÓN DE USUARIOS JIT"
+
+#: src/Config/ConfigItem.php:434
+msgid ""
+"If enabled, samlSSO will add SAML rule assigned profiles to already existing "
+"users without removing their current profile assignments. Requires JIT user "
+"creation to be enabled."
+msgstr ""
+"Si está habilitado, samlSSO agregará perfiles asignados por reglas SAML a "
+"usuarios ya existentes sin eliminar sus asignaciones de perfil actuales. "
+"Requiere que la creación de usuarios JIT esté habilitada."
+
+#: src/Config/ConfigItem.php:435
+msgid "JIT ADD PROFILES"
+msgstr "AGREGAR PERFILES JIT"
 
 #: src/Config/ConfigItem.php:436
 msgid ""
