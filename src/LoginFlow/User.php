@@ -351,9 +351,24 @@ class User
             }
             
 
-            // Assign collected Rights
+            // Assign collected Rights, but only if not already assigned.
             $profileUser = new Profile_User();
-            if(!$profileUser->add($rights)){
+            $existingProfiles = $profileUser->getForUser($update[User::USERSID]);
+            $entityId = $rights[User::ENTITY_ID] ?? 0;
+            $alreadyAssigned = false;
+            if (is_array($existingProfiles)) {
+                foreach ($existingProfiles as $existing) {
+                    if ((int)$existing['profiles_id'] === (int)$rights[User::PROFILESID] &&
+                        (int)$existing['entities_id'] === (int)$entityId) {
+                        $alreadyAssigned = true;
+                        break;
+                    }
+                }
+            }
+
+            if ($alreadyAssigned) {
+                Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT skipped duplicate profile assignment:'.var_export($rights, true)."\n\n" . "\n", true));
+            } elseif(!$profileUser->add($rights)){
                 Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT was not able to assign profile with config:'.var_export($rights, true)."\n\n" . "\n", true));
             }else{
                 // Delete all default profile assignments unless jit_add_profiles is enabled.
