@@ -179,12 +179,14 @@ class User
                                             reactivate your account.", PLUGIN_NAME));
             }
 
+            // Fetch config once for both rule processing and sync
+            $configEntity = new ConfigEntity((new LoginState())->getIdpId());
+
             // Run rules for existing user
-            $this->processRules($userFields, (int)$user->fields[User::USERID], false);
+            $this->processRules($userFields, (int)$user->fields[User::USERID], false, (bool) $configEntity->getField(ConfigEntity::JIT_ADD_PROFILES));
 
             // Sync user fields from SAML claims if enabled
-            $syncConfigEntity = new ConfigEntity((new LoginState())->getIdpId());
-            if ((bool) $syncConfigEntity->getField(ConfigEntity::USER_SYNC)) {
+            if ((bool) $configEntity->getField(ConfigEntity::USER_SYNC)) {
                 $syncFields = ['id' => $user->fields[User::USERID]];
                 foreach ([User::REALNAME, User::FIRSTNAME, User::EMAIL, User::MOBILE, User::PHONE] as $field) {
                     if (array_key_exists($field, $userFields) && !empty($userFields[$field])) {
@@ -193,6 +195,7 @@ class User
                 }
                 $user->update(Sanitizer::sanitize($syncFields));
             }
+            unset($configEntity);
 
             // Refresh user fields in case rules updated them (e.g. default entity)
             $user->getFromDB($user->fields[User::USERID]);
@@ -216,7 +219,7 @@ class User
      * @param bool $isNewUser  True when the user was just created via JIT, false for an existing user.
      * @return void
      */
-    private function processRules(array $userFields, int $userId, bool $isNewUser = false): void
+    private function processRules(array $userFields, int $userId, bool $isNewUser = false, bool $jitAddProfiles = false): void
     {
         $ruleCollection = new RuleSamlCollection();
         $matchInput = [
@@ -229,7 +232,7 @@ class User
             User::JIT_USER_STATE => $isNewUser ? User::JIT_USER_STATE_NEW : User::JIT_USER_STATE_EXISTING,
         ];
         // Uses a hook to call $this->updateUser() if a rule was found.
-        $ruleCollection->processAllRules($matchInput, [User::USERSID => $userId], []);
+        $ruleCollection->processAllRules($matchInput, [User::USERSID => $userId], [ConfigEntity::JIT_ADD_PROFILES => $jitAddProfiles]);
     }
 
     private function performJIT(array $userFields): glpiUser {
@@ -254,7 +257,7 @@ class User
                                                 request a GLPI administrator to review the logs and correct the problem or
                                                 request the administrator to create a GLPI user manually.", PLUGIN_NAME));
             }else{
-                $this->processRules($userFields, (int)$id, true);
+                $this->processRules($userFields, (int)$id, true, (bool) $configEntity->getField(ConfigEntity::JIT_ADD_PROFILES));
             }
 
             // Return the freshly created user!
@@ -338,8 +341,7 @@ class User
                 Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT was not able to assign profile with config:'.var_export($rights, true)."\n\n" . "\n", true));
             }else{
                 // Delete all default profile assignments unless jit_add_profiles is enabled.
-                $jitConfigEntity = new ConfigEntity((new LoginState())->getIdpId());
-                if (!(bool) $jitConfigEntity->getField(ConfigEntity::JIT_ADD_PROFILES)) {
+                if (!(bool) ($params[ConfigEntity::JIT_ADD_PROFILES] ?? false)) {
                     Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT remove all default profiles from newly created user:'."\n"));
                     $profileUser = new Profile_User();
                     if($pid = $profileUser->getForUser($update[User::USERSID])){
