@@ -357,6 +357,8 @@ class LoginFlow extends CommonDBTM
      */
     protected function performSamlIdpRequest(): void
     {
+        global $CFG_GLPI;
+
         // Fetch the correct configEntity GLPI
         if($configEntity = new ConfigEntity($this->state->getIdpId())){ // Get the configEntity object using our stored ID
             $samlConfig = $configEntity->getPhpSamlConfig();      // Get the correctly formatted SamlConfig array
