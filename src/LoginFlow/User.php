@@ -223,16 +223,17 @@ class User
     {
         $ruleCollection = new RuleSamlCollection();
         $matchInput = [
-            User::EMAIL          => $userFields[User::EMAIL] ?? [],
-            User::SAMLGROUPS     => $userFields[User::SAMLGROUPS] ?? [],
-            User::SAMLJOBTITLE   => $userFields[User::SAMLJOBTITLE] ?? false,
-            User::SAMLCOUNTRY    => $userFields[User::SAMLCOUNTRY] ?? false,
-            User::SAMLCITY       => $userFields[User::SAMLCITY] ?? false,
-            User::SAMLSTREET     => $userFields[User::SAMLSTREET] ?? false,
-            User::JIT_USER_STATE => $isNewUser ? User::JIT_USER_STATE_NEW : User::JIT_USER_STATE_EXISTING,
+            User::EMAIL                      => $userFields[User::EMAIL] ?? [],
+            User::SAMLGROUPS                 => $userFields[User::SAMLGROUPS] ?? [],
+            User::SAMLJOBTITLE               => $userFields[User::SAMLJOBTITLE] ?? false,
+            User::SAMLCOUNTRY                => $userFields[User::SAMLCOUNTRY] ?? false,
+            User::SAMLCITY                   => $userFields[User::SAMLCITY] ?? false,
+            User::SAMLSTREET                 => $userFields[User::SAMLSTREET] ?? false,
+            User::JIT_USER_STATE             => $isNewUser ? User::JIT_USER_STATE_NEW : User::JIT_USER_STATE_EXISTING,
+            ConfigEntity::JIT_ADD_PROFILES   => $jitAddProfiles,
         ];
         // Uses a hook to call $this->updateUser() if a rule was found.
-        $ruleCollection->processAllRules($matchInput, [User::USERSID => $userId], [ConfigEntity::JIT_ADD_PROFILES => $jitAddProfiles]);
+        $ruleCollection->processAllRules($matchInput, [User::USERSID => $userId], []);
     }
 
     private function performJIT(array $userFields): glpiUser {
@@ -341,7 +342,7 @@ class User
                 Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT was not able to assign profile with config:'.var_export($rights, true)."\n\n" . "\n", true));
             }else{
                 // Delete all default profile assignments unless jit_add_profiles is enabled.
-                if (!(bool) ($params[ConfigEntity::JIT_ADD_PROFILES] ?? false)) {
+                if (!(bool) ($params['input'][ConfigEntity::JIT_ADD_PROFILES] ?? false)) {
                     Toolbox::logInFile(PLUGIN_NAME.PLUGIN_SAMLSSO_LOGEVENTS, __('JIT remove all default profiles from newly created user:'."\n"));
                     $profileUser = new Profile_User();
                     if($pid = $profileUser->getForUser($update[User::USERSID])){
