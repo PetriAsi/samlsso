@@ -179,8 +179,10 @@ class User
                                             reactivate your account.", PLUGIN_NAME));
             }
 
-            // Fetch config once for both rule processing and sync
-            $configEntity = new ConfigEntity((new LoginState())->getIdpId());
+            // Fetch config once for both rule processing and sync.
+            // Use idpId injected by performGlpiLogin — LoginState session_id lookup is
+            // unreliable at ACS time because the PHP session differs from the stored one.
+            $configEntity = new ConfigEntity((int)($userFields[LoginState::IDP_ID] ?? -1));
 
             // Run rules for existing user
             $this->processRules($userFields, (int)$user->fields[User::USERID], false, (bool) $configEntity->getField(ConfigEntity::JIT_ADD_PROFILES));
@@ -239,9 +241,8 @@ class User
     private function performJIT(array $userFields): glpiUser {
         $user = new glpiUser();
 
-        // Get current loginState and
-        // Fetch the correct configEntity using the idp found in our loginState.
-        if(!$configEntity = new ConfigEntity((new Loginstate())->getIdpId())){
+        // Get correct configEntity using idpId injected by performGlpiLogin.
+        if(!$configEntity = new ConfigEntity((int)($userFields[LoginState::IDP_ID] ?? -1))){
             LoginFlow::PrintFatalLoginError(__("Your SSO login was successful but we where not able to fetch
                                             the loginState from the database and could not continue to log
                                             you into GLPI.", PLUGIN_NAME));
@@ -250,9 +251,11 @@ class User
         // Are we allowed to perform JIT user creation?
         if($configEntity->getField(ConfigEntity::USER_JIT)){
             // Build the input array using the provided attributes (claims)
-            // from the samlResponse. maybe use this method in the future
-            // to also validate provided claims in one go.
-            if(!$id = $user->add(Sanitizer::sanitize($userFields))){
+            // from the samlResponse. Strip the injected idpId so it is not
+            // passed to GLPI's User::add().
+            $userFieldsForAdd = $userFields;
+            unset($userFieldsForAdd[LoginState::IDP_ID]);
+            if(!$id = $user->add(Sanitizer::sanitize($userFieldsForAdd))){
                 LoginFlow::PrintFatalLoginError(__("Your SSO login was successful but there is no matching GLPI user account and
                                                 we failed to create one dynamically using Just In Time user creation. Please
                                                 request a GLPI administrator to review the logs and correct the problem or

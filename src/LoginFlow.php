@@ -434,6 +434,10 @@ class LoginFlow extends CommonDBTM
         // This validation will print and exit(!) on errors because user information is mandatory
         // after this step.
         $userFields = User::getUserInputFieldsFromSamlClaim($response);
+        // Inject the IDP ID so getOrCreateUser can load the correct config without
+        // relying on a session_id-based LoginState lookup (which fails at ACS time
+        // because the PHP session differs from the pre-redirect session stored in state).
+        $userFields[LoginState::IDP_ID] = $state->getIdpId();
        
         // Try to populate GLPI Auth using the fetched samlResponse attributes;
         try {
