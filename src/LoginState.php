@@ -257,6 +257,7 @@ class LoginState extends CommonDBTM
             LoginState::DATABASE          => false,
             LoginState::PHASE             => LoginState::PHASE_INITIAL,
             LoginState::LOGIN_FLOW_TRACE  => serialize([]),
+            LoginState::LOGIN_DATETIME    => date('Y-m-d H:i:s'),
         ]);
 
         // Get the last activity
