@@ -707,27 +707,28 @@ class LoginState extends CommonDBTM
         // Do not update this table for later versions, use the migration class;
         if (!$DB->tableExists($table)) {
             // Create table
-            $migration->addTable($table, [
-                'id'            => ['type' => 'int', 'notnull' => true, 'autoincrement' => true],
-                'userId'        => ['type' => 'int', 'notnull' => true],
-                'userName'      => ['type' => 'string', 'null' => true],
-                'sessionId'     => ['type' => 'string', 'notnull' => true],
-                'sessionName'   => ['type' => 'string', 'notnull' => true],
-                'glpiAuthed'    => ['type' => 'tinyint', 'null' => true],
-                'samlAuthed'    => ['type' => 'tinyint', 'null' => true],
-                'loginTime'     => ['type' => 'datetime', 'notnull' => true],
-                'lastClickTime' => ['type' => 'datetime', 'notnull' => true],
-                'location'      => ['type' => 'longtext', 'notnull' => true],
-                'enforceLogoff' => ['type' => 'tinyint', 'null' => true],
-                'idpId'         => ['type' => 'int', 'null' => true],
-                'serverParams'  => ['type' => 'text', 'null' => true],
-                'requestParams' => ['type' => 'text', 'null' => true],
-                'loggedOff'     => ['type' => 'tinyint', 'null' => true],
-                'phase'         => ['type' => 'text', 'null' => true],
-            ], [
-                'engine' => 'InnoDB',
-                'row_format' => 'COMPRESSED'
-            ]);
+            $DB->doQuery("CREATE TABLE `$table` (
+                `id`            int {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                `userId`        int {$default_key_sign} NOT NULL DEFAULT '0',
+                `userName`      varchar(255) NULL DEFAULT NULL,
+                `sessionId`     varchar(255) NOT NULL DEFAULT '',
+                `sessionName`   varchar(255) NOT NULL DEFAULT '',
+                `glpiAuthed`    tinyint NULL DEFAULT NULL,
+                `samlAuthed`    tinyint NULL DEFAULT NULL,
+                `loginTime`     datetime NOT NULL,
+                `lastClickTime` datetime NOT NULL,
+                `location`      longtext NOT NULL,
+                `enforceLogoff` tinyint NULL DEFAULT NULL,
+                `idpId`         int {$default_key_sign} NULL DEFAULT NULL,
+                `serverParams`  text NULL,
+                `requestParams` text NULL,
+                `loggedOff`     tinyint NULL DEFAULT NULL,
+                `phase`         text NULL,
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB
+              DEFAULT CHARSET={$default_charset}
+              COLLATE={$default_collation}
+              ROW_FORMAT=COMPRESSED");
             Session::addMessageAfterRedirect("🆗 Installed: $table.");
         }
 

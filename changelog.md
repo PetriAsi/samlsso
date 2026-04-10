@@ -1,3 +1,8 @@
+**V1.2.8**
+- Feature: Added `user_sync` per-IDP configuration option. When enabled, existing users' `realname`, `firstname`, `_useremails`, `mobile` and `phone` fields are updated from SAML claims on every login.
+- Improvement: Added `SYNC USER FIELDS` toggle to the Security tab of the IDP configuration form.
+- Migration: Added `user_sync` database column to `glpi_plugin_samlsso_configs` table (fresh installs and upgrades).
+
 **V1.2.7**
 - Feature: Added `jit_add_profiles` per-IDP configuration option. When enabled, SAML rule assigned profiles are added to existing users without removing their current profile assignments.
 - Improvement: Added `jit_add_profiles` toggle to the Security tab of the IDP configuration form.

@@ -337,19 +337,20 @@ class Exclude extends CommonDropdown
         // Create the base table if it does not yet exist;
         // Do not update this table for later versions, use the migration class;
         if (!$DB->tableExists($table)) {
-            $migration->addTable($table, [
-                'id'            => ['type' => 'int', 'notnull' => true, 'autoincrement' => true],
-                'name'          => ['type' => 'string', 'null' => true],
-                'comment'       => ['type' => 'text', 'null' => true],
-                'date_creation' => ['type' => 'datetime', 'null' => true],
-                'date_mod'      => ['type' => 'datetime', 'null' => true],
-                'ClientAgent'   => ['type' => 'text', 'notnull' => true],
-                'ExcludePath'   => ['type' => 'text', 'notnull' => true],
-                'action'        => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
-            ], [
-                'engine' => 'InnoDB',
-                'row_format' => 'COMPRESSED'
-            ]);
+            $DB->doQuery("CREATE TABLE `$table` (
+                `id`            int {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                `name`          varchar(255) NULL DEFAULT NULL,
+                `comment`       text NULL,
+                `date_creation` datetime NULL DEFAULT NULL,
+                `date_mod`      datetime NULL DEFAULT NULL,
+                `ClientAgent`   text NOT NULL,
+                `ExcludePath`   text NOT NULL,
+                `action`        tinyint NOT NULL DEFAULT '0',
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB
+              DEFAULT CHARSET={$default_charset}
+              COLLATE={$default_collation}
+              ROW_FORMAT=COMPRESSED");
             Session::addMessageAfterRedirect("🆗 Installed: $table.");
             // insert default excludes;
             $DB->insert($table, [
