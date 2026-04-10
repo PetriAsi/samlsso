@@ -190,12 +190,24 @@ class User
             // Sync user fields from SAML claims if enabled
             if ((bool) $configEntity->getField(ConfigEntity::USER_SYNC)) {
                 $syncFields = ['id' => $user->fields[User::USERID]];
-                foreach ([User::REALNAME, User::FIRSTNAME, User::EMAIL, User::MOBILE, User::PHONE] as $field) {
+                foreach ([User::REALNAME, User::FIRSTNAME, User::MOBILE, User::PHONE] as $field) {
                     if (array_key_exists($field, $userFields) && !empty($userFields[$field])) {
                         $syncFields[$field] = $userFields[$field];
                     }
                 }
                 $user->update(Sanitizer::sanitize($syncFields));
+
+                // Sync email separately: update the existing default email record
+                // instead of inserting (which causes a duplicate key error).
+                if (array_key_exists(User::EMAIL, $userFields) && !empty($userFields[User::EMAIL][0])) {
+                    $newEmail = $userFields[User::EMAIL][0];
+                    $userEmail = new \UserEmail();
+                    if ($userEmail->getFromDBByCrit(['users_id' => $user->fields[User::USERID], 'is_default' => 1])) {
+                        if ($userEmail->fields['email'] !== $newEmail) {
+                            $userEmail->update(['id' => $userEmail->fields['id'], 'email' => $newEmail]);
+                        }
+                    }
+                }
             }
             unset($configEntity);
 
