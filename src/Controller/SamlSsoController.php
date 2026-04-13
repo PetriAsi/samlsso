@@ -110,11 +110,13 @@ final class SamlSsoController extends AbstractController
     public const SCIM_PARAM     = '/{idpId}';
     public const SCIM_NAME      = 'samlsso_SCIM';                       // Route name
 
-    #[SecurityStrategy(Firewall::STRATEGY_NO_CHECK)]                    // Decorator to disable authentication check
-    #[Route(self::SCIM_ROUTE.self::SCIM_PARAM, name: self::SCIM_NAME)]  // Decorator to register route to controller
-    public function scim(Request $request): Response                    // What to do if route is invoked.
+    #[SecurityStrategy(Firewall::STRATEGY_NO_CHECK)]                                                                       // Decorator to disable authentication check
+    #[Route(self::SCIM_ROUTE.self::SCIM_PARAM, name: self::SCIM_NAME)]                                                     // Base route: /front/scim/{idpId}
+    #[Route(self::SCIM_ROUTE.self::SCIM_PARAM.'/{scimPath}', name: self::SCIM_NAME.'_path',                                // Sub-paths: /front/scim/{idpId}/Users, /front/scim/{idpId}/Users/{id}
+        requirements: ['scimPath' => '.+'])]                                                                                // .+ allows slashes so /Users/123 is a single parameter
+    public function scim(Request $request): Response                                                                       // What to do if route is invoked.
     {
-        return (new Scim)->init($request);                              // Call the SCIM handler.
+        return (new Scim)->init($request);                                                                                 // Call the SCIM handler.
     }
 
 

@@ -89,13 +89,35 @@ class Scim
      */
     private function authenticate(Request $request, ConfigEntity $config): bool
     {
-        $authHeader = $request->headers->get('Authorization');
-        if (!$authHeader || strpos($authHeader, 'Bearer ') !== 0) {
+        // Symfony reads Authorization from $_SERVER['HTTP_AUTHORIZATION'].
+        // Some web servers (Apache mod_php, certain FastCGI setups) strip the
+        // Authorization header before it reaches PHP. Fall back to the raw
+        // server variables so Bearer tokens are not silently dropped.
+        // Symfony reads Authorization from $_SERVER['HTTP_AUTHORIZATION'].
+        // Apache mod_php and some FastCGI setups strip the header; fall back
+        // through all known delivery paths.
+        $authHeader = $request->headers->get('Authorization')
+            ?? $_SERVER['HTTP_AUTHORIZATION']
+            ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+            ?? $_SERVER['AUTHORIZATION']
+            ?? (function_exists('getallheaders') ? (getallheaders()['Authorization'] ?? null) : null)
+            ?? null;
+
+        if ($authHeader === null || strpos($authHeader, 'Bearer ') !== 0) {
             return false;
         }
 
-        $token = substr($authHeader, 7);
-        return $token === $config->getField(ConfigEntity::SCIM_TOKEN);
+        $storedToken = $config->getField(ConfigEntity::SCIM_TOKEN);
+
+        // Reject when no token has been configured for this IdP.
+        if (!is_string($storedToken) || $storedToken === '') {
+            return false;
+        }
+
+        // trim() both sides: web forms sometimes store tokens with trailing
+        // whitespace or newlines; clients may pad the header value too.
+        $sentToken = trim(substr($authHeader, 7));
+        return $sentToken !== '' && $sentToken === trim($storedToken);
     }
 
     /**
