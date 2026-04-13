@@ -78,6 +78,7 @@ define('PLUGIN_SAMLSSO_WEBDIR', $CFG_GLPI['url_base'] .$pLoc.PLUGIN_NAME.'/');  
 function plugin_samlsso_boot(): void {
         SessionManager::RegisterPluginStatelessPath(PLUGIN_NAME, '#^/front/acs/#');             // Register the assertion Service as stateless (prevent csrf checking)
         SessionManager::registerPluginStatelessPath(PLUGIN_NAME, '#^/front/slo/#');             // Register the logout service as stateless (prevent csrf checking)
+        SessionManager::registerPluginStatelessPath(PLUGIN_NAME, '#^/front/scim/#');            // Register the SCIM endpoint as stateless (uses own Bearer token auth)
 }
 
 /**
