@@ -16,6 +16,14 @@
         "php": ">=8.0.0",
         "onelogin/php-saml": "^4.2"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^11"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GlpiPlugin\\Samlsso\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "glpi": {
             "providers": [

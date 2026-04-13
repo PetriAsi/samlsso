@@ -47,6 +47,7 @@ namespace GlpiPlugin\Samlsso\LoginFlow;
 
 use User as glpiUser;
 use GlpiPlugin\Samlsso\Config\ConfigEntity;
+use GlpiPlugin\Samlsso\ScimUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -115,102 +116,140 @@ class Scim
 
             switch ($method) {
                 case 'GET':
-                    return $userId ? $this->getUser($userId) : $this->getUsers($request);
+                    return $userId ? $this->getUser($userId, $config) : $this->getUsers($request, $config);
                 case 'POST':
-                    return $this->createUser($request);
+                    return $this->createUser($request, $config);
                 case 'PUT':
                 case 'PATCH':
-                    return $this->updateUser($request, $userId);
+                    return $this->updateUser($request, $userId, $config);
                 case 'DELETE':
-                    return $this->deleteUser($userId);
+                    return $this->deleteUser($userId, $config);
             }
         }
 
         return new JsonResponse(['error' => 'Endpoint not implemented'], Response::HTTP_NOT_IMPLEMENTED);
     }
 
-    private function getUsers(Request $request): JsonResponse
+    private function getUsers(Request $request, ConfigEntity $config): JsonResponse
     {
-        // Simple implementation: list all users created by SAML/SCIM
-        $user = new glpiUser();
-        // This is a placeholder for actual user search/listing logic
+        $idpId = (int) $config->getField(ConfigEntity::ID);
+
+        // SCIM pagination: startIndex is 1-based per RFC 7644
+        $startIndex = max(1, (int) $request->query->get('startIndex', 1));
+        $count      = max(1, min(200, (int) $request->query->get('count', 100)));
+        $dbStart    = $startIndex - 1;
+
+        $total    = ScimUser::countByIdp($idpId);
+        $mappings = ScimUser::getUsersByIdp($idpId, $dbStart, $count);
+
+        $resources = [];
+        $glpiUser  = new glpiUser();
+        foreach ($mappings as $mapping) {
+            if ($glpiUser->getFromDB($mapping[ScimUser::USERS_ID])) {
+                $resources[] = $this->mapUserToScim($glpiUser, $mapping[ScimUser::EXTERNAL_ID]);
+            }
+        }
+
         return new JsonResponse([
-            'schemas' => ['urn:ietf:params:scim:api:messages:2.0:ListResponse'],
-            'totalResults' => 0,
-            'Resources' => []
+            'schemas'      => ['urn:ietf:params:scim:api:messages:2.0:ListResponse'],
+            'totalResults' => $total,
+            'startIndex'   => $startIndex,
+            'itemsPerPage' => count($resources),
+            'Resources'    => $resources,
         ]);
     }
 
-    private function getUser(string $id): JsonResponse
+    private function getUser(string $id, ConfigEntity $config): JsonResponse
     {
-        $user = new glpiUser();
-        if ($user->getFromDB($id)) {
-            return new JsonResponse($this->mapUserToScim($user));
+        $idpId = (int) $config->getField(ConfigEntity::ID);
+        $user  = new glpiUser();
+
+        if (!$user->getFromDB($id)) {
+            return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
-        return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+
+        $externalId = ScimUser::getExternalId((int) $id, $idpId);
+        return new JsonResponse($this->mapUserToScim($user, $externalId));
     }
 
-    private function createUser(Request $request): JsonResponse
+    private function createUser(Request $request, ConfigEntity $config): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         if (!$data) {
             return new JsonResponse(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Map SCIM data to GLPI user fields
-        $userFields = $this->mapScimToUser($data);
-        
-        $user = new glpiUser();
-        // Check if user already exists by externalId/authid or userName/name
+        $idpId      = (int) $config->getField(ConfigEntity::ID);
         $externalId = $data['externalId'] ?? null;
-        $userName = $data['userName'] ?? null;
-        
-        /* if ($externalId && $user->getFromDBByCrit(['authid' => $externalId])) {
+        $userName   = $data['userName'] ?? null;
+
+        // Conflict check: externalId already mapped to a user for this IdP
+        if ($externalId !== null && ScimUser::findByExternalId($idpId, $externalId) !== null) {
             return new JsonResponse(['error' => 'User already exists'], Response::HTTP_CONFLICT);
-        } */
+        }
+
+        // Conflict check: GLPI username already taken
+        $user = new glpiUser();
         if ($userName && $user->getFromDBbyName($userName)) {
             return new JsonResponse(['error' => 'User already exists'], Response::HTTP_CONFLICT);
         }
 
+        $userFields = $this->mapScimToUser($data);
+
         if ($id = $user->add($userFields)) {
+            if ($externalId !== null) {
+                ScimUser::saveMapping((int) $id, $idpId, $externalId);
+            }
             $user->getFromDB($id);
-            return new JsonResponse($this->mapUserToScim($user), Response::HTTP_CREATED);
+            return new JsonResponse($this->mapUserToScim($user, $externalId), Response::HTTP_CREATED);
         }
 
         return new JsonResponse(['error' => 'Failed to create user'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    private function updateUser(Request $request, string $id): JsonResponse
+    private function updateUser(Request $request, string $id, ConfigEntity $config): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         if (!$data) {
             return new JsonResponse(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
         }
 
-        $user = new glpiUser();
+        $idpId = (int) $config->getField(ConfigEntity::ID);
+        $user  = new glpiUser();
+
         if (!$user->getFromDB($id)) {
             return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $userFields = $this->mapScimToUser($data);
+        $userFields       = $this->mapScimToUser($data);
         $userFields['id'] = $id;
 
         if ($user->update($userFields)) {
+            // Update the externalId mapping if the IdP sent one
+            $externalId = $data['externalId'] ?? null;
+            if ($externalId !== null) {
+                ScimUser::saveMapping((int) $id, $idpId, $externalId);
+            } else {
+                $externalId = ScimUser::getExternalId((int) $id, $idpId);
+            }
             $user->getFromDB($id);
-            return new JsonResponse($this->mapUserToScim($user));
+            return new JsonResponse($this->mapUserToScim($user, $externalId));
         }
 
         return new JsonResponse(['error' => 'Failed to update user'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
-    private function deleteUser(string $id): JsonResponse
+    private function deleteUser(string $id, ConfigEntity $config): JsonResponse
     {
-        $user = new glpiUser();
+        $idpId = (int) $config->getField(ConfigEntity::ID);
+        $user  = new glpiUser();
+
         if (!$user->getFromDB($id)) {
             return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
         if ($user->delete(['id' => $id], true)) {
+            ScimUser::deleteMapping((int) $id, $idpId);
             return new JsonResponse(null, Response::HTTP_NO_CONTENT);
         }
 
@@ -219,38 +258,49 @@ class Scim
 
     /**
      * Maps SCIM user data to GLPI user fields.
+     * externalId is intentionally not written to glpi_users — it is stored
+     * in glpi_plugin_samlsso_scim_users, scoped per IdP.
      */
     private function mapScimToUser(array $data): array
     {
         return [
-            'name'      => $data['userName'] ?? '',
-            'realname'  => $data['name']['familyName'] ?? '',
-            'firstname' => $data['name']['givenName'] ?? '',
+            'name'        => $data['userName'] ?? '',
+            'realname'    => $data['name']['familyName'] ?? '',
+            'firstname'   => $data['name']['givenName'] ?? '',
             '_useremails' => isset($data['emails']) ? array_column($data['emails'], 'value') : [],
-            'is_active' => $data['active'] ?? 1,
-            // 'authid'    => $data['externalId'] ?? ($data['userName'] ?? ''),
-            'authtype'  => 4, // External
+            'is_active'   => isset($data['active']) ? (int) $data['active'] : 1,
+            'authtype'    => 4, // External
         ];
     }
 
     /**
-     * Maps GLPI user to SCIM structure.
+     * Maps a GLPI user to a SCIM 2.0 User resource.
+     * externalId is read from the ScimUser mapping table and included only
+     * when a mapping exists for the current IdP.
+     *
+     * @param glpiUser    $user        The GLPI user object (fields must be populated).
+     * @param string|null $externalId  The IdP-scoped externalId, or null if unknown.
      */
-    private function mapUserToScim(glpiUser $user): array
+    private function mapUserToScim(glpiUser $user, ?string $externalId = null): array
     {
-        return [
-            'schemas'    => ['urn:ietf:params:scim:schemas:core:2.0:User'],
-            'id'         => (string) $user->fields['id'],
-            'userName'   => $user->fields['name'],
-            // 'externalId' => $user->fields['authid'],
-            'name'       => [
+        $resource = [
+            'schemas'  => ['urn:ietf:params:scim:schemas:core:2.0:User'],
+            'id'       => (string) $user->fields['id'],
+            'userName' => $user->fields['name'],
+            'name'     => [
                 'familyName' => $user->fields['realname'],
                 'givenName'  => $user->fields['firstname'],
             ],
-            'active'     => (bool) $user->fields['is_active'],
-            'emails'     => [
-                ['value' => $user->fields['name'], 'primary' => true] // Simplified
-            ]
+            'active'   => (bool) $user->fields['is_active'],
+            'emails'   => [
+                ['value' => $user->fields['name'], 'primary' => true],
+            ],
         ];
+
+        if ($externalId !== null) {
+            $resource['externalId'] = $externalId;
+        }
+
+        return $resource;
     }
 }
