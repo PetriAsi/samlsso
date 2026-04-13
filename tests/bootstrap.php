@@ -81,7 +81,7 @@ if (!defined('PLUGIN_NAME')) {
     define('PLUGIN_NAME', 'samlsso');
 }
 if (!defined('PLUGIN_SAMLSSO_VERSION')) {
-    define('PLUGIN_SAMLSSO_VERSION', '1.2.8');
+    define('PLUGIN_SAMLSSO_VERSION', '1.2.9');
 }
 if (!defined('PLUGIN_SAMLSSO_SRCDIR')) {
     define('PLUGIN_SAMLSSO_SRCDIR', dirname(__DIR__) . '/src');
