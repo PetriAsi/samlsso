@@ -400,12 +400,12 @@ class LoginState extends CommonDBTM
      * @since       1.0.0
      * @see         LoginState::PHASE_## constants for valid values
      */
-    public function setRedirect(): bool
+    public function setRedirect(?string $url = null): bool
     {
         if(isset($this->state[LoginState::STATE_ID])){
             // https://github.com/DonutsNL/glpisaml/issues/22
             // https://github.com/DonutsNL/samlsso/issues/2
-            if($redirect_url = filter_input(INPUT_GET, loginstate::REDIRECT, FILTER_DEFAULT)){  //NOSONAR wont merge for readability
+            if($redirect_url = $url ?? filter_input(INPUT_GET, loginstate::REDIRECT, FILTER_DEFAULT)){  //NOSONAR wont merge for readability
                 $this->state[LoginState::REDIRECT] = $redirect_url;
                 return ($this->update($this->state)) ? true : false;
             }

@@ -334,6 +334,21 @@ class LoginFlow extends CommonDBTM
             strlen((string) $_POST[LoginFlow::POSTFIELD]) < 3    ){      // Should not exceed 999
 
                 $this->state->addLoginFlowTrace(['finalIdp' => 'idpId:'.$_POST[LoginFlow::POSTFIELD]]);
+
+                // Preserve a directly requested GLPI page (e.g. ticket link from an email)
+                // when no explicit ?redirect= was given.
+                if(empty($this->state->getRedirect())                                   &&
+                   ($_SERVER['REQUEST_METHOD'] ?? '') === 'GET'                         &&
+                   isset($_SERVER['REQUEST_URI'])                                       ){
+                    $path = $_SERVER['REQUEST_URI'];
+                    $root = $CFG_GLPI['root_doc'] ?? '';
+                    if($root !== '' && strpos($path, $root.'/') === 0){
+                        $path = substr($path, strlen($root));
+                    }
+                    if(strpos($path, '/front/') === 0 && strpos($path, 'login.php') === false){
+                        $this->state->setRedirect($path);
+                    }
+                }
                 // If we know the idp we register it in the login State
                 // the input is validated as is_numeric. Floats will be truncated by
                 // the cast to int (int).
@@ -685,7 +700,7 @@ class LoginFlow extends CommonDBTM
         // Restore stored redirect requests.
         // https://github.com/DonutsNL/samlsso/issues/2
         if(!empty($state->getRedirect())){
-            $url=$CFG_GLPI['url_base'].'?redirect='.$state->getRedirect();
+            $url=$CFG_GLPI['url_base'].'?redirect='.rawurlencode($state->getRedirect());
         }else{
             $url=$CFG_GLPI['url_base'];
         }
