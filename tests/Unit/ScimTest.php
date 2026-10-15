@@ -1,4 +1,20 @@
 <?php
+/**
+ *  ------------------------------------------------------------------------
+ *  samlSSO
+ *
+ *  Copyright (C) 2024 by Chris Gralike
+ *  ------------------------------------------------------------------------
+ *
+ *  @package    samlSSO
+ *  @version    1.3.2
+ *  @author     Chris Gralike
+ *  @copyright  Copyright (c) 2024 by Chris Gralike
+ *  @license    GPLv3+
+ *  @see        https://github.com/DonutsNL/samlSSO/readme.md
+ *  @link       https://github.com/DonutsNL/samlSSO
+ * ------------------------------------------------------------------------
+ **/
 declare(strict_types=1);
 
 namespace GlpiPlugin\Samlsso\Tests\Unit;

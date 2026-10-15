@@ -1,0 +1,358 @@
+<!-- General details -->
+{% import glpi_tpl_macro as fields %}
+<div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-lg-6 mb-4">
+                <!-- Group 1: State & Branding -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-toggle-on me-2 text-primary"></i>{{ __('State & Branding', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- name field -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.name.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.name.errors }}</div>
+                            {% endif %}
+                            {% if buttonsHiddenWarn == true %}
+                                <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8)">{{ __('⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visible again.', plugin) }}</div>
+                            {% endif %}
+                        {% endset %}
+
+                        {{ fields.textField(
+                            inputfields.name.field, 
+                            inputfields.name.value, 
+                            inputfields.name.formtitle, 
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.name.formexplain,
+                            }
+                        ) }}
+                    </div>
+
+                    <!-- enabled -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.is_active.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.is_active.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.is_active.field,
+                            inputfields.is_active.value,
+                            inputfields.is_active.formtitle,
+                           {
+                              'add_field_html': error_helper|raw,
+                              helper: inputfields.is_active.formexplain,
+                           }
+                        ) }}
+                    </div>
+
+                    <!-- Debug mode -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.debug.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.debug.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.debug.field,
+                            inputfields.debug.value,
+                            inputfields.debug.formtitle,
+                           {
+                              'add_field_html': error_helper|raw,
+                              helper: inputfields.debug.formexplain,
+                           }
+                        ) }}
+                    </div>
+                </div>
+
+                <!-- Group 2: Domain & Button Configurations -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-link me-2 text-primary"></i>{{ __('Domain & Button Configurations', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- icon field -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.conf_icon.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.conf_icon.errors }}</div>
+                            {% endif %}
+                            {% if buttonsHiddenWarn == true %}
+                                <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8)">{{ __('⚠️ Userdomain is configured. The login button will be hidden from the loginscreen. Clear the Userdomain to make the button visible again.', plugin) }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.dropdownArrayField(
+                            inputfields.conf_icon.field, 
+                            inputfields.conf_icon.value, 
+                            inputOptionsIcons,
+                            inputfields.conf_icon.formtitle, 
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.conf_icon.formexplain,
+                            }
+                        ) }}
+                        <style>
+                        .icon-item {
+                            width: calc(20% - 8px);
+                            min-width: 85px;
+                            border: 1px solid #e9ecef;
+                            border-radius: 6px;
+                            background: #fff;
+                            cursor: pointer;
+                            transition: all 0.15s ease-in-out;
+                        }
+                        .icon-item:hover {
+                            border-color: #0d6efd;
+                            background-color: #f8fbff;
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 8px rgba(13,110,253,0.1);
+                        }
+                        .icon-item.active {
+                            border-color: #0d6efd;
+                            background-color: #e7f1ff;
+                            box-shadow: 0 0 0 2px rgba(13,110,253,0.25);
+                        }
+                        .icon-item i {
+                            color: #495057;
+                            transition: color 0.15s ease;
+                        }
+                        .icon-item:hover i, .icon-item.active i {
+                            color: #0d6efd;
+                        }
+                        #icon-grid {
+                            scrollbar-width: thin;
+                        }
+                        </style>
+                        <script>
+                        $(document).ready(function() {
+                            var selectEl = $('[name="{{ inputfields.conf_icon.field }}"]');
+                            if (!selectEl.length) return;
+
+                            // Hide the standard select dropdown and destroy select2 if initialized
+                            selectEl.css('display', 'none');
+                            if (selectEl.data('select2')) {
+                                selectEl.select2('destroy');
+                            }
+                            selectEl.next('.select2-container').hide();
+                            selectEl.addClass('d-none');
+
+                            // Create the picker trigger button
+                            var currentVal = selectEl.val() || 'fa-solid fa-sign-in-alt';
+                            var currentText = selectEl.find('option:selected').text() || 'Sign In';
+
+                            var triggerBtn = $('<button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2" id="icon-picker-btn">' +
+                                '<i class="' + currentVal + ' fa-fw fa-lg"></i>' +
+                                '<span class="selected-icon-label">' + currentText + '</span>' +
+                                '<i class="fas fa-caret-down ms-auto"></i>' +
+                                '</button>');
+
+                            selectEl.after(triggerBtn);
+
+                            // Parse all icon options from the select element
+                            var allIcons = [];
+                            selectEl.find('option').each(function() {
+                                var val = $(this).val();
+                                if (val) {
+                                    allIcons.push({
+                                        value: val,
+                                        text: $(this).text()
+                                    });
+                                }
+                            });
+
+                            // Create and append the modal HTML to the body
+                            var modalHtml = `
+                            <div class="modal fade" id="iconPickerModal" tabindex="-1" aria-labelledby="iconPickerModalLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content" style="border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                                  <div class="modal-header" style="border-bottom: 1px solid #e9ecef; background-color: #f8f9fa; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                                    <h5 class="modal-title d-flex align-items-center" id="iconPickerModalLabel">
+                                      <i class="fas fa-icons me-2 text-primary"></i> Choose Login Icon
+                                    </h5>
+                                    <button type="button" class="btn-close text-dark border-0 bg-transparent" data-bs-dismiss="modal" aria-label="Close" style="font-size: 1.5rem; line-height: 1;"><i class="fas fa-times"></i></button>
+                                  </div>
+                                  <div class="modal-body" style="padding: 1.5rem;">
+                                    <div class="row g-3 mb-4">
+                                      <div class="col-md-6">
+                                        <div class="input-group">
+                                          <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                                          <input type="text" id="icon-search-input" class="form-control border-start-0" placeholder="Search icons by name..." style="box-shadow: none;">
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="btn-group w-100" role="group" id="icon-style-filters">
+                                          <button type="button" class="btn btn-outline-primary active" data-style="all">All</button>
+                                          <button type="button" class="btn btn-outline-primary" data-style="solid">Solid</button>
+                                          <button type="button" class="btn btn-outline-primary" data-style="regular">Regular</button>
+                                          <button type="button" class="btn btn-outline-primary" data-style="brands">Brands</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div id="icon-grid" class="d-flex flex-wrap gap-2 justify-content-start align-content-start" style="max-height: 400px; overflow-y: auto; padding: 10px; border: 1px solid #e9ecef; border-radius: 6px; background: #fafafa;">
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer" style="background-color: #f8f9fa; border-top: 1px solid #e9ecef; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                                    <span class="me-auto text-muted small" id="icon-picker-status"></span>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>`;
+
+                            $('#iconPickerModal').remove();
+                            $('body').append(modalHtml);
+
+                            var modal = new bootstrap.Modal(document.getElementById('iconPickerModal'));
+                            var grid = $('#icon-grid');
+                            var searchInput = $('#icon-search-input');
+                            var styleFilters = $('#icon-style-filters');
+                            var statusText = $('#icon-picker-status');
+                            
+                            var currentStyle = 'all';
+                            var currentSearch = '';
+                            var visibleLimit = 120;
+                            var filteredList = [];
+
+                            function filterIcons() {
+                                filteredList = allIcons.filter(function(item) {
+                                    var matchesSearch = currentSearch === '' || item.text.toLowerCase().includes(currentSearch);
+                                    if (!matchesSearch) return false;
+
+                                    if (currentStyle === 'all') return true;
+                                    if (currentStyle === 'solid') return item.value.startsWith('fa-solid');
+                                    if (currentStyle === 'regular') return item.value.startsWith('fa-regular');
+                                    if (currentStyle === 'brands') return item.value.startsWith('fa-brands');
+                                    return true;
+                                });
+                                
+                                visibleLimit = 120;
+                                renderGrid();
+                            }
+
+                            function renderGrid() {
+                                grid.empty();
+                                var slice = filteredList.slice(0, visibleLimit);
+                                var selectedVal = selectEl.val();
+
+                                slice.forEach(function(item) {
+                                    var isActive = item.value === selectedVal ? 'active' : '';
+                                    var card = $('<div class="icon-item text-center p-2 ' + isActive + '" data-value="' + item.value + '" data-text="' + item.text + '">' +
+                                        '<i class="' + item.value + ' fa-2x mb-1"></i>' +
+                                        '<div class="small text-muted text-truncate" style="font-size: 11px;" title="' + item.text + '">' + item.text + '</div>' +
+                                        '</div>');
+                                    grid.append(card);
+                                });
+
+                                statusText.text('Showing ' + Math.min(visibleLimit, filteredList.length) + ' of ' + filteredList.length + ' icons');
+                            }
+
+                            // Infinite scroll loading logic
+                            grid.on('scroll', function() {
+                                if (grid.scrollTop() + grid.innerHeight() >= grid[0].scrollHeight - 30) {
+                                    if (visibleLimit < filteredList.length) {
+                                        visibleLimit += 120;
+                                        renderGrid();
+                                    }
+                                }
+                            });
+
+                            grid.on('click', '.icon-item', function() {
+                                var val = $(this).data('value');
+                                var text = $(this).data('text');
+                                selectEl.val(val).trigger('change');
+                                triggerBtn.find('i.fa-fw').attr('class', val + ' fa-fw fa-lg');
+                                triggerBtn.find('.selected-icon-label').text(text);
+                                modal.hide();
+                            });
+
+                            searchInput.on('input', function() {
+                                currentSearch = $(this).val().toLowerCase().trim();
+                                filterIcons();
+                            });
+
+                            styleFilters.on('click', 'button', function() {
+                                styleFilters.find('button').removeClass('active');
+                                $(this).addClass('active');
+                                currentStyle = $(this).data('style');
+                                filterIcons();
+                            });
+
+                            triggerBtn.on('click', function(e) {
+                                e.preventDefault();
+                                currentSearch = '';
+                                currentStyle = 'all';
+                                searchInput.val('');
+                                styleFilters.find('button').removeClass('active');
+                                styleFilters.find('[data-style="all"]').addClass('active');
+                                filterIcons();
+                                modal.show();
+                            });
+
+                            // Synchronize with external changes (e.g. preview trigger)
+                            selectEl.on('change', function() {
+                                var val = $(this).val();
+                                var opt = selectEl.find('option[value="' + val + '"]');
+                                var text = opt.length ? opt.text() : val;
+                                triggerBtn.find('i.fa-fw').attr('class', val + ' fa-fw fa-lg');
+                                triggerBtn.find('.selected-icon-label').text(text);
+                            });
+                        });
+                        </script>
+                    </div>
+
+                    <!-- domain field -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.conf_domain.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.conf_domain.errors }}</div>
+                            {% endif %}
+                            {% if buttonsHiddenWarn == true %}
+                                <div id="textHelper" class="form-text" style="color:rgb(3, 126, 26)">{{ __('🔒 Userdomain is configured. Users can trigger a Saml Login by providing their {username}@{userdomain} in the glpi username field and pressing the login button. The password field is ignored and can be left blank. This is a more secure option that wont expose configured IDPs.', plugin) }}
+                                </div>
+                            {% endif %}
+                        {% endset %}
+
+                        {{ fields.textField(
+                            inputfields.conf_domain.field, 
+                            inputfields.conf_domain.value, 
+                            inputfields.conf_domain.formtitle, 
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.conf_domain.formexplain,
+                            }
+                        ) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 mb-4">
+                <!-- Group 3: Comments -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-sticky-note me-2 text-primary"></i>{{ __('Comments', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- Comment field -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.comment.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.comment.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.textareaField(
+                            inputfields.comment.field, 
+                            inputfields.comment.value, 
+                            inputfields.comment.formtitle, 
+                            {
+                                'required':false,
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.comment.formexplain,
+                            }
+                        ) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<!-- scim tab -->
+{% import glpi_tpl_macro as fields %}
+<div class="tab-pane fade" id="scim" role="tabpanel" aria-labelledby="scim-tab">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-lg-7 mb-4">
+                <div class="samlsso-category-header">
+                    <i class="fas fa-users-cog me-2 text-primary"></i>{{ __('SCIM provisioning', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- scim_active -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.scim_active.errors == true %}
+                                <div class="form-text" style="color:red;">{{ inputfields.scim_active.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.scim_active.field,
+                            inputfields.scim_active.value,
+                            inputfields.scim_active.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.scim_active.formexplain,
+                            }
+                        ) }}
+                    </div>
+
+                    <!-- scim_token -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.scim_token.errors == true %}
+                                <div class="form-text" style="color:red;">{{ inputfields.scim_token.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.textField(
+                            inputfields.scim_token.field,
+                            inputfields.scim_token.value,
+                            inputfields.scim_token.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.scim_token.formexplain,
+                            }
+                        ) }}
+                    </div>
+
+                    <!-- SCIM url -->
+                    <div class="mb-3">
+                        {{ fields.textField(
+                            'ScimUrl',
+                            scimUrl,
+                            __('SCIM Endpoint URL', plugin),
+                            {
+                                'id': 'ScimUrl',
+                                'readonly': true,
+                                'is_copyable': true,
+                                helper: __('This is the SCIM endpoint URL you need to provide to your Identity Provider to enable user and group provisioning.', plugin),
+                            }
+                        ) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attribute mapping reference -->
+            <div class="col-12 col-lg-5 mb-4">
+                <div class="alert alert-info shadow-sm">
+                    <h5><i class="fas fa-info-circle"></i> {{ __('Attribute Mapping Reference', plugin) }}</h5>
+                    <p class="small text-muted">{{ __('Use these GLPI field names and corresponding SAML/SCIM attributes when configuring your IdP:', plugin) }}</p>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped small align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('GLPI Field', plugin) }}</th>
+                                    <th>{{ __('SAML Claim (Short)', plugin) }}</th>
+                                    <th>{{ __('SCIM Attribute', plugin) }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>name</code></td><td><code>NameID</code></td><td><code>userName</code></td></tr>
+                                <tr><td><code>_useremails</code></td><td><code>.../emailaddress</code></td><td><code>emails</code></td></tr>
+                                <tr><td><code>realname</code></td><td><code>.../surname</code></td><td><code>name.familyName</code></td></tr>
+                                <tr><td><code>firstname</code></td><td><code>.../givenname</code></td><td><code>name.givenName</code></td></tr>
+                                <tr><td><code>phone</code></td><td><code>.../telephonenumber</code></td><td><code>phoneNumbers[type eq "work"]</code></td></tr>
+                                <tr><td><code>mobile</code></td><td><code>.../mobilephone</code></td><td><code>phoneNumbers[type eq "mobile"]</code></td></tr>
+                                <tr><td><code>jobtitle</code></td><td><code>.../jobtitle</code></td><td><code>title</code></td></tr>
+                                <tr><td><code>is_active</code></td><td>-</td><td><code>active</code></td></tr>
+                                <tr><td><code>groups</code></td><td><code>.../claims/groups</code></td><td><code>groups</code></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

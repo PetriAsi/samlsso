@@ -1,0 +1,140 @@
+<!-- transit tab -->
+{% import glpi_tpl_macro as fields %}
+<div class="tab-pane fade show" id="transit" role="tabpanel" aria-labelledby="transit-tab">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-lg-6 mb-4">
+                <!-- Group 1: Compression -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-file-archive me-2 text-primary"></i>{{ __('Compression', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- compress_requests -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.compress_requests.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.compress_requests.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.compress_requests.field,
+                            inputfields.compress_requests.value,
+                            inputfields.compress_requests.formtitle,
+                           {
+                              'add_field_html': error_helper|raw,
+                               helper: inputfields.compress_requests.formexplain,
+                           }
+                        ) }}
+                    </div>
+
+                    <!-- compress_responses -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.compress_responses.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.compress_responses.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.compress_responses.field,
+                            inputfields.compress_responses.value,
+                            inputfields.compress_responses.formtitle,
+                           {
+                              'add_field_html': error_helper|raw,
+                               helper: inputfields.compress_responses.formexplain,
+                           }
+                        ) }}
+                    </div>
+                </div>
+
+                <!-- Group 2: Proxied & Encoding -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-network-wired me-2 text-primary"></i>{{ __('Proxied & Encoding', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- Proxied -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.proxied.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">{{ inputfields.proxied.errors|raw }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.proxied.field,
+                            inputfields.proxied.value,
+                            inputfields.proxied.formtitle,
+                           {
+                              'add_field_html': error_helper|raw,
+                               helper: inputfields.proxied.formexplain,
+                           }
+                        ) }}
+                    </div>
+
+                    <!-- lowercase_url_encoding -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.lowercase_url_encoding.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.lowercase_url_encoding.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.lowercase_url_encoding.field,
+                            inputfields.lowercase_url_encoding.value,
+                            inputfields.lowercase_url_encoding.formtitle,
+                           {
+                              'add_field_html': error_helper|raw,
+                               helper: inputfields.lowercase_url_encoding.formexplain,
+                           }
+                        ) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 mb-4">
+                <!-- Group 3: XML & Destination Validation -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-check-double me-2 text-primary"></i>{{ __('XML & Destination Validation', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- validate_xml -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.validate_xml.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.validate_xml.errors }}</div>
+                            {% endif %}
+                            {% if inputfields.strict.value == false %}
+                                <div id="textHelper" class="form-text" style="color:rgb(180, 120, 8);">{{ __('⚠️ Strict is disabled, validate xml setting will not do anything.', plugin) }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.validate_xml.field,
+                            inputfields.validate_xml.value,
+                            inputfields.validate_xml.formtitle,
+                           {
+                              'add_field_html': error_helper|raw,
+                               helper: inputfields.validate_xml.formexplain,
+                           }
+                        ) }}
+                    </div>
+
+                    <!-- validate_destination -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.validate_destination.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.validate_destination.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.validate_destination.field,
+                            inputfields.validate_destination.value,
+                            inputfields.validate_destination.formtitle,
+                           {
+                              'add_field_html': error_helper|raw,
+                               helper: inputfields.validate_destination.formexplain,
+                           }
+                        ) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

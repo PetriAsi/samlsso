@@ -1,14 +1,123 @@
-**V1.2.9**
-- Feature: Added `user_sync` per-IDP configuration option. When enabled, existing users' `realname`, `firstname`, `_useremails`, `mobile` and `phone` fields are updated from SAML claims on every login.
-- Improvement: Added `SYNC USER FIELDS` toggle to the Security tab of the IDP configuration form.
-- Migration: Added `user_sync` database column to `glpi_plugin_samlsso_configs` table (fresh installs and upgrades).
+**Unreleased - SCIM branch**
+- Feature: Added SCIM 2.0 user provisioning endpoint (`/front/scim/{idpId}`) with per-IDP `scim_active` and `scim_token` (Bearer) configuration and a new SCIM tab in the IDP configuration form.
+- Feature: Added `jit_add_profiles` per-IDP option. When enabled, SAML rule assigned profiles are added to existing and new users without removing their current profile assignments.
+- Feature: Added `JIT User State` (new/existing) rule criterion to the SAML assignment rules.
+- Feature: Preserve a directly requested GLPI page (e.g. ticket link from an email) through the SSO login redirect and URL-encode the stored redirect.
+- Migration: Added `jit_add_profiles`, `scim_active` and `scim_token` columns to `glpi_plugin_samlsso_configs` (fresh installs and upgrades).
+- Note: The `user_sync` option from earlier SCIM branch builds is replaced by upstream `sync_on_login`.
+
+**V1.3.3**
+- Feature: Added GLPI 12 compatibility while keeping GLPI 11 support unchanged - resolves https://github.com/DonutsNL/samlsso/issues/167.
+- Feature: Added `src/compat.php`, one abstract intermediate class per plugin class declaring the GLPI 12 core property types (`$rightname`, `$dohistory`, `$menu_option`) selected at load time from `GLPI_VERSION`, so `Config`, `Exclude`, `LoginFlow`, `RuleSaml` and `RuleSamlCollection` load on both GLPI 11 and GLPI 12.
+- Bugfix: Resolved the `Plugin::getWebDir()` removal on GLPI 12 by resolving the plugin web directory at call time with a `method_exists` fallback, keeping GLPI 11 behaviour identical.
+- Bugfix: Exposed absolute ACS/SLO URLs to php-saml and the IdP to fix `sp_acs_url_invalid` / `sp_sls_url_invalid` when `setup.php` is loaded during kernel boot before `url_base` is available (issue https://github.com/DonutsNL/samlsso/issues/167).
+- Bugfix: Set `Auth::$auth_succeded` to `true` (typed `bool` on GLPI 12) to prevent the fatal `TypeError` on SSO login.
+- Bugfix: Guarded `Glpi\Toolbox\Sanitizer` behind `class_exists` because it was removed from GLPI 12 core, keeping GLPI 11 sanitization behaviour unchanged.
+- Bugfix: Made the configuration and login-flow form pages render under Twig `strict_variables` by defaulting optional field keys, guarding IdP certificate mappings and providing `currentUserId` / `currentUsername` to the render context.
+- Architecture: Added ADR 0024 documenting the typed-property compatibility layer introduced for GLPI 12 support.
+- Tests: Added `tests/Glpi12CompatTest.php` verifying the GLPI 12 compatibility wiring (compat layer selection, absolute web-dir helper, no core patches, no obfuscation).
+
+**V1.3.2**
+- Fixed issue https://github.com/DonutsNL/samlsso/issues/134 by adding "registration_number" to user mapping.
+- Fixed issue https://github.com/DonutsNL/samlsso/issues/145 where custom GLPI_MARKETPLACE_DIR paths caused 404/installation regressions - suggested by @albertogalisteo.
+- Fixed issue https://github.com/DonutsNL/samlsso/issues/141 with JIT rules test route opening missing plugin path - suggested by @KawanCostaNs.
+- Fixed issue https://github.com/DonutsNL/samlsso/pull/144 to support GeneralizedTime X.509 certificate dates with validity dates beyond 2049 by @enricomv.
+- Fixed issue https://github.com/DonutsNL/samlsso/pull/140 where LogoutResponse was incorrectly processed as AuthnResponse in Acs.php by @Siruv.
+- Fix: Refactored database query and loop assignments inside conditional checks to resolve CodeFactor's "Assignment in condition" warnings.
+- Fix: Refactored translation logging messages in User defaults synchronization to use static literal strings and `sprintf` to resolve CodeFactor's "Unnecessary string concatenation" warnings.
+- Fix: Replaced raw `TODO` in base64 mock private key template to resolve CodeFactor's "Unresolved TODO comment" warnings.
+- Fix: Fixed a loop-overwriting bug in `getTabWarnings` where warning status (⚠️) on configuration tab panels was cleared and overwritten by subsequent clean fields.
+- Fix: Resolved a parsing condition in `sp_certificate` and `idp_certificate` where validly parsed certificates skipped passing expiration and default/example certificate warnings to the form fields' errors property.
+
+**V1.3.1**
+- Fix: Resolved TypeError: noMethod() expects string, int given on undefined or custom database configuration fields in ConfigItem and LoginFlowItem.
+- Fix: Implemented case-insensitive email comparison during JIT user synchronization on login to prevent duplicate `glpi_useremails` insert errors. (Related issues: https://github.com/DonutsNL/samlsso/issues/126, https://github.com/DonutsNL/samlsso/issues/127)
+- Feature: Added dynamic FontAwesome CSS parser to populate the LOGIN ICON selector with all available installed icons, sorted alphabetically.
+- Fix: Removed '. UTC' from datetime conversions in LoginState to resolve timezone mismatches and premature timeouts on servers not configured to UTC. (Related issue https://github.com/DonutsNL/samlsso/issues/124)
+- Feature: Added timezone validation warning popout to timeout configuration settings to detect and display PHP vs Database timezone mismatches.
+- Feature: Added ADR 0023 documenting the timezone fix and validation for login states.
+- Fix: Applied raw filter to Twig error helper variables passed to form fields to prevent HTML auto-escaping, restoring warning/error popovers and yellow background highlighting.
+- Fix: Resolved database migration race condition where `loginFlowTrace` column failed to upgrade to `TEXT` if it did not exist prior to update. (Related issue https://github.com/DonutsNL/samlsso/issues/123)
+- Fix: Ensured the `location` column in the login states table does not receive a `null` value when `parse_url()` fails on malformed or empty URIs by defaulting to `'UNKNOWN'`. (Related issue https://github.com/DonutsNL/samlsso/issues/123)
+- Fix: Resolved inactive session timeout bugs by replacing invalid database column queries in cleanSessionSAML CronTask with class constants and protecting the TIMED_OUT phase in evalGlpiAuth.
+- Feature: Automatically disable and display warnings on inbound security fields when strict mode is disabled.
+- Architecture: Added ADR 0022 documenting the decision to auto-disable inbound security options when strict is off and use prefix-based dynamic stylinrsg for warnings.
+- Redesigned the configuration form fields layout to use a modern two-line strategy (Labels and tooltips on line 1, input controls on line 2), preventing squishing and making better use of the available space.
+- Implemented soft yellow/warning background styling (via `.form-field-warning-row` class) and borders for rows with active warnings.
+- Refactored warnings across all form fields (including those inside General, Transit, and Security tabs) to render elegantly as warning tooltips next to labels, hiding the original text messages.
+- Refactored monolithic configForm.html.twig into separate sub-templates for each tab panel inside templates/configForm/.
+- Wrapped all remaining hardcoded user-facing fields in Twig templates with i18n translation functions and formatted them for easy localization.
+- Fixed translation of Service Provider fields (Entity ID, MetaUrl, AcsUrl, SloUrl) in Twig configuration form templates.
+- Architecture: Added ADR 0015 documenting the design, implementation, and environment requirements for the translation automation tool.
+- UI: Added a translatable warning tooltip icon next to the "SYNC ON LOGIN" field explaining potential data leak incidents from IDP configuration mistakes. Also formatted the conditional warnings for "ENFORCED" and "STRICT" fields in the same clean hoverable style.
+- UI: Restructured the Security tab layout using Bootstrap columns to eliminate empty whitespace and grouped the settings logically into four categories: Enforcement & Sessions, User Provisioning, Inbound Security (IdP), and Outbound Security (SP).
+- UI: Restructured the General, Transit, SP, and IdP configuration tabs into consistent card-based logical subject groups with neat right-aligned inputs and responsive layouts.
+- Feature: Added inactivity timeout configuration setting allowing administrators to forcefully log out inactive user sessions after a specified duration (default is 0, which disables the inactivity check).
+- Feature: Implemented passive ACS request evaluation during user logins to automatically clean up and forcefully expire stale pending authentication states.
+
+
+
+**V1.3.0**
+- Fix: Removed 'after' statements from database field migrations to prevent update/installation errors due to non-existent columns. (Related issue https://github.com/DonutsNL/samlsso/issues/119)
+- Feature: Added proactive GLPI cache reset during plugin installation/upgrade using CacheManager::resetAllCaches(). (Related issue https://github.com/DonutsNL/samlsso/issues/119)
+- Architecture: Added ADR 0014 documenting the design decision to clear GLPI cache during installation/upgrade. (Related issue https://github.com/DonutsNL/samlsso/issues/119)
+- Fix: Resolved a critical nested form structure conflict in the Twig template (`configForm.html.twig`) that incorrectly triggered `forcelogoff` actions when saving configuration updates.
+- Fix: Prevented SSO login/redirection flow interception on active administrator sessions by skipping `doAuth()` and local login blocks if `Session::getLoginUserID()` is active.
+- Fix: Ensured the multiple active IDPs warning message is always displayed on the Enforce SSO field in the configuration UI when more than one IDP is active.
+- Fix: Reset database session phase to `PHASE_INITIAL` when GLPI session is expired, ensuring SSO enforcement redirects work correctly for returning users with lingering cookies. (Related issue https://github.com/DonutsNL/samlsso/issues/25)
+- Feature: Added configurable SAML request timeout fallback to automatically expire stale authentication states after a set duration (default 15 minutes) - by @eduardomozart
+- Security Fix: Addressed local login SSO enforcement bypass securely using server-side session variable checks instead of a spoofable Referer check - by @eduardomozart
+- Merged PR 114: Added country code 'ZZ' fallback tooltip and image display - by @eduardomozart
+- Merged PR 115: Replaced custom copy buttons with native is_copyable attribute - by @eduardomozart
+- Merged PR 116: Enforced access control checks with Session::checkRight and added user avatars - by @eduardomozart
+- Merged PR 117: Separated translation links and added PO/POT generator - by @eduardomozart
+- Merged PR 118: Added user fields matching support in rule criteria - by @eduardomozart
+- Implemented configurable SAML claim mapping for GLPI user fields with predefined presets (Entra ID, Okta, Keycloak) and observed claims tracking.
+- Refactored installation/uninstallation routines using a central class registry and single migration instance.
+- Hardened logout and Single Logout (SLO) confirmation rendering, local logout redirection paths, and auto-login loop prevention.
+- Added automated test validation pre-checks to the release packaging script.
+- Fixed static analysis warnings, type declarations, compliance checks, and translation domain issues across source files.
+- Fixed issue https://github.com/DonutsNL/samlsso/issues/51 where user JIT creation bypassed the Identity Provider configuration.
+- UI: Refactored the Backup & Restore section on the IDP list page into a collapsible panel triggered by a subtle outline toggle button, reducing visual weight while keeping the feature accessible.
+- UI: Wrapped the "Template & View XML" tools on the Claim Mapping tab into a collapsible "Tools" panel, consistent with the Backup & Restore treatment.
+- UI: Claim mappings are now ordered deterministically — enforced (system) mappings are always shown first, followed by manually added mappings in insertion order.
+- Reliability: Replaced `::class` constants in the `PLUGIN_SAMLSSO_CLASSES` array in `setup.php` with fully-qualified string literals so the constant can be safely defined before the Composer autoloader is registered (i.e. when the plugin is disabled).
+- Reliability: Added `include_once __DIR__ . '/vendor/autoload.php'` to `hook.php` so plugin classes are always resolvable during install/uninstall, even when `plugin_init_samlsso()` (which normally loads the autoloader) has not run.
+- Reliability: Replaced `ClassName::getTable()` / `self::getTable()` calls inside `install()` and `uninstall()` lifecycle methods with `getTableForItemType(static::class)` across `Config`, `ClaimMap`, `ObservedClaim`, `Exclude`, and `LoginState`, using the GLPI-recommended function that performs pure string manipulation with no dependency on plugin state.
+- Testing: Updated `LifecycleIntegrityTest.php` class parser to support both the legacy `::class` constant format and the new quoted string literal format in `PLUGIN_SAMLSSO_CLASSES`.
+- Fix: Corrected signed `INT` foreign key columns (`configs_id` in `ObservedClaim` and `ClaimMap`; `idpId` in `LoginState`) to `INT UNSIGNED` to silence GLPI 11 deprecation warnings; added upgrade migrations to fix existing installations.
+- Feature: Added `sync_on_login` configuration option to automatically update user claim mappings and rerun the rules engine on every successful user login.
+- Refactored Claim Mappings to use class constants instead of raw strings for target fields and target types, improving consistency and maintainability.
+- Refactored SAML claim resolution, defaults, and requirements validation logic out of `User.php` and into `ClaimMapEntity.php` helper methods.
+- Decomposed large methods in `User.php`, `Acs.php`, and `LoginFlow.php` into descriptive private helper methods to improve readability.
+- Standardized project-wide class layout and structure rules (constants at the top, chronological method ordering, and database schema hooks at the bottom) documented in ADR 0010.
+- Cleaned up unused imports and normalized FQCN references across source files.
+- Removed unused `SCHEMA_*` and `USERDATA` constants from `User.php` that are no longer referenced after the mapping refactor.
+- Cleaned up unused and deprecated methods (`trackObservedClaim` in `ClaimMapEntity.php`; `setSamlResponseParams`, `setRequestParams`, and `isLoadedFromDb` in `LoginState.php`) detected by dead-code analysis.
+- Feature: Added offline GeoIP originating country flag resolution. Client IPs are stored and matched using a high-performance binary search resolver (`GeoIPResolver`) on a compact local database (`ip_to_country.bin`). Flags are rendered as native browser emojis with full country hover tooltips in the session log UI.
+- CLI Tool: Added `tools/update_geoip.php` to fetch DB-IP Lite country CSV databases and compile them into the optimized binary database format.
+- Testing: Integrated `GeoIPTest.php` to verify offline database country matching and emoji flag conversions.
+- Fix: Prevented SAML SSO auto-redirect logic from running on AJAX/sub-requests (e.g., translation fetch) to avoid session state phase corruption and ensure top-level pages correctly redirect to the IdP when SSO is enforced.
+- Architecture: Added ADR 0011 documenting the decision to skip SAML SSO redirection on AJAX requests.
+- Fix: Updated session log UI to render country flags using FlagCDN PNG images rather than native OS-dependent emoji characters, ensuring correct rendering on platforms like Windows.
+- Fix: Automatically disable the SSO Enforce option (`enforce_sso`) via `ConfigEntity::validateAdvancedConfig()` when multiple active IDPs exist, and display a warning inline in the configuration form rather than as a redirect message.
+- Architecture: Added ADR 0012 explaining the multi-IDP Enforce conflict resolution mechanism and the explicit design decision not to follow the GLPI standard redirect-based messages.
+- Feature: Added administrative action to forcefully log off and disable users directly from the active sessions log table.
+- Architecture: Added ADR 0013 documenting the design and security of the force logoff and disable user action.
+
 
 **V1.2.7**
-- Feature: Added `jit_add_profiles` per-IDP configuration option. When enabled, SAML rule assigned profiles are added to existing users without removing their current profile assignments.
-- Improvement: Added `jit_add_profiles` toggle to the Security tab of the IDP configuration form.
-- Migration: Added `jit_add_profiles` database column to `glpi_plugin_samlsso_configs` table (fresh installs and upgrades).
+- Bugfix for regression bug in `acs.php:228` where method getErrors didnt exist https://github.com/DonutsNL/samlsso/issues/104
 
 **V1.2.6**
+- Security Fix: Resolved critical authentication bypass vulnerability in exclude path matching logic by parsing URL path component before matching.
+- Security Fix: Implemented strict "Open Redirect" protection. The `redirect` parameter is now validated to allow only relative paths, preventing attackers from using GLPI as an open relay.
+- Security Fix: Hardened error logs by implementing conditional redaction. Sensitive SAML data is now redacted by default unless "Debug" is explicitly enabled in the IDP configuration.
+- Fix: Replaced non-existent `DBConnection::getDefaultDatabase()` with `$DB->dbdefault` for compatibility with GLPI 10.0+.
+- Architecture: Added ADR 0002 documenting the rationale for LoginState hardening and DB compatibility fixes.
+- Architecture: Added ADR 0003 documenting the new Integration Testing Strategy.
+- Testing: Implemented a lightweight test harness in `tests/` with shims for GLPI core, allowing validation of core logic paths (Enforced redirect, Domain selection, Bypass) without a full GLPI environment.
+- Documentation: Created `WIKI_UPDATES.md` and `PROPOSED_ISSUE_TESTABILITY.md` to guide future improvements.
 - Improve generation scripts in tools directory to include more info.
 - Improvement: Added index to logging table via installation/upgrade as suggested by @Neozlag
 - Improvement: Reviewed and added completed es_AR translation
@@ -17,6 +126,7 @@
 - Improvement: JIT handling: Remove default profiles only if profiles have been successfully assigned - by @eduardomozart
 - Fix: Update User.php fix ENTITY_DEFAULT and PROFILE_DEFAULT variables undefined key warinings - by @eduardomozart
 - Fix: Corrected constant name of entity for prepared not yet implemented reaply JIT function `src/LoginFlow/LoginFlowItem.php`:210 - by @eduardomozart
+- Improvement: Check for numeric srtings too instead of pure int - by @tomas321. 
 
 **V1.2.5 - BUGFIX RELEASE**
 - Provide bugfix for critical bug https://github.com/DonutsNL/samlsso/issues/38.

@@ -1,0 +1,2250 @@
+# Dutch translations for samlSSO package.
+# Copyright (C) 2026 Chris Gralike
+# This file is distributed under the same license as the samlSSO package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+""
+"Project-Id-Version: samlSSO 1.3.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-09 20:30+0200\n"
+"PO-Revision-Date: 2026-06-02 09:43+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: hook.php:104
+msgid "samlSSO exclusions"
+msgstr "samlSSO-uitsluitingen"
+
+#: hook.php:163
+msgid "🆗 Installing version:"
+msgstr "🆗 Versie installeren:"
+
+#: hook.php:187
+msgid ""
+""
+"⚠️ PHP memory_limit is less than 512M. This may cause crashes during SAML "
+"Login. See: "
+msgstr "⚠️ PHP memory_limit is minder dan 512M. Dit kan crashes veroorzaken tijdens SAML-aanmelding. Zien:"
+
+#: hook.php:198
+msgid "⚠️ OpenSSL not available, cant verify provided certificates"
+msgstr "⚠️ OpenSSL niet beschikbaar, kan de verstrekte certificaten niet verifiëren"
+
+#: hook.php:200
+msgid "🆗 OpenSSL found!"
+msgstr "🆗 OpenSSL gevonden!"
+
+#: setup.php:249
+msgid "Installed "
+msgstr "Geïnstalleerd"
+
+#: src/RuleSaml.php:86
+msgid "JIT rules"
+msgstr "JIT-regels"
+
+#: src/RuleSaml.php:177
+msgid "SAML Groups"
+msgstr "SAML-groepen"
+
+#: src/RuleSaml.php:184
+msgid "SAML Job Title"
+msgstr "SAML-functietitel"
+
+#: src/RuleSaml.php:191
+msgid "SAML Country"
+msgstr "SAML-land"
+
+#: src/RuleSaml.php:198
+msgid "SAML City"
+msgstr "SAML-stad"
+
+#: src/RuleSaml.php:205
+msgid "SAML Street"
+msgstr "SAML-straat"
+
+#: src/RuleSaml.php:226
+#, php-format
+msgid "SAML Claim: %s"
+msgstr "SAML-claim: %s"
+
+#: src/RuleSamlCollection.php:73 src/Config.php:151
+msgid "JIT import rules"
+msgstr "JIT-importregels"
+
+#: src/CronTask.php:66
+msgid "Clean old SAML sessions"
+msgstr "Oude SAML-sessies opschonen"
+
+#: src/CronTask.php:67
+msgid "SAML sessions retention period (in days, 0 for infinite)"
+msgstr "Bewaartermijn voor SAML-sessies (in dagen, 0 voor oneindig)"
+
+#: src/CronTask.php:69
+msgid "Update GeoIP offline database"
+msgstr "Update de offline GeoIP-database"
+
+#: src/Config/ConfigItem.php:103 src/LoginFlow/LoginFlowItem.php:97
+msgid "⭕ ID must be a positive numeric value!"
+msgstr "⭕ ID moet een positieve numerieke waarde zijn!"
+
+#: src/Config/ConfigItem.php:107 src/LoginFlow/LoginFlowItem.php:101
+msgid "Unique identifier for this configuration"
+msgstr "Unieke ID voor deze configuratie"
+
+#: src/Config/ConfigItem.php:108 src/LoginFlow/LoginFlowItem.php:102
+msgid "CONFIG ID"
+msgstr "CONFIG-ID"
+
+#: src/Config/ConfigItem.php:122
+msgid ""
+""
+"This name is shown with the login button on the login page. Try to keep this "
+"name short and to the point."
+msgstr "Deze naam wordt weergegeven met de login-knop op de login-pagina. Probeer deze naam kort en to the point te houden."
+
+#: src/Config/ConfigItem.php:123
+msgid "FRIENDLY NAME"
+msgstr "VRIENDELIJKE NAAM"
+
+#: src/Config/ConfigItem.php:128
+msgid "⭕ Name is a required field"
+msgstr "⭕ Naam is een verplicht veld"
+
+#: src/Config/ConfigItem.php:139
+msgid "USERDOMAIN"
+msgstr "GEBRUIKERSDOMEIN"
+
+#: src/Config/ConfigItem.php:144
+msgid "⭕ "
+msgstr "⭕ "
+
+#: src/Config/ConfigItem.php:161
+msgid ""
+""
+"⭕ Provided certificate does not look like a valid (base64 encoded) "
+"certificate"
+msgstr "⭕ Het opgegeven certificaat lijkt niet op een geldig (base64-gecodeerd) certificaat"
+
+#: src/Config/ConfigItem.php:166
+msgid ""
+""
+"The base64 encoded x509 service provider certificate. Used to sign and "
+"encrypt messages sent by the service provider to the identity provider. "
+"Required for most of the security options"
+msgstr "Het base64-gecodeerde x509-serviceprovidercertificaat. Wordt gebruikt voor het ondertekenen en coderen van berichten die door de serviceprovider naar de identiteitsprovider worden verzonden. Vereist voor de meeste beveiligingsopties"
+
+#: src/Config/ConfigItem.php:167
+msgid "SP CERTIFICATE"
+msgstr "SP-CERTIFICAAT"
+
+#: src/Config/ConfigItem.php:184
+msgid ""
+""
+"The base64 encoded x509 service provider's private key. Should match the "
+"modulus of the provided X509 service provider certificate"
+msgstr "De met base64 gecodeerde privésleutel van de x509-serviceprovider. Moet overeenkomen met de modulus van het meegeleverde X509-serviceprovidercertificaat"
+
+#: src/Config/ConfigItem.php:185
+msgid "SP PRIVATE KEY"
+msgstr "SP PRIVÉSLEUTEL"
+
+#: src/Config/ConfigItem.php:198
+msgid ""
+""
+"The Service Provider nameid format specifies the constraints on the name "
+"identifier to be used to represent the requested subject."
+msgstr ""
+""
+"Het naam-ID-formaat van de serviceprovider specificeert de beperkingen op de "
+"naam-ID die moet worden gebruikt om het aangevraagde onderwerp weer te geven."
+
+#: src/Config/ConfigItem.php:199
+msgid "NAMEID FORMAT"
+msgstr "NAAMID-FORMAAT"
+
+#: src/Config/ConfigItem.php:204
+msgid "Service provider name id is a required field"
+msgstr "Naam-ID van serviceprovider is een verplicht veld"
+
+#: src/Config/ConfigItem.php:213
+msgid ""
+""
+"Identifier of the IdP entity which is an URL provided by the SAML2 Identity "
+"Provider (IdP)"
+msgstr ""
+""
+"Identificator van de IdP-entiteit, een URL die wordt verstrekt door de SAML2-"
+"identiteitsprovider (IdP)"
+
+#: src/Config/ConfigItem.php:214
+msgid "ENTITY ID"
+msgstr "ENTITEIT-ID"
+
+#: src/Config/ConfigItem.php:219
+msgid "⭕ Identity provider entity id is a required field"
+msgstr "⭕ De entiteits-ID van de identiteitsprovider is een verplicht veld"
+
+#: src/Config/ConfigItem.php:233
+msgid "⭕ The IdP SSO URL is a required field!<br>"
+msgstr "⭕ De IdP SSO-URL is een verplicht veld!<br>"
+
+#: src/Config/ConfigItem.php:238
+msgid "⭕ Invalid IdP SSO URL, use: scheme://host.domain.tld/path/"
+msgstr "⭕ Ongeldige IdP SSO-URL, gebruik: schema://host.domain.tld/path/"
+
+#: src/Config/ConfigItem.php:246
+msgid ""
+""
+"Single Sign On Service endpoint of the IdP. URL Target of the IdP where the "
+"Authentication Request Message will be sent. OneLogin PHPSAML only supports "
+"the 'HTTP-redirect' binding for this endpoint."
+msgstr ""
+""
+"Single Sign On Service-eindpunt van de IdP. URL Doel van de IdP waar het "
+"Authenticatieverzoekbericht naartoe wordt verzonden. OneLogin PHPSAML "
+"ondersteunt alleen de 'HTTP-redirect'-binding voor dit eindpunt."
+
+#: src/Config/ConfigItem.php:247
+msgid "SSO URL"
+msgstr "SSO-URL"
+
+#: src/Config/ConfigItem.php:270
+msgid "⭕ Invalid Idp SLO URL, use: scheme://host.domain.tld/path/"
+msgstr "⭕ Ongeldige Idp SLO-URL, gebruik: schema://host.domain.tld/path/"
+
+#: src/Config/ConfigItem.php:274
+msgid ""
+""
+"Single Logout service endpoint of the IdP. URL Location of the IdP where SLO "
+"Request will be sent.OneLogin PHPSAML only supports the 'HTTP-redirect' "
+"binding for this endpoint."
+msgstr ""
+""
+"Single Logout-service-eindpunt van de IdP. URL Locatie van de IdP waar het "
+"SLO-verzoek naartoe wordt verzonden. OneLogin PHPSAML ondersteunt alleen de "
+"'HTTP-redirect'-binding voor dit eindpunt."
+
+#: src/Config/ConfigItem.php:275
+msgid "SLO URL"
+msgstr "SLO-URL"
+
+#: src/Config/ConfigItem.php:296
+msgid "⭕ Valid Idp X509 certificate is required! (base64 encoded)"
+msgstr "⭕ Geldig Idp X509-certificaat is vereist! (base64 gecodeerd)"
+
+#: src/Config/ConfigItem.php:301
+msgid ""
+""
+"The Public Base64 encoded x509 certificate used by the IdP. Fingerprinting "
+"can be used, but is not recommended. Fingerprinting requires you to manually "
+"alter the Saml Config array located in ConfigEntity.php and provide the "
+"required configuration options"
+msgstr ""
+""
+"Het Public Base64-gecodeerde x509-certificaat dat door de IdP wordt "
+"gebruikt. Vingerafdrukken kunnen worden gebruikt, maar worden niet "
+"aanbevolen. Voor vingerafdrukken moet u de Saml Config-array in ConfigEntity."
+"php handmatig wijzigen en de vereiste configuratie-opties opgeven"
+
+#: src/Config/ConfigItem.php:302
+msgid "X509 CERTIFICATE"
+msgstr "X509 CERTIFICAAT"
+
+#: src/Config/ConfigItem.php:329
+msgid ""
+""
+"Authentication context needs to be satisfied by the IdP in order to allow "
+"Saml login. Set to \"none\" and OneLogin PHPSAML will not send an "
+"AuthContext in the AuthNRequest. Or, select one or more options using the "
+"\"control+click\" combination."
+msgstr ""
+""
+"Er moet aan de authenticatiecontext worden voldaan door de IdP om Saml-"
+"aanmelding mogelijk te maken. Als u deze instelt op 'none', verzendt "
+"OneLogin PHPSAML geen AuthContext in de AuthNRequest. Of selecteer een of "
+"meer opties met de combinatie \"control+klik\"."
+
+#: src/Config/ConfigItem.php:330
+msgid "REQ AUTHN CONTEXT"
+msgstr "VERZOEK VERIFICATIECONTEXT"
+
+#: src/Config/ConfigItem.php:335
+msgid "⭕ Requested authN context is a required field"
+msgstr "⭕ De aangevraagde authN-context is een verplicht veld"
+
+#: src/Config/ConfigItem.php:342
+msgid "AUTHN Comparison attribute value"
+msgstr "AUTHN-vergelijkingskenmerkwaarde"
+
+#: src/Config/ConfigItem.php:343
+msgid "AUTHN COMPARISON"
+msgstr "AUTHN VERGELIJKING"
+
+#: src/Config/ConfigItem.php:348
+msgid "⭕ Requested authN context comparison is a required field"
+msgstr "⭕ De aangevraagde authN-contextvergelijking is een verplicht veld"
+
+#: src/Config/ConfigItem.php:355
+#, php-format
+msgid "The FontAwesome (%s) icon to show on the button on the login page."
+msgstr ""
+""
+"Het FontAwesome (%s)-pictogram dat op de knop op de inlogpagina moet worden "
+"weergegeven."
+
+#: src/Config/ConfigItem.php:356
+msgid "LOGIN ICON"
+msgstr "INLOG-PICTOGRAM"
+
+#: src/Config/ConfigItem.php:361
+msgid "⭕ Configuration icon is a required field"
+msgstr "⭕ Het configuratiepictogram is een verplicht veld"
+
+#: src/Config/ConfigItem.php:368
+msgid "The comments"
+msgstr "De opmerkingen"
+
+#: src/Config/ConfigItem.php:369
+msgid "COMMENTS"
+msgstr "OPMERKINGEN"
+
+#: src/Config/ConfigItem.php:381
+msgid "The anonymized SAML response XML structure"
+msgstr "De geanonimiseerde XML-structuur van het SAML-antwoord"
+
+#: src/Config/ConfigItem.php:382
+msgid "SAML Response XML Structure"
+msgstr "XML-structuur van SAML-antwoord"
+
+#: src/Config/ConfigItem.php:395
+msgid "The date this configuration item was created"
+msgstr "De datum waarop dit configuratie-item is gemaakt"
+
+#: src/Config/ConfigItem.php:396
+msgid "CREATE DATE"
+msgstr "DATUM MAKEN"
+
+#: src/Config/ConfigItem.php:410
+msgid "The date this config was modified"
+msgstr "De datum waarop deze configuratie is gewijzigd"
+
+#: src/Config/ConfigItem.php:411
+msgid "MODIFICATION DATE"
+msgstr "WIJZIGINGSDATUM"
+
+#: src/Config/ConfigItem.php:431
+msgid "Is this configuration marked as deleted by GLPI"
+msgstr "Is deze configuratie gemarkeerd als verwijderd door GLPI"
+
+#: src/Config/ConfigItem.php:432
+msgid "IS DELETED"
+msgstr "IS VERWIJDERD"
+
+#: src/Config/ConfigItem.php:444
+msgid ""
+""
+"Indicates if this configuration is activated. Disabled configurations cannot "
+"be used to log in to GLPI and will NOT be shown on the login page."
+msgstr "Geeft aan of deze configuratie is geactiveerd. Uitgeschakelde configuraties kunnen niet worden gebruikt om in te loggen bij GLPI en worden NIET weergegeven op de inlogpagina."
+
+#: src/Config/ConfigItem.php:445
+msgid "IS ACTIVE"
+msgstr "IS ACTIEF"
+
+#: src/Config/ConfigItem.php:457
+msgid ""
+""
+"If enabled, PHPSAML will replace the default GLPI login screen with a "
+"version that does not have the default GLPI login options and only allows "
+"the user to authenticate using the configured SAML2 IDPs. This setting can "
+"be bypassed using a bypass URI parameter."
+msgstr "Indien ingeschakeld zal PHPSAML het standaard GLPI-inlogscherm vervangen door een versie die niet de standaard GLPI-inlogopties heeft en de gebruiker alleen in staat stelt zich te authenticeren met behulp van de geconfigureerde SAML2-idps. Deze instelling kan worden omzeild met behulp van een bypass-URI-parameter"
+
+#: src/Config/ConfigItem.php:458
+msgid "ENFORCED"
+msgstr "GEDWONGEN"
+
+#: src/Config/ConfigItem.php:479
+msgid "Is GLPI positioned behind a proxy that alters the SAML response scheme?"
+msgstr "Staat GLPI achter een proxy die het SAML-reactieschema verandert?"
+
+#: src/Config/ConfigItem.php:480
+msgid "REQUESTS PROXIED"
+msgstr "VERZOEKEN BEVOEGD"
+
+#: src/Config/ConfigItem.php:492
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML Toolkit will reject unsigned or unencrypted "
+"messages if it expects them to be signed or encrypted. Also, it will reject "
+"the messages if the SAML standard is not strictly followed: Destination, "
+"NameID, and Conditions are validated too. Strongly advised in production "
+"environments."
+msgstr "Indien ingeschakeld zal de OneLogin PHPSAML Toolkit niet-ondertekende of niet-gecodeerde berichten weigeren als deze verwacht dat ze ondertekend of gecodeerd zijn. Het zal ook de berichten weigeren als de SAML-standaard niet strikt wordt gevolgd: Destination, NameId en Terms zijn ook gevalideerd. Sterk aanbevolen in productieomgevingen."
+
+#: src/Config/ConfigItem.php:493
+msgid "STRICT"
+msgstr "STRENG"
+
+#: src/Config/ConfigItem.php:505
+msgid ""
+""
+"If enabled, it will force OneLogin PHPSAML to print status and error "
+"messages. Be aware that not all messages might be captured by samlSSO and "
+"might therefore not become visible. WARNING: Enabling debug mode will expose "
+"the Service Provider metadata publicly."
+msgstr "Indien ingeschakeld, dwingt het OneLogin PHPSAML af om status- en foutmeldingen af ​​te drukken. Houd er rekening mee dat niet alle berichten door samlSSO worden opgevangen en daarom mogelijk niet zichtbaar zijn."
+
+#: src/Config/ConfigItem.php:518
+msgid ""
+""
+"If enabled, samlSSO will create new GLPI users on the fly and assign the "
+"properties defined in the samlSSO assignment rules. If disabled, users that "
+"do not have a valid GLPI user will not be able to log in to GLPI until a "
+"user is manually created."
+msgstr "Indien ingeschakeld zal samlSSO direct nieuwe GLPI-gebruikers aanmaken en de eigenschappen toewijzen die zijn gedefinieerd in de samlSSO-toewijzingsregels. Als deze optie is uitgeschakeld, kunnen gebruikers die geen geldige GLPI-gebruiker hebben, niet inloggen bij GLPI totdat er handmatig een gebruiker is aangemaakt."
+
+#: src/Config/ConfigItem.php:519
+msgid "JIT USER CREATION"
+msgstr "JIT GEBRUIKERS CREËREN"
+
+#: src/Config/ConfigItem.php:537
+msgid ""
+""
+"If enabled, user fields mapped from SAML claims and assignment rules will be "
+"synchronized on every successful login."
+msgstr ""
+""
+"Indien ingeschakeld, worden gebruikersvelden die zijn toegewezen op basis "
+"van SAML-claims en toewijzingsregels gesynchroniseerd bij elke succesvolle "
+"aanmelding."
+
+#: src/Config/ConfigItem.php:538
+msgid "SYNC ON LOGIN"
+msgstr "SYNC BIJ INLOGGEN"
+
+#: src/Config/ConfigItem.php:556
+msgid ""
+""
+"If enabled, GLPI will require all SAML protocol messages received from the "
+"Identity Provider (IdP) to be cryptographically signed."
+msgstr ""
+""
+"Indien ingeschakeld, vereist GLPI dat alle SAML-protocolberichten die worden "
+"ontvangen van de identiteitsprovider (IdP) cryptografisch worden ondertekend."
+
+#: src/Config/ConfigItem.php:557
+msgid "REQUIRE SIGNED MESSAGES"
+msgstr "VEREIST ONDERTEKENDE BERICHTEN"
+
+#: src/Config/ConfigItem.php:575
+msgid ""
+""
+"If enabled, GLPI will require individual SAML assertions within the SAML "
+"message to be signed. If unsigned, assertions will be rejected."
+msgstr ""
+""
+"Indien ingeschakeld, vereist GLPI dat individuele SAML-beweringen binnen het "
+"SAML-bericht worden ondertekend. Als ze niet ondertekend zijn, worden "
+"beweringen afgewezen."
+
+#: src/Config/ConfigItem.php:576
+msgid "REQUIRE SIGNED ASSERTIONS"
+msgstr "VEREISTE ONDERTEKENDE BEWEGINGEN"
+
+#: src/Config/ConfigItem.php:594
+msgid ""
+""
+"If enabled, GLPI will expect the SAML assertions containing user claims to "
+"be encrypted. GLPI will decrypt them using the SP private key."
+msgstr ""
+""
+"Indien ingeschakeld, verwacht GLPI dat de SAML-beweringen die "
+"gebruikersclaims bevatten, zijn gecodeerd. GLPI zal ze decoderen met behulp "
+"van de privésleutel van SP."
+
+#: src/Config/ConfigItem.php:595
+msgid "REQUIRE ENCRYPTED ASSERTIONS"
+msgstr "VEREIS VERSLEUTELDE BEWEGINGEN"
+
+#: src/Config/ConfigItem.php:613
+msgid ""
+""
+"If enabled, the SAML SP metadata XML generated by GLPI will be "
+"cryptographically signed using the Service Provider certificate."
+msgstr ""
+""
+"Indien ingeschakeld, wordt de door GLPI gegenereerde SAML SP-metadata-XML "
+"cryptografisch ondertekend met behulp van het Service Provider-certificaat."
+
+#: src/Config/ConfigItem.php:614
+msgid "SIGN SP METADATA"
+msgstr "SIGN SP METADATA"
+
+#: src/Config/ConfigItem.php:632
+msgid ""
+""
+"If enabled, GLPI will strictly require a NameID element to be present in the "
+"SAML assertion payload."
+msgstr ""
+""
+"Indien ingeschakeld zal GLPI strikt vereisen dat een NameID-element aanwezig "
+"is in de SAML-definitiepayload."
+
+#: src/Config/ConfigItem.php:633
+msgid "REQUIRE NAMEID"
+msgstr "NAAM-ID VEREIST"
+
+#: src/Config/ConfigItem.php:645
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML toolkit will encrypt the <samlp:"
+"logoutRequest> sent by this SP using the provided SP certificate and private "
+"key. This option will be toggled \"off\" automatically if no, or no valid SP "
+"certificate and key is provided."
+msgstr "Indien ingeschakeld, codeert de OneLogin PHPSAML-toolkit de <samlp:logoutRequest> die door deze SP wordt verzonden met behulp van het meegeleverde SP-certificaat en de privésleutel. Deze optie wordt automatisch uitgeschakeld als er geen of geen geldig SP-certificaat en -sleutel wordt verstrekt."
+
+#: src/Config/ConfigItem.php:646
+msgid "ENCRYPT NAMEID"
+msgstr "VERSLEUTEL NAAMID"
+
+#: src/Config/ConfigItem.php:658
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML toolkit will sign the <samlp:AuthnRequest> "
+"messages sent by this SP. The IDP should consult the metadata to get the "
+"information required to validate the signatures."
+msgstr "Indien ingeschakeld, zal de OneLogin PHPSAML-toolkit de <samlp:AuthnRequest>-berichten ondertekenen die door deze SP worden verzonden. De IDP moet de metadata raadplegen om de informatie te verkrijgen die nodig is om de handtekeningen te valideren."
+
+#: src/Config/ConfigItem.php:659
+msgid "SIGN AUTHN REQUEST"
+msgstr "AUTEURSVERZOEK TEKENEN"
+
+#: src/Config/ConfigItem.php:671
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML toolkit will sign the <samlp:logoutRequest> "
+"messages sent by this SP."
+msgstr "Indien ingeschakeld, zal de OneLogin PHPSAML-toolkit de <samlp:logoutRequest>-berichten ondertekenen die door deze SP worden verzonden."
+
+#: src/Config/ConfigItem.php:672
+msgid "SIGN LOGOUT REQUEST"
+msgstr "TEKEN UITLOGVERZOEK"
+
+#: src/Config/ConfigItem.php:684
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML toolkit will sign the <samlp:"
+"logoutResponse> messages sent by this SP."
+msgstr "Indien ingeschakeld, zal de OneLogin PHPSAML-toolkit de <samlp:logoutResponse>-berichten ondertekenen die door deze SP worden verzonden."
+
+#: src/Config/ConfigItem.php:685
+msgid "SIGN LOGOUT RESPONSE"
+msgstr "TEKEN UITLOGGEN ANTWOORD"
+
+#: src/Config/ConfigItem.php:697
+msgid ""
+""
+"If enabled, the authentication requests sent to the IdP will be compressed "
+"by the SP."
+msgstr "Indien ingeschakeld, worden de authenticatieverzoeken die naar de IdP worden verzonden, gecomprimeerd door de SP."
+
+#: src/Config/ConfigItem.php:698
+msgid "COMPRESS REQUESTS"
+msgstr "COMPRESSIE VAN VERZOEKEN"
+
+#: src/Config/ConfigItem.php:710
+msgid "If enabled, the SP expects responses sent by the IdP to be compressed."
+msgstr "Indien ingeschakeld verwacht de SP dat de door de IdP verzonden antwoorden worden gecomprimeerd."
+
+#: src/Config/ConfigItem.php:711
+msgid "COMPRESS RESPONSES"
+msgstr "COMPRESSIE ANTWOORDEN"
+
+#: src/Config/ConfigItem.php:723
+msgid ""
+""
+"If enabled, the SP will validate all received XMLs. In order to validate the "
+"XML, the \"strict\" security setting must be enabled."
+msgstr "Indien ingeschakeld zal de SP alle ontvangen XML's valideren. Om de XML te valideren\n                                                        De \"strikte\" beveiligingsinstelling moet waar zijn."
+
+#: src/Config/ConfigItem.php:724
+msgid "VALIDATE XML"
+msgstr "VALIDEER XML"
+
+#: src/Config/ConfigItem.php:736
+msgid ""
+""
+"If enabled, SAMLResponses with an empty value at its Destination attribute "
+"will not be rejected for this fact."
+msgstr ""
+""
+"Indien ingeschakeld, worden SAMLResponses met een lege waarde bij het "
+"Destination-attribuut vanwege dit feit niet afgewezen."
+
+#: src/Config/ConfigItem.php:737
+msgid "RELAX DEST VALIDATION"
+msgstr "ONTSPANNEN BESTEMMINGSVALIDATIE"
+
+#: src/Config/ConfigItem.php:749
+msgid ""
+""
+"ADFS URL-Encodes SAML data as lowercase, and the OneLogin PHPSAML toolkit by "
+"default uses uppercase. Enable this setting for ADFS compatibility on "
+"signature verification"
+msgstr ""
+""
+"ADFS URL-codeert SAML-gegevens als kleine letters, en de OneLogin PHPSAML-"
+"toolkit gebruikt standaard hoofdletters. Schakel deze instelling in voor "
+"ADFS-compatibiliteit bij handtekeningverificatie"
+
+#: src/Config/ConfigItem.php:750
+msgid "LOWER CASE ENCODING"
+msgstr "CODERING IN KLEINE LETTERS"
+
+#: src/Config/ConfigItem.php:813
+msgid ""
+""
+"⚠️ Warning, do not use the 'withlove.from.donuts.nl' example certificates. "
+"They offer no additional protection."
+msgstr "⚠‼Waarschuwing, gebruik niet de voorbeeldcertificaten 'withlove.from.donuts.nl'. Ze bieden geen extra bescherming."
+
+#: src/Config/ConfigItem.php:823
+msgid ""
+""
+"⭕ Certificate must be wrapped in valid BEGIN CERTIFICATE and END "
+"CERTIFICATE tags"
+msgstr "⭕ Het certificaat moet zijn verpakt in geldige BEGIN CERTIFICATE- en END CERTIFICATE-tags"
+
+#: src/Config/ConfigItem.php:829
+msgid "⭕ Certificate should not contain \"carriage returns\" [<CR>]"
+msgstr "⭕ Certificaat mag geen 'kostretouren' bevatten [<CR>]"
+
+#: src/Config/ConfigItem.php:833
+msgid "⭕ No valid X509 certificate found"
+msgstr "⭕ Geen geldig X509-certificaat gevonden"
+
+#: src/Config/ConfigItem.php:836
+msgid "⚠️ OpenSSL is not available, GLPI cant validate your certificate"
+msgstr "⚠️ OpenSSL is niet beschikbaar, GLPI kan uw certificaat niet valideren"
+
+#: src/Config/ConfigItem.php:853
+msgid "⭕ Request timeout must be a positive integer (minutes)"
+msgstr "⭕ Time-out van aanvraag moet een positief geheel getal zijn (minuten)"
+
+#: src/Config/ConfigItem.php:857
+msgid ""
+""
+"The duration in minutes before an uncompleted SAML request is considered "
+"expired."
+msgstr ""
+""
+"De duur in minuten voordat een onvoltooid SAML-verzoek als verlopen wordt "
+"beschouwd."
+
+#: src/Config/ConfigItem.php:858
+msgid "REQUEST TIMEOUT (MINUTES)"
+msgstr "TIME-OUT AANVRAGEN (MINUTEN)"
+
+#: src/Config/ConfigItem.php:883
+msgid "⭕ Inactivity timeout must be a non-negative integer (minutes)"
+msgstr "⭕ Time-out voor inactiviteit moet een niet-negatief geheel getal zijn (minuten)"
+
+#: src/Config/ConfigItem.php:887
+msgid ""
+""
+"The duration in minutes of inactivity before a session is forcefully logged "
+"out (0 to disable)."
+msgstr ""
+""
+"De duur in minuten van inactiviteit voordat een sessie gedwongen wordt "
+"afgemeld (0 tot uitgeschakeld)."
+
+#: src/Config/ConfigItem.php:888
+msgid "INACTIVITY TIMEOUT (MINUTES)"
+msgstr "TIME-OUT AANVRAGEN (MINUTEN)"
+
+#: src/Config/ConfigItem.php:935 src/Config/ConfigItem.php:950
+msgid "Active (Secure)"
+msgstr "Actief (beveiligd)"
+
+#: src/Config/ConfigItem.php:946
+msgid "Condition / Parameter"
+msgstr "Conditie / Parameter"
+
+#: src/Config/ConfigItem.php:946
+msgid "Expected"
+msgstr "SAML ACS verwacht"
+
+#: src/Config/ConfigItem.php:946
+msgid "Detected"
+msgstr "Gedetecteerd"
+
+#: src/Config/ConfigItem.php:950
+msgid "Any"
+msgstr "Elk"
+
+#: src/Config/ConfigItem.php:954 src/Config/ConfigItem.php:955
+#: src/Config/ConfigItem.php:956
+#, php-format
+msgid "Detected (%s)"
+msgstr "Gedetecteerd (%s)"
+
+#: src/Config/ConfigItem.php:954 src/Config/ConfigItem.php:955
+#: src/Config/ConfigItem.php:956
+msgid "Not Detected"
+msgstr "Niet gedetecteerd"
+
+#: src/Config/ConfigItem.php:962 src/Config/ConfigItem.php:964
+msgid "Present"
+msgstr "Voorinstelling toepassen"
+
+#: src/Config/ConfigItem.php:967
+msgid "HTTPS (Secure)"
+msgstr "HTTPS (beveiligd)"
+
+#: src/Config/ConfigItem.php:967
+msgid "HTTP or HTTPS"
+msgstr "HTTP of HTTPS"
+
+#: src/Config/ConfigItem.php:972
+msgid ""
+""
+"⚠️ Conflict: Secure cookie is enabled but PHP is running in a non-secure HTTP "
+"context. Cookies will be rejected by the browser!"
+msgstr "⚠️ Conflict: Beveiligde cookie is ingeschakeld, maar PHP draait in een niet-beveiligde HTTP-context. Cookies worden door de browser afgewezen!"
+
+#: src/Config/ConfigItem.php:975
+msgid ""
+""
+"⚠️ Security Warning: HTTPS is detected but session.cookie_secure is disabled. "
+"Cookies are not protected!"
+msgstr "⚠️ Beveiligingswaarschuwing: HTTPS wordt gedetecteerd, maar session.cookie_secure is uitgeschakeld. Cookies zijn niet beschermd!"
+
+#: src/Config/ConfigItem.php:977
+msgid ""
+""
+"Unsatisfied conditions might break the authentication flow in proxied or "
+"containerized environments depending on your setup and naming schemes."
+msgstr ""
+""
+"Als er niet aan de voorwaarden wordt voldaan, kan de authenticatiestroom in "
+"proxy- of containeromgevingen worden verstoord, afhankelijk van uw "
+"instellingen en naamgevingsschema's."
+
+#: src/Config/ConfigItem.php:1037
+msgid "Current Time"
+msgstr "Huidige tijd"
+
+#: src/Config/ConfigItem.php:1044
+msgid ""
+""
+"✅ Timezone Alignment: PHP and Database connection clocks are synchronized. "
+"(Shown because Debug mode is enabled)"
+msgstr ""
+""
+"✅ Tijdzone-uitlijning: PHP- en database-verbindingsklokken zijn "
+"gesynchroniseerd. (Getoond omdat de foutopsporingsmodus is ingeschakeld)"
+
+#: src/Config/ConfigItem.php:1052
+#, php-format
+msgid ""
+""
+"⚠️ Timezone Mismatch: PHP and Database connection clocks differ by %s hours "
+"(%s seconds). This will cause authentication requests to time out "
+"prematurely or linger too long."
+msgstr "⚠️ Tijdzone komt niet overeen: PHP- en databaseverbindingsklokken verschillen %s-uren (%s-seconden). Dit zorgt ervoor dat authenticatieverzoeken voortijdig verlopen of te lang blijven hangen."
+
+#: src/Config/ConfigItem.php:1053
+msgid ""
+""
+"Ensure GLPI's timezone usage configuration is enabled (under Setup > General "
+"> System), MySQL timezone tables are loaded, or PHP's date.timezone matches "
+"the database timezone."
+msgstr ""
+""
+"Zorg ervoor dat de tijdzonegebruiksconfiguratie van GLPI is ingeschakeld "
+"(onder Instellingen > Algemeen > Systeem), dat MySQL-tijdzonetabellen zijn "
+"geladen, of dat PHP's date.timezone overeenkomt met de tijdzone van de "
+"database."
+
+#: src/Config/ClaimMapEntity.php:300
+msgid "Username mapping is required and cannot be removed."
+msgstr ""
+""
+"Het toewijzen van gebruikersnaam is vereist en kan niet worden verwijderd."
+
+#: src/Config/ClaimMapEntity.php:304
+msgid "Email mapping is required and cannot be removed."
+msgstr "E-mailtoewijzing is vereist en kan niet worden verwijderd."
+
+#: src/Config/ClaimMapEntity.php:329
+msgid "SAML Claim key cannot be empty for Username mapping."
+msgstr "SAML-claimsleutel mag niet leeg zijn voor gebruikersnaamtoewijzing."
+
+#: src/Config/ClaimMapEntity.php:337
+msgid "SAML Claim key cannot be empty for Email mapping."
+msgstr "SAML-claimsleutel mag niet leeg zijn voor e-mailtoewijzing."
+
+#: src/Config/ClaimMapEntity.php:376
+#, php-format
+msgid "Duplicate mapping for %s: %s"
+msgstr "Dubbele toewijzing voor %s: %s"
+
+#: src/Config/ClaimMapEntity.php:483
+msgid "NameId attribute is missing in samlResponse"
+msgstr "Het NameId-kenmerk ontbreekt in samlResponse"
+
+#: src/Config/ClaimMapEntity.php:489
+msgid ""
+""
+"Detected a default guest user in samlResponse, this is not supported by "
+"glpiSAML."
+msgstr ""
+""
+"Er is een standaard gastgebruiker gedetecteerd in samlResponse, dit wordt "
+"niet ondersteund door glpiSAML."
+
+#: src/Config/ClaimMapEntity.php:545
+msgid "invalid values where used to identify the user during auth"
+msgstr ""
+""
+"ongeldige waarden werden gebruikt om de gebruiker te identificeren tijdens "
+"auth"
+
+#: src/Config/ClaimMapEntity.php:561
+msgid ""
+""
+"Warning: SAML NameId format was requested as email but observed value is not "
+"a valid email. Falling back to configured email field."
+msgstr ""
+""
+"Waarschuwing: SAML NameId-indeling is aangevraagd als e-mailadres, maar de "
+"waargenomen waarde is geen geldig e-mailadres. Terugvallen op het "
+"geconfigureerde e-mailveld."
+
+#: src/Config/ClaimMapEntity.php:632
+#, php-format
+msgid "Required user field \"%s\" is missing or invalid in SAML response"
+msgstr ""
+""
+"Het vereiste gebruikersveld '%s' ontbreekt of is ongeldig in het SAML-"
+"antwoord"
+
+#: src/Config/ClaimMapEntity.php:674
+msgid "Required rule field \"groups\" is missing in SAML response"
+msgstr "Het vereiste regelveld 'groepen' ontbreekt in het SAML-antwoord"
+
+#: src/Config/ClaimMapEntity.php:732
+#, php-format
+msgid "Required rule field \"%s\" is missing or invalid in SAML response"
+msgstr ""
+""
+"Het vereiste regelveld '%s' ontbreekt of is ongeldig in het SAML-antwoord"
+
+#: src/Config/ConfigForm.php:255
+msgid "Restore failed: no valid backup file was uploaded."
+msgstr "Herstellen mislukt: er is geen geldig back-upbestand geüpload."
+
+#: src/Config/ConfigForm.php:261
+msgid "Restore failed: unable to read the uploaded file."
+msgstr "Herstellen mislukt: kan het geüploade bestand niet lezen."
+
+#: src/Config/ConfigForm.php:272
+msgid "Restore failed: the backup file has an invalid or unrecognized format."
+msgstr ""
+""
+"Herstellen mislukt: het back-upbestand heeft een ongeldig of niet-herkend "
+"formaat."
+
+#: src/Config/ConfigForm.php:319
+#, php-format
+msgid "Restore successful: %d IDP configuration(s) restored."
+msgstr "Herstel succesvol: %d IDP-configuratie(s) hersteld."
+
+#: src/Config/ConfigForm.php:328
+msgid "Restore completed but no configurations were imported."
+msgstr "Herstel voltooid, maar er zijn geen configuraties geïmporteerd."
+
+#: src/Config/ConfigForm.php:384
+#, php-format
+msgid "Entry %d skipped: missing config block."
+msgstr "Invoer %d overgeslagen: ontbrekend configuratieblok."
+
+#: src/Config/ConfigForm.php:392
+#, php-format
+msgid "Entry %d skipped: missing or invalid id."
+msgstr "Invoer %d overgeslagen: ontbrekende of ongeldige ID."
+
+#: src/Config/ConfigForm.php:413
+#, php-format
+msgid "Entry %d (%s) could not be inserted into database."
+msgstr "Invoer %d (%s) kan niet in de database worden ingevoegd."
+
+#: src/Config/ConfigForm.php:424
+#, php-format
+msgid "Config %s restored but claim mappings had validation errors."
+msgstr ""
+""
+"Configuratie %s hersteld, maar claimtoewijzingen bevatten validatiefouten."
+
+#: src/Config/ConfigForm.php:442
+msgid "You do not have permission to perform this action."
+msgstr "U heeft geen toestemming om deze actie uit te voeren."
+
+#: src/Config/ConfigForm.php:457
+msgid "User disabled and session forced logoff."
+msgstr "Gebruiker uitgeschakeld en sessie gedwongen afmelden."
+
+#: src/Config/ConfigForm.php:459
+msgid "Login state session not found."
+msgstr "Inlogstatussessie niet gevonden."
+
+#: src/Config/ConfigForm.php:551
+msgid "Successfully added new samlSSO configuration."
+msgstr "Nieuwe samlSSO-configuratie is succesvol toegevoegd."
+
+#: src/Config/ConfigForm.php:555
+msgid "Unable to add new samlSSO configuration, please review error logging"
+msgstr ""
+""
+"Kan geen nieuwe samlSSO-configuratie toevoegen. Controleer de foutregistratie"
+
+#: src/Config/ConfigForm.php:560 src/Config/ConfigForm.php:605
+msgid "Configuration invalid, please correct all ⭕ errors first"
+msgstr "Configuratie ongeldig. Corrigeer eerst alle ⭕ fouten"
+
+#: src/Config/ConfigForm.php:596 src/LoginFlow/LoginFlowForm.php:107
+msgid "Configuration updated successfully"
+msgstr "Configuratie succesvol bijgewerkt"
+
+#: src/Config/ConfigForm.php:600 src/LoginFlow/LoginFlowForm.php:111
+msgid "Configuration update failed, check your update rights or error logging"
+msgstr ""
+""
+"Configuratie-update mislukt. Controleer uw updaterechten of foutregistratie"
+
+#: src/Config/ConfigForm.php:625
+msgid "Configuration deleted successfully"
+msgstr "Configuratie succesvol verwijderd"
+
+#: src/Config/ConfigForm.php:629
+msgid "Not allowed or error deleting SAML configuration!"
+msgstr "Niet toegestaan ​​of fout bij verwijderen van SAML-configuratie!"
+
+#: src/Config/ConfigForm.php:648 src/LoginFlow/LoginFlowForm.php:136
+msgid "Invalid request, redirecting back"
+msgstr "Ongeldig verzoek, terugverwijzing"
+
+#: src/Config/ConfigForm.php:776
+msgid "This claim key has not been observed in any SAML responses yet."
+msgstr "Deze claimsleutel is nog niet in SAML-reacties waargenomen."
+
+#: src/Config/ConfigForm.php:828 src/LoginFlow/LoginFlowForm.php:187
+msgid "Email Address"
+msgstr "E-mailadres"
+
+#: src/Config/ConfigForm.php:829 src/LoginFlow/LoginFlowForm.php:188
+msgid "Transient"
+msgstr "Vergankelijk"
+
+#: src/Config/ConfigForm.php:830 src/LoginFlow/LoginFlowForm.php:189
+msgid "Persistent"
+msgstr "Volhardend"
+
+#: src/Config/ConfigForm.php:831 src/LoginFlow/LoginFlowForm.php:192
+msgid "PasswordProtectedTransport"
+msgstr "Met wachtwoord beveiligd Transport"
+
+#: src/Config/ConfigForm.php:833 src/LoginFlow/LoginFlowForm.php:194
+msgid "X509"
+msgstr "X509"
+
+#: src/Config/ConfigForm.php:834 src/LoginFlow/LoginFlowForm.php:195
+msgid "none"
+msgstr "geen"
+
+#: src/Config/ConfigForm.php:835 src/LoginFlow/LoginFlowForm.php:198
+msgid "Exact"
+msgstr "Exact"
+
+#: src/Config/ConfigForm.php:838 src/LoginFlow/LoginFlowForm.php:201
+msgid "Better"
+msgstr "Beter"
+
+#: src/Config/ConfigForm.php:854
+msgid "Microsoft"
+msgstr "Microsoft"
+
+#: src/Config/ConfigForm.php:855
+msgid "Google"
+msgstr "Googlen"
+
+#: src/Config/ConfigForm.php:856
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/Config/ConfigForm.php:857
+msgid "Apple"
+msgstr "Appel"
+
+#: src/Config/ConfigForm.php:858
+msgid "OpenID"
+msgstr "OpenID"
+
+#: src/Config/ConfigForm.php:860
+msgid "Shield"
+msgstr "Schild"
+
+#: src/Config/ConfigForm.php:862
+msgid "User Lock"
+msgstr "Gebruikersvergrendeling"
+
+#: src/Config/ConfigForm.php:863
+msgid "Cloud / Azure"
+msgstr "Wolk / Azure"
+
+#: src/Config/ConfigForm.php:864
+msgid "Sign In"
+msgstr "Inloggen"
+
+#: src/Config/ConfigEntity.php:367
+msgid ""
+""
+"⚠️ SP private key does not seem to match provided SP certificates modulus."
+msgstr "⚠️De privésleutel van SP lijkt niet overeen te komen met de opgegeven SP-certificatenmodule."
+
+#: src/Config/ConfigEntity.php:373
+msgid ""
+""
+"⚠️ Will be defaulted to \"No\" because the provided SP certificate does not "
+"look valid!"
+msgstr "⚠️ Wordt standaard ingesteld op \"Nee\" omdat het opgegeven SP-certificaat er niet geldig uitziet!"
+
+#: src/Config/ConfigEntity.php:403
+msgid ""
+""
+"⚠️ These fields are only enforced when strict mode is enabled. Your "
+"environment is at risk without strict mode."
+msgstr "⚠️ Deze velden worden alleen afgedwongen als de strikte modus is ingeschakeld. Zonder strikte modus loopt uw ​​omgeving gevaar."
+
+#: src/Config/ConfigEntity.php:443
+msgid "⚠️ IDPs cannot be enforced if more than one is present in the IDP list."
+msgstr "⚠️ IDP's kunnen niet worden afgedwongen als er meer dan één op de IDP-lijst staat."
+
+#: src/Config/ClaimMapItem.php:120
+msgid "IDP configuration ID must be a positive integer"
+msgstr "IDP-configuratie-ID moet een positief geheel getal zijn"
+
+#: src/Config/ClaimMapItem.php:140
+msgid "Invalid mapping target type"
+msgstr "Ongeldig toewijzingsdoeltype"
+
+#: src/Config/ClaimMapItem.php:162
+msgid "Invalid GLPI field selected for target type"
+msgstr "Ongeldig GLPI-veld geselecteerd voor doeltype"
+
+#: src/Config/ClaimMapItem.php:182
+msgid "SAML Claim key cannot be empty"
+msgstr "SAML-claimsleutel mag niet leeg zijn"
+
+#: src/Config/ClaimMapItem.php:184
+msgid "SAML Claim key cannot exceed 255 characters"
+msgstr "SAML-claimsleutel mag niet langer zijn dan 255 tekens"
+
+#: src/Config/ClaimMapItem.php:204
+msgid "Default value must be a string"
+msgstr "De standaardwaarde moet een tekenreeks zijn"
+
+#: src/Config/ClaimMapItem.php:206
+msgid "Default value cannot exceed 255 characters"
+msgstr "De standaardwaarde mag niet langer zijn dan 255 tekens"
+
+#: src/LoginFlow.php:177
+msgid "samlFlow"
+msgstr "samlFlow"
+
+#: src/LoginFlow.php:272
+msgid "You have been forcefully logged out by an administrator."
+msgstr "U bent gedwongen uitgelogd door een beheerder."
+
+#: src/LoginFlow.php:280
+msgid "Your session has timed out due to inactivity."
+msgstr "Er is een time-out opgetreden voor uw sessie vanwege inactiviteit."
+
+#: src/LoginFlow.php:523
+#, php-format
+msgid ""
+""
+"Could not update the loginState and therefor stopped the loginFlow for: %s"
+msgstr "Kon de loginState niet bijwerken en stopte daarom de loginFlow voor:"
+
+#: src/LoginFlow.php:631
+msgid "Continue with local logout"
+msgstr "Ga verder met lokaal uitloggen"
+
+#: src/LoginFlow.php:632
+msgid "Log out everywhere"
+msgstr "Overal uitloggen"
+
+#: src/LoginFlow.php:636
+#, php-format
+msgid ""
+""
+"You have been authenticated using the SAML2 identity provider: <b>%1$s</b>."
+"<br><br>Because SAML authentication is enforced, logging out of GLPI locally "
+"will automatically log you back in immediately.<br><br>To sign out "
+"completely, please select <b>'%2$s'</b>. Note that this will also terminate "
+"your active sessions in all other applications connected to this Identity "
+"Provider.<br><br>If you want to leave GLPI, just close this browser tab."
+msgstr "U bent geauthenticeerd met behulp van de SAML2-identiteitsprovider: <b>%1$s</b>.<br><br>Omdat SAML-authenticatie wordt afgedwongen, wordt u bij lokaal afmelden bij GLPI automatisch onmiddellijk weer aangemeld.<br><br>Om volledig af te melden, selecteert u <b>'Overal uitloggen'</b>. Houd er rekening mee dat hierdoor ook uw actieve sessies worden beëindigd in alle andere applicaties die zijn verbonden met deze identiteitsprovider.<br><br>Als u GLPI wilt verlaten, sluit u gewoon dit browsertabblad."
+
+#: src/LoginFlow.php:642
+#, php-format
+msgid ""
+""
+"You have been authenticated using the SAML2 identity provider: <b>%1$s</b>."
+"<br><br>You can log out permanently by also logging out with the IDP by "
+"pressing <b>'%2$s'</b> (which terminates active sessions in all other "
+"applications depending on it), or perform a local logout from GLPI only by "
+"pressing <b>'%3$s'</b>."
+msgstr "U bent geauthenticeerd met behulp van de SAML2-identiteitsprovider: <b>%1$s</b>.<br><br> U kunt permanent uitloggen door ook uit te loggen met de IDP door op <b>'Overal uitloggen'</b> te drukken (wat actieve sessies in alle andere applicaties beëindigt, afhankelijk daarvan), of u kunt alleen lokaal uitloggen bij GLPI door op <b>'Doorgaan met GLPI uitloggen'</b> te drukken."
+
+#: src/LoginFlow.php:651
+msgid "🤔 How would you like to proceed?"
+msgstr "🤔 Hoe zou je verder willen?"
+
+#: src/LoginFlow.php:656
+msgid "Close tab"
+msgstr "Tabblad sluiten"
+
+#: src/LoginFlow.php:711
+msgid "Login with external provider"
+msgstr "Inloggen met externe provider"
+
+#: src/LoginFlow.php:770 src/LoginFlow.php:837
+msgid ""
+""
+"Something went wrong during authentication assertion and prevents you from "
+"logging in. Please contact your GLPI administrator for more information and "
+"support."
+msgstr ""
+""
+"Er is iets misgegaan tijdens het bevestigen van de authenticatie, waardoor u "
+"niet kunt inloggen. Neem contact op met uw GLPI-beheerder voor meer "
+"informatie en ondersteuning."
+
+#: src/LoginFlow.php:773
+msgid "⚠️ Sorry we are unable to log you in"
+msgstr "⚠️ Sorry, we kunnen u niet inloggen"
+
+#: src/LoginFlow.php:778 src/LoginFlow.php:844
+msgid "Return to GLPI"
+msgstr "Keer terug naar GLPI"
+
+#: src/LoginFlow.php:840
+msgid "⚠️ An error occurred"
+msgstr "⚠️ Er is een fout opgetreden"
+
+#: src/LoginFlow.php:841
+msgid "We are sorry, something went wrong while processing your request!"
+msgstr ""
+""
+"Het spijt ons, er is iets misgegaan tijdens het verwerken van uw verzoek!"
+
+#: src/Config.php:125
+msgid "samlSSO"
+msgstr "samlSSO"
+
+#: src/Config.php:149 src/Exclude.php:87
+msgid "Excluded paths"
+msgstr "Uitgesloten paden"
+
+#: src/Config.php:184
+msgid "Idp entity ID"
+msgstr "Idp-entiteits-ID"
+
+#: src/LoginFlow/Acs.php:140
+#, php-format
+msgid "Unable to fetch idp configuration with id: %s from database"
+msgstr "Kan idp-configuratie met id niet ophalen:"
+
+#: src/LoginFlow/Acs.php:141
+msgid "Samlsso->acs->init->FetchConfig"
+msgstr "Samlsso->acs->init->FetchConfig"
+
+#: src/LoginFlow/Acs.php:156
+#, php-format
+msgid ""
+""
+"The received idp response did not contain the required samlResponse POST "
+"body or idpId to authenticate the user, see: %s for more information"
+msgstr ""
+""
+"Het ontvangen idp-antwoord bevatte niet de vereiste samlResponse POST-body "
+"of idpId om de gebruiker te authenticeren, zie: %s voor meer informatie"
+
+#: src/LoginFlow/Acs.php:157
+msgid "Samlsso->acs->init->NoSamlResponse"
+msgstr "Samlsso->acs->init->GeenSamlResponse"
+
+#: src/LoginFlow/Acs.php:179
+msgid "Samlsso->acs->init->phpsaml->Utils->setProxyVars"
+msgstr "Samlsso->acs->init->phpsaml->Utils->setProxyVars"
+
+#: src/LoginFlow/Acs.php:198
+msgid ""
+""
+"PHP-SAML could not initialize the settings object using the configEntity."
+msgstr ""
+""
+"PHP-SAML kan het instellingenobject niet initialiseren met behulp van de "
+"configEntity."
+
+#: src/LoginFlow/Acs.php:199
+msgid "Samlsso->acs->init->phpsaml->initializeSettings"
+msgstr "Samlsso->acs->init->phpsaml->initializeSettings"
+
+#: src/LoginFlow/Acs.php:207
+msgid "PHP-SAML library could not process samlResponse and reported the error:"
+msgstr ""
+""
+"De PHP-SAML-bibliotheek kon samlResponse niet verwerken en rapporteerde de "
+"fout:"
+
+#: src/LoginFlow/Acs.php:208
+msgid "Samlsso->acs->init->phpsaml->initializeResponse"
+msgstr "Samlsso->acs->init->phpsaml->initializeResponse"
+
+#: src/LoginFlow/Acs.php:228
+#, php-format
+msgid ""
+""
+"Could not fetch loginState from database with error: <br><br>%s<br><br>See: "
+"%s for more information."
+msgstr ""
+""
+"Kan loginState niet ophalen uit database met fout: <br><br>%s<br><br>Zie: %s "
+"voor meer informatie."
+
+#: src/LoginFlow/Acs.php:229
+msgid "Samlsso->acs->init->LoginState::construct"
+msgstr "Samlsso->acs->init->LoginState::construct"
+
+#: src/LoginFlow/Acs.php:255
+msgid ""
+""
+" (Suggestion: check 'Want Assertions Encrypted' under Inbound Security in "
+"the Security tab)"
+msgstr ""
+""
+"(Suggestie: vink 'Want Assertions Encrypted' aan onder Inbound Security op "
+"het tabblad Beveiliging)"
+
+#: src/LoginFlow/Acs.php:257
+msgid ""
+""
+" (Suggestion: check 'Want Messages Signed' under Inbound Security in the "
+"Security tab)"
+msgstr ""
+""
+"(Suggestie: vink 'Berichten laten ondertekenen' aan onder Inkomende "
+"beveiliging op het tabblad Beveiliging)"
+
+#: src/LoginFlow/Acs.php:259
+msgid ""
+""
+" (Suggestion: check 'Want Assertions Signed' under Inbound Security in the "
+"Security tab)"
+msgstr ""
+""
+"(Suggestie: vink 'Want Assertions Signed' aan onder Inbound Security op het "
+"tabblad Beveiliging)"
+
+#: src/LoginFlow/Acs.php:261
+msgid ""
+""
+" (Suggestion: check 'Want NameID Signed' under Inbound Security in the "
+"Security tab)"
+msgstr ""
+""
+"(Suggestie: vink 'Want NameID Signed' aan onder Inbound Security op het "
+"tabblad Security)"
+
+#: src/LoginFlow/Acs.php:263 src/LoginFlow/Acs.php:279
+msgid " (Suggestion: verify the Identity Provider Certificates configuration)"
+msgstr ""
+""
+"(Suggestie: controleer de configuratie van de "
+"identiteitsprovidercertificaten)"
+
+#: src/LoginFlow/Acs.php:265
+msgid ""
+""
+" (Suggestion: check proxy settings or ensure request timeout has not expired)"
+msgstr ""
+""
+"(Suggestie: controleer de proxy-instellingen of zorg ervoor dat de time-out "
+"van het verzoek niet is verlopen)"
+
+#: src/LoginFlow/Acs.php:269
+msgid "Validation of the samlResponse document failed"
+msgstr ""
+""
+"Validatie van het samlResponse-document is mislukt. Bekijk het saml-logboek "
+"voor meer details"
+
+#: src/LoginFlow/Acs.php:270 src/LoginFlow/Acs.php:284
+msgid "Samlsso->acs->assertSaml->SamlResponse::isValid"
+msgstr "Samlsso->acs->assertSaml->SamlResponse::isGeldig"
+
+#: src/LoginFlow/Acs.php:283
+msgid "Validation of the samlResponse document failed with a critical error"
+msgstr ""
+""
+"Validatie van het samlResponse-document is mislukt vanwege een kritieke "
+"fout. Bekijk het saml-logboek voor meer details"
+
+#: src/LoginFlow/Acs.php:291
+msgid ""
+""
+"Your SAML authentication request timed out. Please try logging in again."
+msgstr ""
+""
+"Er is een time-out opgetreden voor uw SAML-authenticatieverzoek. Probeer "
+"opnieuw in te loggen."
+
+#: src/LoginFlow/Acs.php:292
+msgid "Samlsso->acs->assertSaml->Timeout"
+msgstr "Samlsso->acs->assertSaml->Phase komt niet overeen"
+
+#: src/LoginFlow/Acs.php:311
+#, php-format
+msgid ""
+""
+"It looks like this samlResponse has already been used to authenticate a "
+"different user.\n"
+"                    Maybe an error occurred and you pressed F5 and "
+"accidently resend the samlResponse that is\n"
+"                    already registered as processed. For security reasons we "
+"can not allow processed samlResponses\n"
+"                    to be processed again. Please login again to generate a "
+"new samlResponse. Sorry for any inconvenience.\n"
+"                    If the problem presists, then please contact your "
+"administrator.\n"
+"                    See: %s for more information"
+msgstr ""
+""
+"Het lijkt erop dat deze samlResponse al is gebruikt om een ​​andere gebruiker "
+"te authenticeren.\n"
+"                    Misschien is er een fout opgetreden en hebt u op F5 "
+"gedrukt en per ongeluk de samlResponse opnieuw verzonden\n"
+"                    al geregistreerd als verwerkt. Om veiligheidsredenen "
+"kunnen we geen verwerkte samlResponses toestaan\n"
+"                    opnieuw verwerkt worden. Meld u opnieuw aan om een ​​"
+"nieuwe samlResponse te genereren. Excuses voor eventueel ongemak.\n"
+"                    Als het probleem zich blijft voordoen, neem dan contact "
+"op met uw beheerder.\n"
+"                    Zie: %s voor meer informatie"
+
+#: src/LoginFlow/Acs.php:317
+msgid "Samlsso->acs->assertSaml->LoginState::checkResponseIdUnique"
+msgstr "Samlsso->acs->assertSaml->LoginState::checkResponseIdUnique"
+
+#: src/LoginFlow/Acs.php:338
+msgid ""
+""
+"An error occured while trying to update the samlResponseId into the "
+"LoginState database. Review the saml log for more details"
+msgstr ""
+""
+"Er is een fout opgetreden bij het bijwerken van de samlResponseId in de "
+"LoginState-database. Bekijk het saml-logboek voor meer details"
+
+#: src/LoginFlow/Acs.php:339
+msgid "Samlsso->acs->assertSaml->LoginState::setSamlResponseId"
+msgstr "Samlsso->acs->assertSaml->LoginState::setSamlResponseId"
+
+#: src/LoginFlow/Acs.php:352
+#, php-format
+msgid ""
+""
+"GLPI did not expect an assertion from this Idp. The most likely reason is a "
+"race condition\n"
+"                    causing an inconsistant loginState in the database or "
+"software bug. Please login again via the\n"
+"                    GLPI-interface. Sorry for the inconvenience. See: %s\n"
+"                    for more information"
+msgstr ""
+""
+"GLPI verwachtte geen bewering van deze Idp. De meest waarschijnlijke reden "
+"is een raceconditie\n"
+"                    waardoor een inconsistente loginState in de database of "
+"een softwarefout ontstaat. Log opnieuw in via de\n"
+"                    GLPI-interface. Sorry voor het ongemak Zie: %s\n"
+"                    voor meer informatie"
+
+#: src/LoginFlow/Acs.php:356
+msgid "Samlsso->acs->assertSaml->PhaseMismatched"
+msgstr "Samlsso->acs->assertSaml->Phase komt niet overeen"
+
+#: src/LoginFlow/Acs.php:370
+msgid ""
+""
+"An error occured while trying to update the login phase to LoginState::"
+"PHASE_SAML_AUTH  into the LoginState database.\n"
+"                                  Review the saml log for more details"
+msgstr ""
+""
+"Er is een fout opgetreden bij het bijwerken van de aanmeldingsfase naar "
+"LoginState::PHASE_SAML_AUTH in de LoginState-database.\n"
+"                                  Bekijk het saml-logboek voor meer details"
+
+#: src/LoginFlow/Acs.php:371
+msgid "LoginState"
+msgstr "LoginStatus"
+
+#: src/LoginFlow/LoginFlowItem.php:120
+msgid "⭕ IDP ID must be a positive numeric value!"
+msgstr "⭕ IDP-ID moet een positieve numerieke waarde zijn!"
+
+#: src/LoginFlow/LoginFlowItem.php:124
+msgid "What IDP ID should be enforced?"
+msgstr "Welke IDP-ID moet worden afgedwongen?"
+
+#: src/LoginFlow/LoginFlowItem.php:125
+msgid "ENFORCED IDP ID"
+msgstr "GEDWONGEN IDP-ID"
+
+#: src/LoginFlow/LoginFlowItem.php:144
+msgid "Debug enabled?"
+msgstr "Foutopsporing ingeschakeld?"
+
+#: src/LoginFlow/LoginFlowItem.php:161
+msgid ""
+""
+"Should SAML SSO be enforced. This option can be bypassed by the bypass var "
+"and value"
+msgstr ""
+""
+"Moet SAML SSO worden afgedwongen. Deze optie kan worden omzeild door de "
+"bypass var en waarde"
+
+#: src/LoginFlow/LoginFlowItem.php:162
+msgid "ENFORCE SSO"
+msgstr "SSO afdwingen"
+
+#: src/LoginFlow/LoginFlowItem.php:178
+msgid "Try to match domain in username for IDP selection"
+msgstr "Probeer domein en gebruikersnaam te matchen voor IDP-selectie"
+
+#: src/LoginFlow/LoginFlowItem.php:179
+msgid "ENABLE DOMAIN BASED SSO"
+msgstr "DOMEINGEBASEERDE SSO INSCHAKELEN"
+
+#: src/LoginFlow/LoginFlowItem.php:195
+msgid "Allow the ?idpId=[val] URI to pre select IDP from URLs"
+msgstr "Sta toe dat de ?idpId=[val] URI vooraf IDP uit URL's selecteert"
+
+#: src/LoginFlow/LoginFlowItem.php:196
+msgid "Enable getter login"
+msgstr "Schakel getter-login in"
+
+#: src/LoginFlow/LoginFlowItem.php:212
+msgid ""
+""
+"Hide the default GLPI login options. This option can be bypassed using the "
+"bypass var and value."
+msgstr ""
+""
+"Verberg de standaard GLPI-inlogopties. Deze optie kan worden omzeild met "
+"behulp van de bypass var en waarde."
+
+#: src/LoginFlow/LoginFlowItem.php:213
+msgid "HIDE GLPI LOGIN"
+msgstr "VERBERG GLPI-AANMELDING"
+
+#: src/LoginFlow/LoginFlowItem.php:229
+msgid ""
+""
+"Hides Saml Buttons. This option cannot be used together with the Hide GLPI "
+"login."
+msgstr ""
+""
+"Verbergt Saml-knoppen. Deze optie kan niet samen met de optie GLPI-login "
+"verbergen worden gebruikt."
+
+#: src/LoginFlow/LoginFlowItem.php:230
+msgid "Hide Saml Buttons"
+msgstr "Saml-knoppen verbergen"
+
+#: src/LoginFlow/LoginFlowItem.php:246
+msgid "Hide the GLPI password field. To be used with Enable Domain Login."
+msgstr ""
+""
+"Verberg het GLPI-wachtwoordveld. Te gebruiken met Domeinaanmelding "
+"inschakelen."
+
+#: src/LoginFlow/LoginFlowItem.php:247
+msgid "HIDE PASSWORD FIELD"
+msgstr "VERBERG WACHTWOORDVELD"
+
+#: src/LoginFlow/LoginFlowItem.php:263
+msgid "Forces samlSSO to (re)apply the rules on each succesfull auth."
+msgstr ""
+""
+"Dwingt samlSSO om de regels (opnieuw) toe te passen bij elke succesvolle "
+"verificatie."
+
+#: src/LoginFlow/LoginFlowItem.php:264
+msgid "APPLY RULES ON AUTH"
+msgstr "REGELS TOEPASSEN OP AUTH"
+
+#: src/LoginFlow/Meta.php:76
+msgid "Error fetching spMetadata."
+msgstr "Fout bij ophalen van spMetadata."
+
+#: src/LoginFlow/Meta.php:81
+msgid "Invalid id or metadata not exposed."
+msgstr "Ongeldige ID of metadata niet zichtbaar."
+
+#: src/LoginFlow/Meta.php:86
+msgid "Error fetching config."
+msgstr "Fout bij ophalen van configuratie."
+
+#: src/LoginFlow/User.php:170
+#, php-format
+msgid ""
+""
+"User with GlpiUserid: %s is marked deleted but still exists in the GLPI "
+"database. Because of this we cannot log you in as this would violate GLPI "
+"its security policies. Please contact the GLPI administrator to restore the "
+"user with provided ID or purge the user to allow the Just in Time (JIT) user "
+"creation to create a new user with the idp provided claims."
+msgstr ""
+""
+"Gebruiker met GlpiUserid: %s is gemarkeerd als verwijderd, maar bestaat nog "
+"steeds in de GLPI-database. Hierdoor kunnen wij u niet inloggen, omdat dit "
+"in strijd zou zijn met het veiligheidsbeleid van GLPI. Neem contact op met "
+"de GLPI-beheerder om de gebruiker met de opgegeven ID te herstellen of de "
+"gebruiker te verwijderen zodat de Just in Time (JIT)-gebruiker kan worden "
+"aangemaakt om een ​​nieuwe gebruiker te maken met de door de IDP verstrekte "
+"claims."
+
+#: src/LoginFlow/User.php:175
+#, php-format
+msgid ""
+""
+"User with GlpiUserid: %s is disabled. Please contact your GLPI administrator "
+"and request him to reactivate your account."
+msgstr ""
+""
+"Gebruiker met GlpiUserid: %s is uitgeschakeld. Neem contact op met uw GLPI-"
+"beheerder en vraag hem uw account opnieuw te activeren."
+
+#: src/LoginFlow/User.php:187
+msgid ""
+""
+"Your SSO login was successful but no GLPI profile was assigned to your "
+"account. Please contact your GLPI administrator to assign a profile to your "
+"account."
+msgstr ""
+""
+"Uw SSO-aanmelding is gelukt, maar er is geen GLPI-profiel aan uw account "
+"toegewezen. Neem contact op met uw GLPI-beheerder om een ​​profiel aan uw "
+"account toe te wijzen."
+
+#: src/LoginFlow/User.php:212
+msgid ""
+""
+"Your SSO login was successful but the identity provider configuration is "
+"invalid or disabled."
+msgstr ""
+""
+"Uw SSO-aanmelding is gelukt, maar de configuratie van de identiteitsprovider "
+"is ongeldig of uitgeschakeld."
+
+#: src/LoginFlow/User.php:221
+msgid ""
+""
+"Your SSO login was successful but there is no matching GLPI user account "
+"and\n"
+"                                                we failed to create one "
+"dynamically using Just In Time user creation. Please\n"
+"                                                request a GLPI administrator "
+"to review the logs and correct the problem or\n"
+"                                                request the administrator to "
+"create a GLPI user manually."
+msgstr ""
+""
+"Uw SSO-aanmelding was succesvol, maar er is geen overeenkomend GLPI-"
+"gebruikersaccount en\n"
+"                                                het is ons niet gelukt om er "
+"dynamisch een te maken met behulp van Just In Time-gebruikerscreatie. "
+"Alsjeblieft\n"
+"                                                een GLPI-beheerder verzoeken "
+"om de logbestanden te bekijken en het probleem te corrigeren, of\n"
+"                                                vraag de beheerder om "
+"handmatig een GLPI-gebruiker aan te maken."
+
+#: src/LoginFlow/User.php:234
+msgid ""
+""
+"Your SSO login was successful but no GLPI profile was assigned to your "
+"account and\n"
+"                                                    we failed to assign one "
+"dynamically using Just In Time user creation. Please\n"
+"                                                    request a GLPI "
+"administrator to review the logs and correct the problem or\n"
+"                                                    request the "
+"administrator to assign a GLPI profile manually."
+msgstr ""
+""
+"Uw SSO-aanmelding was succesvol, maar er is geen GLPI-profiel toegewezen aan "
+"uw account en\n"
+"                                                    we zijn er niet in "
+"geslaagd er één dynamisch toe te wijzen met behulp van Just In Time-"
+"gebruikerscreatie. Alsjeblieft\n"
+"                                                    een GLPI-beheerder "
+"verzoeken om de logbestanden te bekijken en het probleem te corrigeren, of\n"
+"                                                    vraag de beheerder om "
+"handmatig een GLPI-profiel toe te wijzen."
+
+#: src/LoginFlow/User.php:242
+msgid ""
+""
+"Critical error: samlSSO was unable to fetch newly created user from the "
+"database!"
+msgstr ""
+""
+"Kritieke fout: samlSSO kon de nieuw aangemaakte gebruiker niet uit de "
+"database ophalen!"
+
+#: src/LoginFlow/User.php:264
+msgid "JIT was called with params:"
+msgstr "JIT werd aangeroepen met params:"
+
+#: src/LoginFlow/User.php:333
+msgid "Created by phpSaml Just-In-Time user creation on:"
+msgstr "Gemaakt door phpSaml Just-In-Time gebruikerscreatie op:"
+
+#: src/LoginFlow/User.php:491
+msgid "JIT group already assigned:"
+msgstr "JIT-groep al toegewezen:"
+
+#: src/LoginFlow/User.php:502
+msgid "JIT failed to assign groupID:"
+msgstr "JIT kan groepsID niet toewijzen:"
+
+#: src/LoginFlow/User.php:507
+msgid "JIT assigned groupID:"
+msgstr "JIT toegewezen groepsID:"
+
+#: src/LoginFlow/User.php:514
+msgid "JIT found no groupId to add."
+msgstr "JIT heeft geen groupId gevonden om toe te voegen."
+
+#: src/LoginFlow/User.php:538
+msgid "JIT found entity for profile assignment:"
+msgstr "JIT heeft entiteit gevonden voor profieltoewijzing:"
+
+#: src/LoginFlow/User.php:540
+msgid ""
+""
+"JIT didnt find a profile for entity assignment. Profile asignment might not "
+"work."
+msgstr ""
+""
+"JIT heeft geen profiel gevonden voor entiteitstoewijzing. Profieltoewijzing "
+"werkt mogelijk niet."
+
+#: src/LoginFlow/User.php:546
+msgid "JIT found to be assigned profile(s) to be recursive."
+msgstr "JIT bleek dat de toegewezen profielen recursief waren."
+
+#: src/LoginFlow/User.php:548
+msgid "JIT didnt find to be assigned profile(s) to be recursive."
+msgstr "JIT vond niet dat de toegewezen profielen recursief waren."
+
+#: src/LoginFlow/User.php:565
+msgid "JIT profile already assigned with config:"
+msgstr "JIT-profiel al toegewezen met configuratie:"
+
+#: src/LoginFlow/User.php:571
+msgid "JIT was not able to assign profile with config:"
+msgstr "JIT kon geen profiel toewijzen met configuratie:"
+
+#: src/LoginFlow/User.php:577
+msgid "JIT remove all default profiles from newly created user:"
+msgstr ""
+""
+"JIT verwijdert alle standaardprofielen van een nieuw aangemaakte gebruiker:"
+
+#: src/LoginFlow/User.php:589
+msgid "JIT assigned profile with config:"
+msgstr "JIT toegewezen profiel met configuratie:"
+
+#: src/LoginFlow/User.php:622
+msgid "JIT found default groupID:"
+msgstr "JIT heeft standaard groepsID gevonden:"
+
+#: src/LoginFlow/User.php:624
+msgid "Jit didnt find a default GroupID to assign, skipping\n"
+msgstr ""
+""
+"Jit vond geen standaard groeps-ID om toe te wijzen en sloeg deze over\n"
+
+#: src/LoginFlow/User.php:629
+msgid "JIT found default entityID:"
+msgstr "JIT heeft standaardentiteits-ID gevonden:"
+
+#: src/LoginFlow/User.php:631
+msgid "Jit didnt find a default EntityId to assign, skipping\n"
+msgstr "Jit vond geen standaard EntityId om toe te wijzen, maar sloeg over\n"
+
+#: src/LoginFlow/User.php:636
+msgid "JIT found default profileID:"
+msgstr "JIT heeft standaardprofiel-ID gevonden:"
+
+#: src/LoginFlow/User.php:638
+msgid "Jit didnt find a default ProfileId to assign, skipping\n"
+msgstr "Jit vond geen standaard ProfileId om toe te wijzen, maar sloeg over\n"
+
+#: src/LoginFlow/User.php:643
+msgid "JIT found timezone:"
+msgstr "JIT heeft tijdzone gevonden:"
+
+#: src/LoginFlow/User.php:648
+msgid "JIT found is_active:"
+msgstr "JIT gevonden is_actief:"
+
+#: src/LoginFlow/User.php:653
+msgid "JIT found locations_id:"
+msgstr "JIT heeft locaties_id gevonden:"
+
+#: src/LoginFlow/User.php:658
+msgid "JIT found usercategories_id:"
+msgstr "JIT heeft gebruikerscategorie_id gevonden:"
+
+#: src/LoginFlow/User.php:663
+msgid "JIT found usertitles_id:"
+msgstr "JIT heeft usertitles_id gevonden:"
+
+#: src/LoginFlow/User.php:668
+msgid "JIT found language:"
+msgstr "JIT heeft taal gevonden:"
+
+#: src/LoginFlow/User.php:673
+msgid "Jit updated user defaults\n"
+msgstr "Jit heeft de gebruikersstandaarden bijgewerkt\n"
+
+#: src/LoginFlow/User.php:675
+msgid "Jit didnt update user defaults\n"
+msgstr "Jit heeft de standaardinstellingen van de gebruiker niet bijgewerkt\n"
+
+#: src/LoginFlow/LoginFlowForm.php:72
+msgid "Identity providers"
+msgstr "Identiteitsproviders"
+
+#: src/LoginFlow/LoginFlowForm.php:116
+msgid "Configuration invalid please correct all ⭕ errors first"
+msgstr "Configuratie ongeldig, corrigeer eerst alle ⭕ fouten"
+
+#: src/LoginState.php:850
+msgid "ACS Timeout"
+msgstr "Time-out"
+
+#: src/Exclude.php:126
+msgid "samlSSO Excludes"
+msgstr "samlSSO Exclusief"
+
+#: src/Exclude.php:148
+msgid "Agent contains"
+msgstr "Agent bevat"
+
+#: src/Exclude.php:154
+msgid "Bypass SAML auth"
+msgstr "SAML-authenticatie omzeilen"
+
+#: src/Exclude.php:159
+msgid "Url contains path or file"
+msgstr "URL bevat pad of bestand"
+
+#: src/Exclude.php:181
+msgid "Client Agent performing the call"
+msgstr "Clientagent voert het gesprek uit"
+
+#: src/Exclude.php:190
+msgid "To be excluded path"
+msgstr "Uitgesloten pad"
+
+#: templates/loggedOut.html.twig:9
+msgid "Successfully Logged Out"
+msgstr "Succesvol uitgelogd"
+
+#: templates/loggedOut.html.twig:12
+msgid ""
+""
+"You have been successfully logged out of your session. You can now safely "
+"close this browser window/tab, or log in again using the button below."
+msgstr ""
+""
+"U bent succesvol afgemeld bij uw sessie. U kunt dit browservenster/tabblad "
+"nu veilig sluiten, of u kunt opnieuw inloggen via onderstaande knop."
+
+#: templates/loggedOut.html.twig:17
+msgid "Log in again"
+msgstr "Meld u opnieuw aan"
+
+#: templates/configForm/security.html.twig:8
+msgid "Enforcement & Sessions"
+msgstr "Handhaving & Sessies"
+
+#: templates/configForm/security.html.twig:83
+msgid "⚠️ Your environment is at risk, make sure strict is enabled!"
+msgstr "⚠‼️ Uw omgeving loopt gevaar, zorg ervoor dat strikt is ingeschakeld!"
+
+#: templates/configForm/security.html.twig:107
+msgid "User Provisioning"
+msgstr "Gebruikersregistratie"
+
+#: templates/configForm/security.html.twig:136
+msgid ""
+""
+"Enabling this field might cause data leak incidents because samlSSO will "
+"apply configuration mistakes made at the IDP directly into GLPI."
+msgstr ""
+""
+"Het inschakelen van dit veld kan incidenten met datalekken veroorzaken, "
+"omdat samlSSO configuratiefouten gemaakt bij de IDP rechtstreeks in GLPI zal "
+"toepassen."
+
+#: templates/configForm/security.html.twig:161
+msgid "Inbound Security (IdP)"
+msgstr "Inkomende beveiliging (IdP)"
+
+#: templates/configForm/security.html.twig:239
+msgid "Outbound Security (SP)"
+msgstr "Uitgaande beveiliging (SP)"
+
+#: templates/configForm/transit.html.twig:9
+msgid "Compression"
+msgstr "Compressie"
+
+#: templates/configForm/transit.html.twig:51
+msgid "Proxied & Encoding"
+msgstr "Proxy en codering"
+
+#: templates/configForm/transit.html.twig:95
+msgid "XML & Destination Validation"
+msgstr "XML- en bestemmingsvalidatie"
+
+#: templates/configForm/transit.html.twig:105
+msgid "⚠️ Strict is disabled, validate xml setting will not do anything."
+msgstr "⚠️ Strict is uitgeschakeld, het valideren van de xml-instelling doet niets."
+
+#: templates/configForm/idp.html.twig:8
+msgid "Endpoints & Configurations"
+msgstr "Eindpunten en configuraties"
+
+#: templates/configForm/idp.html.twig:71
+msgid "Authentication Context"
+msgstr "SAML SSO-authenticatieblokken"
+
+#: templates/configForm/idp.html.twig:161
+msgid "Identity Provider Certificates"
+msgstr "Identiteitsproviders"
+
+#: templates/configForm/provider.html.twig:8
+msgid "Endpoints & Metadata"
+msgstr "Eindpunten en metadata"
+
+#: templates/configForm/provider.html.twig:16
+msgid "Entity ID"
+msgstr "Idp-entiteits-ID"
+
+#: templates/configForm/provider.html.twig:21
+msgid ""
+""
+"You need to configure the Entity ID at the identity provider. This value is "
+"crosschecked by the identity provider to make sure the sign-in request is "
+"originating from the correct service provider."
+msgstr ""
+""
+"U moet de Entiteits-ID configureren bij de identiteitsprovider. Deze waarde "
+"wordt door de identiteitsprovider gecontroleerd om er zeker van te zijn dat "
+"het aanmeldingsverzoek afkomstig is van de juiste serviceprovider."
+
+#: templates/configForm/provider.html.twig:49
+msgid "MetaUrl"
+msgstr "MetaUrl"
+
+#: templates/configForm/provider.html.twig:51
+msgid ""
+""
+"The location of the metadata provider for this service provider (GLPI). The "
+"meta location can be used by the identity provider to collect important "
+"information from this service provider like what public certificate to use "
+"for signing and encrypting the SamlResponse."
+msgstr ""
+""
+"De locatie van de metadataprovider voor deze serviceprovider (GLPI). De "
+"metalocatie kan door de identiteitsprovider worden gebruikt om belangrijke "
+"informatie van deze serviceprovider te verzamelen, zoals welk openbaar "
+"certificaat moet worden gebruikt voor het ondertekenen en coderen van de "
+"SamlResponse."
+
+#: templates/configForm/provider.html.twig:61
+msgid "AcsUrl"
+msgstr "AcsUrl"
+
+#: templates/configForm/provider.html.twig:66
+msgid ""
+""
+"The location of the Assertion Consumer Service (ACS) for this service "
+"provider (GLPI). This url is called by the identity provider after "
+"succesfull login."
+msgstr ""
+""
+"De locatie van de Assertion Consumer Service (ACS) voor deze serviceprovider "
+"(GLPI). Deze url wordt na succesvol inloggen door de identiteitsprovider "
+"aangeroepen."
+
+#: templates/configForm/provider.html.twig:76
+msgid "SloUrl"
+msgstr "SloUrl"
+
+#: templates/configForm/provider.html.twig:81
+msgid ""
+""
+"The location where logout requests should be send back to from the Identity "
+"Provider."
+msgstr ""
+""
+"De locatie waar uitlogverzoeken van de Identity Provider naartoe moeten "
+"worden teruggestuurd."
+
+#: templates/configForm/provider.html.twig:89
+msgid "Name ID Policy"
+msgstr "Naam-ID-beleid"
+
+#: templates/configForm/provider.html.twig:116
+msgid "Certificates & Keys"
+msgstr "Certificaten & Sleutels"
+
+#: templates/configForm/logging.html.twig:9
+msgid "SAML SSO Authentication Logs"
+msgstr "SAML SSO-authenticatieblokken"
+
+#: templates/configForm/logging.html.twig:12
+msgid ""
+""
+"Track login phases, active sessions, assertion validations, and flow "
+"outcomes for troubleshooting."
+msgstr ""
+""
+"Houd inlogfasen, actieve sessies, beweringsvalidaties en stroomresultaten "
+"bij voor het oplossen van problemen."
+
+#: templates/configForm/logging.html.twig:32
+msgid "Search"
+msgstr "Zoekopdracht"
+
+#: templates/configForm/logging.html.twig:37
+#, python-format
+msgid "Total records found: %s"
+msgstr "Totaal aantal records gevonden: %s"
+
+#: templates/configForm/logging.html.twig:46
+msgid "ID"
+msgstr "Identiteitskaart"
+
+#: templates/configForm/logging.html.twig:47
+msgid "IdP ID"
+msgstr "IdP-ID"
+
+#: templates/configForm/logging.html.twig:48
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: templates/configForm/logging.html.twig:49
+#: templates/configForm/logging.html.twig:127
+msgid "GLPI Authed"
+msgstr "GLPI geauthenticeerd"
+
+#: templates/configForm/logging.html.twig:50
+#: templates/configForm/logging.html.twig:125
+msgid "SAML Authed"
+msgstr "SAML geauthenticeerd"
+
+#: templates/configForm/logging.html.twig:51
+msgid "Phase"
+msgstr "Fase"
+
+#: templates/configForm/logging.html.twig:52
+msgid "Login Time"
+msgstr "Inlogtijd"
+
+#: templates/configForm/logging.html.twig:53
+msgid "Last Click"
+msgstr "Laatste klik"
+
+#: templates/configForm/logging.html.twig:54
+msgid "Location"
+msgstr "Locatie"
+
+#: templates/configForm/logging.html.twig:55
+msgid "Trace"
+msgstr "Spoor"
+
+#: templates/configForm/logging.html.twig:56
+msgid "Actions"
+msgstr "Acties"
+
+#: templates/configForm/logging.html.twig:64
+msgid "No logs match the criteria."
+msgstr "Er zijn geen logboeken die aan de criteria voldoen."
+
+#: templates/configForm/logging.html.twig:100
+#: templates/configForm/logging.html.twig:107
+msgid "Yes"
+msgstr "Ja"
+
+#: templates/configForm/logging.html.twig:102
+#: templates/configForm/logging.html.twig:109
+msgid "No"
+msgstr "Nee"
+
+#: templates/configForm/logging.html.twig:114
+msgid "Initial"
+msgstr "Initieel"
+
+#: templates/configForm/logging.html.twig:122
+msgid "SAML ACS Expected"
+msgstr "SAML ACS verwacht"
+
+#: templates/configForm/logging.html.twig:129
+msgid "Reserved"
+msgstr "Gereserveerd"
+
+#: templates/configForm/logging.html.twig:131
+msgid "Forced Logoff"
+msgstr "Geforceerd afgemeld"
+
+#: templates/configForm/logging.html.twig:133
+msgid "Timed Out"
+msgstr "Time-out"
+
+#: templates/configForm/logging.html.twig:135
+msgid "Logged Out"
+msgstr "Afgemeld"
+
+#: templates/configForm/logging.html.twig:137
+msgid "Error"
+msgstr "Fout"
+
+#: templates/configForm/logging.html.twig:174
+msgid "Force Logoff & Disable"
+msgstr "Forceer afmelden & uitschakelen"
+
+#: templates/configForm/logging.html.twig:193
+msgid "Showing page %1$s of %2$s"
+msgstr "Pagina %1$s van %2$s weergeven"
+
+#: templates/configForm/general.html.twig:9
+msgid "State & Branding"
+msgstr "Staat & Branding"
+
+#: templates/configForm/general.html.twig:19
+#: templates/configForm/general.html.twig:83
+msgid ""
+""
+"⚠️ Userdomain is configured. The login button will be hidden from the "
+"loginscreen. Clear the Userdomain to make the button visible again."
+msgstr "⚠️ Gebruikersdomein is geconfigureerd. De inlogknop wordt verborgen in het inlogscherm. Wis het gebruikersdomein om de knop weer zichtbaar te maken."
+
+#: templates/configForm/general.html.twig:73
+msgid "Domain & Button Configurations"
+msgstr "Domein- en knopconfiguraties"
+
+#: templates/configForm/general.html.twig:312
+#, python-brace-format
+msgid ""
+""
+"🔒 Userdomain is configured. Users can trigger a Saml Login by providing "
+"their {username}@{userdomain} in the glpi username field and pressing the "
+"login button. The password field is ignored and can be left blank. This is a "
+"more secure option that wont expose configured IDPs."
+msgstr "🔒 Gebruikersdomein is geconfigureerd. Gebruikers kunnen een Saml-login activeren door hun {username}@{userdomain} in het glpi-gebruikersnaamveld in te voeren en op de login-knop te drukken. Het wachtwoordveld wordt genegeerd en kan leeg gelaten worden. Dit is een veiligere optie die geconfigureerde IDP's niet blootstelt."
+
+#: templates/configForm/general.html.twig:333
+msgid "Comments"
+msgstr "De opmerkingen"
+
+#: templates/configForm/claim_mapping.html.twig:4
+msgid "SAML Claim Mapping"
+msgstr "SAML-claimtoewijzing"
+
+#: templates/configForm/claim_mapping.html.twig:6
+msgid "Mapping Tools"
+msgstr "Hulpmiddelen voor het in kaart brengen"
+
+#: templates/configForm/claim_mapping.html.twig:13
+msgid "Mapping Assistant"
+msgstr "Mapping-assistent"
+
+#: templates/configForm/claim_mapping.html.twig:15
+msgid ""
+""
+"Map SAML response claim keys dynamically either directly to user profile "
+"fields or as JIT Rule criteria. Configure defaults and required verification "
+"checks."
+msgstr ""
+""
+"Wijs SAML-antwoordclaimsleutels dynamisch toe aan gebruikersprofielvelden of "
+"als JIT-regelcriteria. Configureer standaardinstellingen en vereiste "
+"verificatiecontroles."
+
+#: templates/configForm/claim_mapping.html.twig:22
+msgid "Apply Preset"
+msgstr "Voorinstelling toepassen"
+
+#: templates/configForm/claim_mapping.html.twig:24
+msgid "Select Preset"
+msgstr "Selecteer Voorinstelling"
+
+#: templates/configForm/claim_mapping.html.twig:33
+msgid "View observed samlResponse XML"
+msgstr "Bekijk de waargenomen samlResponse XML"
+
+#: templates/configForm/claim_mapping.html.twig:42
+msgid "Sanitized SAML Response XML Structure"
+msgstr "Opgeschoonde SAML-antwoord-XML-structuur"
+
+#: templates/configForm/claim_mapping.html.twig:46
+msgid ""
+""
+"This shows the structure of the last received SAML Response. Cryptographic "
+"keys, signatures, digests, and PII text node values have been stripped."
+msgstr ""
+""
+"Dit toont de structuur van de laatst ontvangen SAML-reactie. Cryptografische "
+"sleutels, handtekeningen, samenvattingen en PII-tekstknooppuntwaarden zijn "
+"verwijderd."
+
+#: templates/configForm/claim_mapping.html.twig:50
+msgid ""
+""
+"No SAML response has been recorded yet. Perform a successful login to "
+"populate this view."
+msgstr ""
+""
+"Er is nog geen SAML-reactie geregistreerd. Voer een succesvolle aanmelding "
+"uit om deze weergave te vullen."
+
+#: templates/configForm/claim_mapping.html.twig:68
+msgid "Claim Mapping Validation Errors"
+msgstr "Validatiefouten bij claimtoewijzing"
+
+#: templates/configForm/claim_mapping.html.twig:81
+msgid "Target Type"
+msgstr "Doeltype"
+
+#: templates/configForm/claim_mapping.html.twig:82
+msgid "GLPI Target Field"
+msgstr "GLPI-doelveld"
+
+#: templates/configForm/claim_mapping.html.twig:83
+msgid "SAML Response Claim Key"
+msgstr "SAML-antwoordclaimsleutel"
+
+#: templates/configForm/claim_mapping.html.twig:84
+msgid "Default Fallback Value"
+msgstr "Standaard terugvalwaarde"
+
+#: templates/configForm/claim_mapping.html.twig:85
+msgid "Required"
+msgstr "Vereist"
+
+#: templates/configForm/claim_mapping.html.twig:86
+msgid "Status"
+msgstr "Status"
+
+#: templates/configForm/claim_mapping.html.twig:100
+msgid "User Field"
+msgstr "Gebruikersveld"
+
+#: templates/configForm/claim_mapping.html.twig:101
+msgid "Rule Field"
+msgstr "Regelveld"
+
+#: templates/configForm/claim_mapping.html.twig:148
+msgid "Observed"
+msgstr "Waargenomen"
+
+#: templates/configForm/claim_mapping.html.twig:150
+msgid "Unobserved"
+msgstr "Onopgemerkt"
+
+#: templates/configForm/claim_mapping.html.twig:153
+msgid "Unused in Rules"
+msgstr "Ongebruikt in regels"
+
+#: templates/configForm/claim_mapping.html.twig:160
+#: templates/configForm.html.twig:780
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: templates/configForm/claim_mapping.html.twig:172
+msgid "Add Mapping"
+msgstr "Voeg toewijzing toe"
+
+#: templates/errorScreen.html.twig:9
+msgid "The following error was reported"
+msgstr "De volgende fout is gerapporteerd"
+
+#: templates/configForm.html.twig:690
+msgid "General"
+msgstr "Algemeen"
+
+#: templates/configForm.html.twig:701
+msgid "Transit"
+msgstr "Doorvoer"
+
+#: templates/configForm.html.twig:712
+msgid "Service provider"
+msgstr "Dienstverlener"
+
+#: templates/configForm.html.twig:723
+msgid "Identity provider"
+msgstr "Identiteitsprovider"
+
+#: templates/configForm.html.twig:734
+msgid "Security"
+msgstr "Beveiliging"
+
+#: templates/configForm.html.twig:745
+msgid "Claim Mapping"
+msgstr "Claimtoewijzing"
+
+#: templates/configForm.html.twig:756
+msgid "Logging"
+msgstr "Loggen"
+
+#: templates/configForm.html.twig:774
+msgid "Save"
+msgstr "Redden"
+
+#: templates/configForm.html.twig:785
+msgid ""
+""
+"⚠️ Warning SP metadata exposed! - ROWID: %1$s | CREATED DATE: %2$s | LAST "
+"UPDATED: %3$s"
+msgstr "⚠️ Waarschuwing SP-metadata zichtbaar! - ROWID: %1$s | AANGEMAAKDATUM: %2$s | LAATSTE BIJGEWERKT: %3$s"

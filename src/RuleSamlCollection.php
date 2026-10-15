@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.9
+ *  @version    1.3.2
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -45,31 +45,44 @@ declare(strict_types=1);
 
 namespace GlpiPlugin\Samlsso;
 
-use RuleCollection;
+use GlpiPlugin\Samlsso\Compat\RuleSamlCollectionCompat;
 
-class RuleSamlCollection extends RuleCollection
+// Version-selected compatibility layer (GLPI 11 untyped / GLPI 12 typed core
+// properties). Must be required before the class below extends the compat one.
+require_once __DIR__ . '/compat.php';
+
+/**
+ * JIT import rule collection, extending the core RuleCollection through the
+ * version-selected compatibility layer: $rightname ('rule_import') and
+ * $menu_option ('Saml') are carried by RuleSamlCollectionCompat, version-typed
+ * for GLPI 11 and GLPI 12. $stop_on_first_match keeps the core default (false).
+ **/
+class RuleSamlCollection extends RuleSamlCollectionCompat
 {
 
     /**
-     *
-     **/
-    public $stop_on_first_match = false;                    //NOSONAR - Default GLPI property name
-
-    /**
-     *
-     **/
-    static $rightname = "rule_import";
-
-    /**
      * @see Rule::getCriterias()
      **/
-    public $menu_option = "Saml";                               //NOSONAR - Default GLPI property name
-
     /**
-     * @see Rule::getCriterias()
-     **/
-    public function getTitle()
+     * Get the title of the rule collection.
+     *
+     * @return string Friendly name of the JIT import rules.
+     */
+    public function getTitle(): string
     {
         return __('JIT import rules', PLUGIN_NAME);
     }
+
+    /**
+     * Get the URL for testing the rules.
+     * Overrides core RuleCollection to point to the global core rules test endpoint,
+     * since the plugin does not ship a custom rules engine test page in its front directory.
+     *
+     * @return string The test URL.
+     */
+    public static function getRulesTestURL(): string
+    {
+        return '/front/rulesengine.test.php';
+    }
+
 }

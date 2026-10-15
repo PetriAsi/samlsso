@@ -1,0 +1,285 @@
+<!-- Logging details -->
+<div class="tab-pane fade d-none" id="logging" role="tabpanel" aria-labelledby="logging-tab">
+    <div class="card-body">
+        <div class="d-flex flex-column gap-3">
+            <!-- Header with description -->
+            <div class="logging-header p-3 mb-2 rounded-3 border" style="background-color: var(--tb-light, #f8f9fa); border-color: var(--tb-border-color, #dee2e6);">
+                <h4 class="mb-2 text-primary d-flex align-items-center gap-2">
+                    <i class="ti ti-history"></i>
+                    {{ __("SAML SSO Authentication Logs", plugin) }}
+                </h4>
+                <p class="mb-0 text-muted fs-7">
+                    {{ __("Track login phases, active sessions, assertion validations, and flow outcomes for troubleshooting.", plugin) }}
+                </p>
+            </div>
+
+            <!-- Search and filter toolbar -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 p-2 rounded-2 border mb-3" style="background-color: rgba(0, 0, 0, 0.02);">
+                <div class="d-flex align-items-center gap-2 flex-grow-1" style="max-width: 500px;">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0">
+                            <i class="ti ti-search text-muted"></i>
+                        </span>
+                        <input type="text" id="logging-search-input" class="form-control border-start-0" 
+                               placeholder="{{ __('Search username, session ID, location, or ID...', plugin) }}" 
+                               value="{{ logging_search }}">
+                        {% if logging_search is not empty %}
+                            <button type="button" class="btn btn-outline-secondary border-start-0 border-end-0" onclick="clearLoggingSearch()">
+                                <i class="ti ti-x"></i>
+                            </button>
+                        {% endif %}
+                        <button type="button" class="btn btn-primary" onclick="performLoggingSearch()">
+                            {{ __("Search", plugin) }}
+                        </button>
+                    </div>
+                </div>
+                <div class="text-muted fs-7">
+                    {{ __('Total records found: %s', plugin)|format('<strong>' ~ logging_total_count ~ '</strong>')|raw }}
+                </div>
+            </div>
+
+            <!-- Log entries table -->
+            <div class="table-responsive rounded-2 border">
+                <table class="table table-hover align-middle mb-0 logging-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 70px;">{{ __("ID", plugin) }}</th>
+                            <th style="width: 80px;">{{ __("IdP ID", plugin) }}</th>
+                            <th>{{ __("Username", plugin) }}</th>
+                            <th style="width: 110px;" class="text-center">{{ __("GLPI Authed", plugin) }}</th>
+                            <th style="width: 110px;" class="text-center">{{ __("SAML Authed", plugin) }}</th>
+                            <th>{{ __("Phase", plugin) }}</th>
+                            <th>{{ __("Login Time", plugin) }}</th>
+                            <th>{{ __("Last Click", plugin) }}</th>
+                            <th style="width: 90px;" class="text-center">{{ __("Location", plugin) }}</th>
+                            <th style="width: 90px;" class="text-center">{{ __("Trace", plugin) }}</th>
+                            <th style="width: 160px;" class="text-center">{{ __("Actions", plugin) }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if loggingfields is empty %}
+                            <tr>
+                                <td colspan="11" class="text-center py-4 text-muted">
+                                    <i class="ti ti-database-x fs-1 d-block mb-2"></i>
+                                    {{ __("No logs match the criteria.", plugin) }}
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% for logrow in loggingfields %}
+                                <tr>
+                                    <td class="font-monospace text-muted">{{ logrow.id }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary-lt font-monospace px-2 py-1">{{ logrow.idpId }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            {% if logrow.avatarUrl is not empty %}
+                                                <span class="avatar avatar-xs rounded-circle" style="background-image: url({{ logrow.avatarUrl }})"></span>
+                                            {% else %}
+                                                <span class="avatar avatar-xs rounded-circle bg-blue-lt">
+                                                    {{ logrow.userName|slice(0, 2)|upper }}
+                                                </span>
+                                            {% endif %}
+                                            <div>
+                                                <div class="font-weight-medium">
+                                                    {{ logrow.userName }}
+                                                    {% if logrow.clientCountry is not empty and logrow.clientCountry != '??' and logrow.clientCountry|upper != 'ZZ' %}
+                                                        <span class="ms-1" style="cursor: help;" data-bs-toggle="tooltip" title="{{ logrow.clientCountryName }} ({{ logrow.clientIp }})">
+                                                            <img src="https://flagcdn.com/16x12/{{ logrow.clientCountry|lower }}.png" width="16" height="12" alt="{{ logrow.clientCountry }}" style="vertical-align: middle; margin-top: -2px;">
+                                                        </span>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="text-muted fs-8 font-monospace" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" data-bs-toggle="tooltip" title="Session ID: {{ logrow.sessionId }}">
+                                                    {{ logrow.sessionId }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if logrow.glpiAuthed == 1 %}
+                                            <span class="logging-badge logging-badge-success">{{ __("Yes", plugin) }}</span>
+                                        {% else %}
+                                            <span class="logging-badge logging-badge-danger">{{ __("No", plugin) }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if logrow.samlAuthed == 1 %}
+                                            <span class="logging-badge logging-badge-success">{{ __("Yes", plugin) }}</span>
+                                        {% else %}
+                                            <span class="logging-badge logging-badge-danger">{{ __("No", plugin) }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if logrow.phase == 1 %}
+                                            <span class="logging-badge logging-badge-phase-1" title="{{ __('Phase 1: Initial visit', plugin) }}">{{ __("Initial", plugin) }}</span>
+                                        {% elseif logrow.phase == 2 %}
+                                             <span class="logging-badge logging-badge-phase-2" 
+                                                   data-samlsso-toggle="popover" data-bs-placement="top" data-bs-html="true" 
+                                                   data-samlsso-type="warning"
+                                                   data-bs-content="{{ __("The identity provider was contacted, but GLPI didn't receive a successful response back at the ACS endpoint.<br><br><b>Common Solutions:</b><br>&bull; Verify the <strong>Reply URL</strong> in IdP matches the plugin setting <code>AcsUrl</code> exactly.<br>&bull; If using a reverse proxy, ensure the plugin setting <code>REQUESTS PROXIED</code> is enabled to trust <strong>X-Forwarded-Proto</strong> headers.<br>&bull; Check if the user closed the browser during login.", plugin)|e('html_attr') }}" 
+                                                   title="{{ __('Phase 2: SAML ACS Expected', plugin) }}"
+                                                   style="cursor: help;">
+                                                 {{ __("SAML ACS Expected", plugin) }}
+                                             </span>
+                                        {% elseif logrow.phase == 3 %}
+                                             <span class="logging-badge logging-badge-phase-3" title="{{ __('Phase 3: Performed SAML IDP authentication', plugin) }}">{{ __("SAML Authed", plugin) }}</span>
+                                        {% elseif logrow.phase == 4 %}
+                                             <span class="logging-badge logging-badge-phase-4" title="{{ __('Phase 4: Performed GLPI session authentication', plugin) }}">{{ __("GLPI Authed", plugin) }}</span>
+                                        {% elseif logrow.phase == 5 %}
+                                             <span class="logging-badge logging-badge-phase-5" title="{{ __('Phase 5: File Exclude / Reserved', plugin) }}">{{ __("Reserved", plugin) }}</span>
+                                        {% elseif logrow.phase == 6 %}
+                                             <span class="logging-badge logging-badge-phase-6" title="{{ __('Phase 6: Session forced logged off', plugin) }}">{{ __("Forced Logoff", plugin) }}</span>
+                                        {% elseif logrow.phase == 7 %}
+                                             <span class="logging-badge logging-badge-phase-7" title="{{ __('Phase 7: Session Timed out', plugin) }}">{{ __("Timed Out", plugin) }}</span>
+                                         {% elseif logrow.phase == 8 %}
+                                             <span class="logging-badge logging-badge-phase-8" title="{{ __('Phase 8: Session Logged Out', plugin) }}">{{ __("Logged Out", plugin) }}</span>
+                                         {% elseif logrow.phase == 9 %}
+                                             <span class="logging-badge logging-badge-phase-9" title="{{ __('Phase 9: Assertion Error', plugin) }}">{{ __("Error", plugin) }}</span>
+                                         {% else %}
+                                             <span class="logging-badge bg-light text-dark">{{ logrow.phase }}</span>
+                                         {% endif %}
+                                    </td>
+                                    <td class="text-nowrap fs-7 text-muted">{{ logrow.loginTime }}</td>
+                                    <td class="text-nowrap fs-7 text-muted">{{ logrow.lastClickTime }}</td>
+                                    <td class="text-center">
+                                         {% if logrow.location is not empty %}
+                                             <button type="button" class="btn btn-sm btn-ghost-secondary p-1 border-0" 
+                                                     data-samlsso-toggle="popover" data-bs-placement="top" data-bs-html="true" 
+                                                     data-samlsso-type="info"
+                                                     data-bs-content="{{ ("<pre class='p-2 mb-0 font-monospace text-wrap' style='max-height: 250px; overflow-y: auto; word-break: break-all;'>" ~ logrow.location ~ "</pre>")|e('html_attr') }}" 
+                                                     title="{{ __('Location URL', plugin) }}">
+                                                 <i class="ti ti-map-pin fs-4 text-info"></i>
+                                             </button>
+                                         {% else %}
+                                             <span class="text-muted fs-7">-</span>
+                                         {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                         {% if logrow.loginFlowTrace is not empty %}
+                                             <button type="button" class="btn btn-sm btn-ghost-secondary p-1 border-0" 
+                                                     data-samlsso-toggle="popover" data-bs-placement="top" data-bs-html="true" 
+                                                     data-samlsso-type="trace"
+                                                     data-bs-content="{{ ("<div class='p-2 mb-0 font-monospace text-wrap text-start' style='max-height: 350px; overflow-y: auto; font-size: 0.8rem;'>" ~ logrow.loginFlowTrace ~ "</div>")|e('html_attr') }}" 
+                                                     title="{{ __('Login Flow Trace', plugin) }}">
+                                                 <i class="ti ti-terminal-2 fs-4 text-warning"></i>
+                                             </button>
+                                         {% else %}
+                                             <span class="text-muted fs-7">-</span>
+                                         {% endif %}
+                                    </td>
+                                    <td class="text-center text-nowrap">
+                                        {% if logrow.isUserActive == 1 and logrow.phase != 6 and logrow.phase != 8 %}
+                                            <button type="button" class="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1" onclick="samlssoForceLogoff({{ logrow.id }}, {{ inputfields.id.value }})">
+                                                <i class="ti ti-user-off fs-4"></i>
+                                                {{ __("Force Logoff & Disable", plugin) }}
+                                            </button>
+                                        {% else %}
+                                            <span class="text-muted fs-7">-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination controls -->
+            {% if logging_total_pages > 1 %}
+                {% set start_page = logging_page - 3 < 1 ? 1 : logging_page - 3 %}
+                {% set end_page = logging_page + 3 > logging_total_pages ? logging_total_pages : logging_page + 3 %}
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-2">
+                    <div class="text-muted fs-7">
+                        {{ __('Showing page %1$s of %2$s', plugin)|format('<strong>' ~ logging_page ~ '</strong>', '<strong>' ~ logging_total_pages ~ '</strong>')|raw }}
+                    </div>
+                    <nav aria-label="Logging pagination">
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item {% if logging_page <= 1 %}disabled{% endif %}">
+                                <a class="page-link" href="#" onclick="changeLoggingPage({{ logging_page - 1 }}); return false;">
+                                    <i class="ti ti-chevron-left"></i>
+                                </a>
+                            </li>
+                            
+                            {% if start_page > 1 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="#" onclick="changeLoggingPage(1); return false;">1</a>
+                                </li>
+                                {% if start_page > 2 %}
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% endif %}
+                            {% endif %}
+                            
+                            {% for p in start_page..end_page %}
+                                <li class="page-item {% if p == logging_page %}active{% endif %}">
+                                    <a class="page-link" href="#" onclick="changeLoggingPage({{ p }}); return false;">{{ p }}</a>
+                                </li>
+                            {% endfor %}
+                            
+                            {% if end_page < logging_total_pages %}
+                                {% if end_page < logging_total_pages - 1 %}
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% endif %}
+                                <li class="page-item">
+                                    <a class="page-link" href="#" onclick="changeLoggingPage({{ logging_total_pages }}); return false;">{{ logging_total_pages }}</a>
+                                </li>
+                            {% endif %}
+                            
+                            <li class="page-item {% if logging_page >= logging_total_pages %}disabled{% endif %}">
+                                <a class="page-link" href="#" onclick="changeLoggingPage({{ logging_page + 1 }}); return false;">
+                                    <i class="ti ti-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function performLoggingSearch() {
+            var searchInput = document.getElementById('logging-search-input');
+            var searchValue = searchInput ? searchInput.value.trim() : '';
+            var currentUrl = new URL(window.location.href);
+            if (searchValue) {
+                currentUrl.searchParams.set('search', searchValue);
+            } else {
+                currentUrl.searchParams.delete('search');
+            }
+            currentUrl.searchParams.set('page', '1');
+            window.location.href = currentUrl.toString();
+        }
+
+        function clearLoggingSearch() {
+            var currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.delete('search');
+            currentUrl.searchParams.set('page', '1');
+            window.location.href = currentUrl.toString();
+        }
+
+        function changeLoggingPage(pageNumber) {
+            var currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.set('page', pageNumber);
+            window.location.href = currentUrl.toString();
+        }
+
+        $(function() {
+            var searchInput = document.getElementById('logging-search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        performLoggingSearch();
+                    }
+                });
+            }
+            
+            // Initialize popovers on logging tab using the unified popover manager
+            setTimeout(function() {
+                document.querySelectorAll('#logging [data-samlsso-toggle="popover"]').forEach(function(el) {
+                    SamlSsoPopoverManager.init(el);
+                });
+            }, 150);
+        });
+    </script>
+</div>

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  *  ------------------------------------------------------------------------
@@ -33,7 +34,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.9
+ *  @version    1.3.2
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -45,20 +46,28 @@ declare(strict_types=1);
 
 namespace GlpiPlugin\Samlsso;
 
-use Rule;
 use Group;
 use Entity;
 use Session;
 use Profile;
+use Location;
+use UserCategory;
+use UserTitle;
 
-class RuleSaml extends Rule
+use GlpiPlugin\Samlsso\Config\ClaimMapItem;
+use GlpiPlugin\Samlsso\Compat\RuleSamlCompat;
+
+// Version-selected compatibility layer (GLPI 11 untyped / GLPI 12 typed core
+// properties). Must be required before the class below extends RuleSamlCompat.
+require_once __DIR__ . '/compat.php';
+
+/**
+ * Rule executed on JIT provisioning, extending the core Rule object through
+ * the version-selected compatibility layer: $rightname ('rule_import') is
+ * carried by RuleSamlCompat, version-typed for GLPI 11 and GLPI 12.
+ **/
+class RuleSaml extends RuleSamlCompat
 {
-    /**
-     * Define Rights
-     * defines the rights a user must posses to be able to access this menu option in the rules section
-     **/
-    static $rightname = 'rule_import';
-
     /**
      *
      **/
@@ -90,39 +99,81 @@ class RuleSaml extends Rule
         return Profile::getIcon();
     }
 
-    public function invoke(): string
+    /**
+     * Invokes the JIT rules management list interface.
+     *
+     * @return void
+     * @since 1.0.0
+     */
+    public function invoke(): void
     {
-        ob_start();
+        Session::checkRight(self::$rightname, READ);
         $rulecollection = new RuleSamlCollection();
         include_once  GLPI_ROOT . "/front/rule.common.php";                                      // NOSONAR - Cant be included with USE.
-        return (string) ob_get_clean();
     }
-
-    public function invokeForm(): string
-    {
-        ob_start();
-        $rulecollection = new RuleSamlCollection();
-        include_once  GLPI_ROOT . "/front/rule.common.form.php";                                 // NOSONAR - Cant be included with USE.
-        return (string) ob_get_clean();
-    }
-
 
     /**
-     * @see Rule::getCriterias()
-     * @return array    returns available criteria
-     **/
-    public function getCriterias()
+     * Invokes the rule details form.
+     *
+     * @return void
+     * @since 1.0.0
+     */
+    public function invokeForm(): void
+    {
+        Session::checkRight(self::$rightname, READ);
+        $rulecollection = new RuleSamlCollection();
+        include_once  GLPI_ROOT . "/front/rule.common.form.php";                                 // NOSONAR - Cant be included with USE.
+    }
+
+
+    public function getCriterias(): array
     {
         static $criterias = [];
 
         if (!count($criterias)) {
-            $criterias['common']                    = __('Global criteria');
+            $criterias['common']                    = __('Global criteria', PLUGIN_NAME);
+
             $criterias['_useremails']['table']      = '';
             $criterias['_useremails']['field']      = '';
             $criterias['_useremails']['name']       = _n('Email', 'Emails', 1);
             $criterias['_useremails']['linkfield']  = '';
             $criterias['_useremails']['virtual']    = true;
             $criterias['_useremails']['id']         = '_useremails';
+
+            $criterias['name']['table']             = '';
+            $criterias['name']['field']             = '';
+            $criterias['name']['name']              = __('Username', PLUGIN_NAME);
+            $criterias['name']['linkfield']         = '';
+            $criterias['name']['virtual']           = true;
+            $criterias['name']['id']                = 'name';
+
+            $criterias['realname']['table']         = '';
+            $criterias['realname']['field']         = '';
+            $criterias['realname']['name']          = __('Surname', PLUGIN_NAME);
+            $criterias['realname']['linkfield']     = '';
+            $criterias['realname']['virtual']       = true;
+            $criterias['realname']['id']            = 'realname';
+
+            $criterias['firstname']['table']        = '';
+            $criterias['firstname']['field']        = '';
+            $criterias['firstname']['name']         = __('First name', PLUGIN_NAME);
+            $criterias['firstname']['linkfield']    = '';
+            $criterias['firstname']['virtual']      = true;
+            $criterias['firstname']['id']           = 'firstname';
+
+            $criterias['mobile']['table']           = '';
+            $criterias['mobile']['field']           = '';
+            $criterias['mobile']['name']            = __('Mobile phone', PLUGIN_NAME);
+            $criterias['mobile']['linkfield']       = '';
+            $criterias['mobile']['virtual']         = true;
+            $criterias['mobile']['id']              = 'mobile';
+
+            $criterias['phone']['table']            = '';
+            $criterias['phone']['field']            = '';
+            $criterias['phone']['name']             = __('Phone', PLUGIN_NAME);
+            $criterias['phone']['linkfield']        = '';
+            $criterias['phone']['virtual']          = true;
+            $criterias['phone']['id']               = 'phone';
 
             $criterias['samlClaimedGroups']['table']      = '';
             $criterias['samlClaimedGroups']['field']      = '';
@@ -131,46 +182,69 @@ class RuleSaml extends Rule
             $criterias['samlClaimedGroups']['virtual']    = true;
             $criterias['samlClaimedGroups']['id']         = 'samlClaimedGroups';
 
-            $criterias['samlClaimedJobTitle']['table']      = '';
-            $criterias['samlClaimedJobTitle']['field']      = '';
-            $criterias['samlClaimedJobTitle']['name']       = __('SAML Job Title', PLUGIN_NAME);
-            $criterias['samlClaimedJobTitle']['linkfield']  = '';
-            $criterias['samlClaimedJobTitle']['virtual']    = true;
-            $criterias['samlClaimedJobTitle']['id']         = 'samlClaimedJobTitle';
+            $criterias['samlClaimedJobTitle']['table']    = '';
+            $criterias['samlClaimedJobTitle']['field']    = '';
+            $criterias['samlClaimedJobTitle']['name']     = __('SAML Job Title', PLUGIN_NAME);
+            $criterias['samlClaimedJobTitle']['linkfield']= '';
+            $criterias['samlClaimedJobTitle']['virtual']  = true;
+            $criterias['samlClaimedJobTitle']['id']       = 'samlClaimedJobTitle';
 
-            $criterias['country']['table']      = '';
-            $criterias['country']['field']      = '';
-            $criterias['country']['name']       = __('SAML Country', PLUGIN_NAME);
-            $criterias['country']['linkfield']  = '';
-            $criterias['country']['virtual']    = true;
-            $criterias['country']['id']         = 'country';
+            $criterias['country']['table']          = '';
+            $criterias['country']['field']          = '';
+            $criterias['country']['name']           = __('SAML Country', PLUGIN_NAME);
+            $criterias['country']['linkfield']      = '';
+            $criterias['country']['virtual']        = true;
+            $criterias['country']['id']             = 'country';
 
-            $criterias['city']['table']      = '';
-            $criterias['city']['field']      = '';
-            $criterias['city']['name']       = __('SAML City', PLUGIN_NAME);
-            $criterias['city']['linkfield']  = '';
-            $criterias['city']['virtual']    = true;
-            $criterias['city']['id']         = 'city';
+            $criterias['city']['table']             = '';
+            $criterias['city']['field']             = '';
+            $criterias['city']['name']              = __('SAML City', PLUGIN_NAME);
+            $criterias['city']['linkfield']         = '';
+            $criterias['city']['virtual']           = true;
+            $criterias['city']['id']                = 'city';
 
-            $criterias['street']['table']      = '';
-            $criterias['street']['field']      = '';
-            $criterias['street']['name']       = __('SAML Street', PLUGIN_NAME);
-            $criterias['street']['linkfield']  = '';
-            $criterias['street']['virtual']    = true;
-            $criterias['street']['id']         = 'street';
+            $criterias['street']['table']           = '';
+            $criterias['street']['field']           = '';
+            $criterias['street']['name']            = __('SAML Street', PLUGIN_NAME);
+            $criterias['street']['linkfield']       = '';
+            $criterias['street']['virtual']         = true;
+            $criterias['street']['id']              = 'street';
 
-            $criterias['jitUserState']['table']      = '';
-            $criterias['jitUserState']['field']      = '';
-            $criterias['jitUserState']['name']       = __('JIT User State', PLUGIN_NAME);
-            $criterias['jitUserState']['linkfield']  = '';
-            $criterias['jitUserState']['virtual']    = true;
-            $criterias['jitUserState']['id']         = 'jitUserState';
-            $criterias['jitUserState']['type']       = 'dropdown_array';
-            $criterias['jitUserState']['array']      = [
+            $criterias['jitUserState']['table']     = '';
+            $criterias['jitUserState']['field']     = '';
+            $criterias['jitUserState']['name']      = __('JIT User State', PLUGIN_NAME);
+            $criterias['jitUserState']['linkfield'] = '';
+            $criterias['jitUserState']['virtual']   = true;
+            $criterias['jitUserState']['id']        = 'jitUserState';
+            $criterias['jitUserState']['type']      = 'dropdown_array';
+            $criterias['jitUserState']['array']     = [
                 'new'      => __('New user (JIT creation)', PLUGIN_NAME),
                 'existing' => __('Existing user (update)', PLUGIN_NAME),
             ];
 
+            global $DB;
+            if (isset($DB) && method_exists($DB, 'tableExists') && $DB->tableExists(ClaimMap::getTable())) {
+                $claimMapTable = ClaimMap::getTable();
+                $iterator = $DB->request([
+                    'SELECT'   => ['glpi_field'],
+                    'DISTINCT' => true,
+                    'FROM'     => $claimMapTable,
+                    'WHERE'    => [
+                        'target_type' => ClaimMapItem::TARGET_TYPE_RULE_FIELD
+                    ]
+                ]);
+                foreach ($iterator as $row) {
+                    $field = (string)$row['glpi_field'];
+                    $criterias[$field] = [
+                        'table'     => '',
+                        'field'     => '',
+                        'name'      => sprintf(__('SAML Claim: %s', PLUGIN_NAME), ucfirst($field)),
+                        'linkfield' => '',
+                        'virtual'   => true,
+                        'id'        => $field
+                    ];
+                }
+            }
         }
         return $criterias;
     }
@@ -178,7 +252,7 @@ class RuleSaml extends Rule
     /**
      * @see Rule::getActions()
      **/
-    public function getActions()
+    public function getActions(): array
     {
 
         $actions                                                = parent::getActions();
@@ -191,17 +265,17 @@ class RuleSaml extends Rule
         $actions['profiles_id']['type']                         = 'dropdown';
         $actions['profiles_id']['table']                        = 'glpi_profiles';
 
-        $actions['is_recursive']['name']                        = __('Recursive');
+        $actions['is_recursive']['name']                        = __('Recursive', PLUGIN_NAME);
         $actions['is_recursive']['type']                        = 'yesno';
         $actions['is_recursive']['table']                       = '';
 
-        $actions['is_active']['name']                           = __('Active');
+        $actions['is_active']['name']                           = __('Active', PLUGIN_NAME);
         $actions['is_active']['type']                           = 'yesno';
         $actions['is_active']['table']                          = '';
 
         $actions['_entities_id_default']['table']                = 'glpi_entities';
         $actions['_entities_id_default']['field']               = 'name';
-        $actions['_entities_id_default']['name']                = __('Default entity');
+        $actions['_entities_id_default']['name']                = __('Default entity', PLUGIN_NAME);
         $actions['_entities_id_default']['linkfield']           = 'entities_id';
         $actions['_entities_id_default']['type']                = 'dropdown';
 
@@ -211,19 +285,34 @@ class RuleSaml extends Rule
 
         $actions['groups_id']['table']                        = 'glpi_groups';
         $actions['groups_id']['field']                        = 'name';
-        $actions['groups_id']['name']                         = __('Default group');
+        $actions['groups_id']['name']                         = __('Default group', PLUGIN_NAME);
         $actions['groups_id']['linkfield']                    = 'groups_id';
         $actions['groups_id']['type']                         = 'dropdown';
         $actions['groups_id']['condition']                    = ['is_usergroup' => 1];
 
         $actions['_profiles_id_default']['table']             = 'glpi_profiles';
         $actions['_profiles_id_default']['field']             = 'name';
-        $actions['_profiles_id_default']['name']              = __('Default profile');
+        $actions['_profiles_id_default']['name']              = __('Default profile', PLUGIN_NAME);
         $actions['_profiles_id_default']['linkfield']         = 'profiles_id';
         $actions['_profiles_id_default']['type']              = 'dropdown';
 
-        $actions['timezone']['name']                          = __('Timezone');
+        $actions['timezone']['name']                          = __('Timezone', PLUGIN_NAME);
         $actions['timezone']['type']                          = 'timezone';
+
+        $actions['locations_id']['name']                      = Location::getTypeName(Session::getPluralNumber());
+        $actions['locations_id']['type']                      = 'dropdown';
+        $actions['locations_id']['table']                     = 'glpi_locations';
+
+        $actions['usercategories_id']['name']                  = UserCategory::getTypeName(Session::getPluralNumber());
+        $actions['usercategories_id']['type']                  = 'dropdown';
+        $actions['usercategories_id']['table']                 = 'glpi_usercategories';
+
+        $actions['usertitles_id']['name']                     = UserTitle::getTypeName(Session::getPluralNumber());
+        $actions['usertitles_id']['type']                     = 'dropdown';
+        $actions['usertitles_id']['table']                    = 'glpi_usertitles';
+
+        $actions['language']['name']                          = __('Language', PLUGIN_NAME);
+        $actions['language']['type']                          = 'language';
 
         return $actions;
     }

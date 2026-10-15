@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.9
+ *  @version    1.3.2
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -71,9 +71,10 @@ class Meta
             $configEntity = new ConfigEntity($id);                                  // ConfigEntity expects/validates datatype INT.
             if($configEntity->getField(ConfigEntity::DEBUG)){                       // Are we allowed to expose metadata.
                 $samlSettings = new Settings($configEntity->getPhpSamlConfig());    // Get the samlConfig using the provided ID.
-                if ( !$metadata = $samlSettings->getSPMetadata() ) {                // Get the Serviceprovider metadata.
+                $metadata = $samlSettings->getSPMetadata();
+                if (!$metadata) {                // Get the Serviceprovider metadata.
                     $metadata = self::STAG.                                         // Set error if something is wrong
-                                __("Error fetching spMetedata.",PLUGIN_NAME).
+                                __("Error fetching spMetadata.",PLUGIN_NAME).
                                 self::ETAG;
                 }
             }else{

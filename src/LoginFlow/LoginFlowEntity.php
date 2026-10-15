@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.9
+ *  @version    1.3.2
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -100,11 +100,9 @@ class LoginFlowEntity extends LoginFlowItem
 
 
     /**
-     * The ConfigEntity class constructor
+     * The LoginFlowEntity class constructor
      *
      * @param  int      $id             - LoginFlow configuration ID to fetch, always 1
-     * @param  array    $options        - Options['template'] what template to use;
-     * @return object   ConfigEntity    - returns an instance of populated ConfigEntity;
      */
     public function __construct(int $id = 1)
     {
@@ -116,7 +114,7 @@ class LoginFlowEntity extends LoginFlowItem
      * Populates the instance of ConfigEntity using a DB query from the LoginFlow table.
      *
      * @param  int      $id             - id of the database row to fetch
-     * @return object   ConfigEntity    - returns instance of ConfigEntity.
+     * @return void
      */
     private function validateAndPopulateDBEntity($id): void
     {
@@ -139,9 +137,10 @@ class LoginFlowEntity extends LoginFlowItem
      * if defined in ConfigItem, it will convert DB result (string) '1'
      * too (boolean) true in the returned array for type safety purposes.
      *
-     * @param  string   $field  - name of the field to validate
-     * @param  mixed    $val    - value belonging to the field.
-     * @return array            - result of the validation including normalized values.
+     * @param  string   $field       - name of the field to validate
+     * @param  mixed    $value       - value belonging to the field.
+     * @param  bool     $invalidate  - whether to invalidate value on failure
+     * @return array                 - result of the validation including normalized values.
      * @see https://www.mysqltutorial.org/mysql-basics/mysql-boolean/
      */
     private function evaluateItem(string $field, mixed $value, $invalidate = false): array
@@ -187,26 +186,30 @@ class LoginFlowEntity extends LoginFlowItem
      *
      * Intended for generating Config->searchOptions, ConfigForm->showForm().
      *
-     * @param  bool     $debug  - If true will only return fields without predefined class Constant and preloaded value.
      * @return array            - ConfigEntity field information
      */
     public function getFields(): array        //NOSONAR - Maybe reduce complexity reduce calls to validateConfigFields?;
     {
         global $DB;
+        $fields = [];
         // Fetch config item constants;
         $classConstants = LoginFlowEntity::getConstants();
         // Fetch database columns;
-        $table = SamlConfig::getTable();
-        foreach ($DB->listFields($table) as $data) {
-            $fields[$data['Field']] = [
-                ConfigItem::FIELD       => $data['Field'],
-                ConfigItem::TYPE        => $data['Type'],
-                ConfigItem::NULL        => $data['Null'],
-                ConfigItem::CONSTANT    => ($key = array_search($data['Field'], $classConstants)) ? "ConfigEntity::$key" : 'UNDEFINED',
-                ConfigItem::VALUE       => (isset($this->fields[$data['Field']])) ? $this->fields[$data['Field']] : null,
-            ];
-            // Evaluate and merge results.
-            $fields[$data['Field']] = array_merge($fields[$data['Field']], $this->evaluateItem($data['Field'], (isset($this->fields[$data['Field']])) ? $this->fields[$data['Field']] : ''));
+        $sql = 'SHOW COLUMNS FROM '.SamlConfig::getTable();
+        $result = $DB->doQuery($sql);
+        if ($result) {
+            while ($data = $result->fetch_assoc()) {
+                $key = array_search($data['Field'], $classConstants);
+                $fields[$data['Field']] = [
+                    ConfigItem::FIELD       => $data['Field'],
+                    ConfigItem::TYPE        => $data['Type'],
+                    ConfigItem::NULL        => $data['Null'],
+                    ConfigItem::CONSTANT    => $key ? "ConfigEntity::$key" : 'UNDEFINED',
+                    ConfigItem::VALUE       => (isset($this->fields[$data['Field']])) ? $this->fields[$data['Field']] : null,
+                ];
+                // Evaluate and merge results.
+                $fields[$data['Field']] = array_merge($fields[$data['Field']], $this->evaluateItem($data['Field'], (isset($this->fields[$data['Field']])) ? $this->fields[$data['Field']] : ''));
+            }
         }
         // Validate spcert and key if provided
         $fields = $this->validateAdvancedConfig($fields);
@@ -224,6 +227,7 @@ class LoginFlowEntity extends LoginFlowItem
      */
     public function getDBFields($ignoreFields = []): array
     {
+        $fields = [];
         foreach($this->getFields() as $key => $value){
             if(is_array($ignoreFields) && !in_array($key, $ignoreFields)){
                 $fields[$key] = $value[ConfigItem::VALUE];
@@ -251,8 +255,8 @@ class LoginFlowEntity extends LoginFlowItem
     /**
      * This function will return specific config field if it exists
      *
-     * @param  bool     $fieldName  - Name of the configuration item we are looking for, use class constants.
-     * @return string               - Value of the configuration or (bool) false if not found.
+     * @param  string   $fieldName  - Name of the configuration item we are looking for, use class constants.
+     * @return string|bool          - Value of the configuration or (bool) false if not found.
      */
     public function getField(string $fieldName): string|bool
     {
@@ -270,7 +274,7 @@ class LoginFlowEntity extends LoginFlowItem
     /**
      * This function will return all registered error messages
      *
-     * @return array           - Value of the configuration or (bool) false if not found.
+     * @return array           - List of registered error messages.
      */
     public function getErrorMessages(): array
     {

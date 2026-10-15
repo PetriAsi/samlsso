@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.9
+ *  @version    1.3.2
  *  @author     Denis Ollier
  *  @copyright  Copyright (c) 2025 by Denis Ollier
  *  @license    GPLv3+
@@ -55,6 +55,7 @@ use GlpiPlugin\Samlsso\LoginState;
 class CronTask extends CommonDBTM
 {
     /**
+    /**
      * Give cron information
      * @param $name : automatic action's name
      * @return array of information
@@ -64,7 +65,9 @@ class CronTask extends CommonDBTM
         if ($name == 'cleanSessionSAML') {
                 return ['description' => __("Clean old SAML sessions", PLUGIN_NAME),
                         'parameter'   => __("SAML sessions retention period (in days, 0 for infinite)", PLUGIN_NAME)];
-        }else{
+        } else if ($name == 'updateGeoIP') {
+                return ['description' => __("Update GeoIP offline database", PLUGIN_NAME)];
+        } else {
             return [];
         }
     }
@@ -82,6 +85,38 @@ class CronTask extends CommonDBTM
         $cron_status = 0;
         $volume = 0;
 
+        // 1. Process inactivity timeout for active sessions
+        try {
+            $configsTable = Config::getTable();
+            $configs = $DB->request([
+                'FROM'  => $configsTable,
+                'WHERE' => [
+                    'inactivity_timeout' => ['>', 0],
+                    'is_deleted' => 0
+                ]
+            ]);
+
+            foreach ($configs as $cfg) {
+                $idpId = (int)$cfg['id'];
+                $timeoutMinutes = (int)$cfg['inactivity_timeout'];
+
+                $DB->update(
+                    LoginState::getTable(),
+                    [
+                        LoginState::PHASE => LoginState::PHASE_TIMED_OUT
+                    ],
+                    [
+                        LoginState::IDP_ID => $idpId,
+                        LoginState::PHASE  => LoginState::PHASE_GLPI_AUTH,
+                        LoginState::LAST_ACTIVITY => ['<', new QueryExpression('NOW() - INTERVAL ' . $timeoutMinutes . ' MINUTE')]
+                    ]
+                );
+            }
+        } catch (\Throwable $e) {
+            // Keep going to clean up old sessions
+        }
+
+        // 2. Cleanup sessions older than retention period (days)
         if ($days > 0) {
             $result = $DB->delete(
                 LoginState::getTable(),
@@ -89,7 +124,6 @@ class CronTask extends CommonDBTM
             );
 
             if ($result) {
-                //$vol = $DB->affectedRows(); unsure this is required..
                 $cron_status = 1;
             }
         }
@@ -97,7 +131,18 @@ class CronTask extends CommonDBTM
         $task->setVolume($volume);
 
         return $cron_status;
-   }
+    }
+
+    /**
+     * Cron action to update the GeoIP database.
+     * @param glpiCronTask $task for log
+     * @return integer 0 : nothing to do, 1 : done with success
+     */
+    public static function cronUpdateGeoIP(glpiCronTask $task): int
+    {
+        $success = \GlpiPlugin\Samlsso\Utility\GeoIPUpdater::run($task);
+        return $success ? 1 : 0;
+    }
 
     /**
      * Register GlpiSAML plugin CronTasks
@@ -116,6 +161,15 @@ class CronTask extends CommonDBTM
                 'state' => glpiCronTask::STATE_WAITING,
                 'mode'  => glpiCronTask::MODE_EXTERNAL,
                 'param' => 30,
+            ]);
+        }
+
+        $task2 = "updateGeoIP";
+        if (!$cron->getFromDBbyName($class, $task2)) {
+            glpiCronTask::Register($class, $task2, 30 * DAY_TIMESTAMP, [
+                'state' => glpiCronTask::STATE_WAITING,
+                'mode'  => glpiCronTask::MODE_EXTERNAL,
+                'param' => 0,
             ]);
         }
     }

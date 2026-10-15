@@ -33,7 +33,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.9
+ *  @version    1.3.2
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -65,8 +65,7 @@ class ConfigDefaultTpl {
                  ConfigEntity::STRICT           => false,
                  ConfigEntity::DEBUG            => false,
                  ConfigEntity::USER_JIT         => true,
-                 ConfigEntity::JIT_ADD_PROFILES  => false,
-                 ConfigEntity::USER_SYNC         => false,
+                 ConfigEntity::JIT_ADD_PROFILES => false,
                  ConfigEntity::SP_CERTIFICATE   => '-----BEGIN CERTIFICATE-----
 MIIF1TCCA72gAwIBAgIUB6hrJz15hIkxxAtAhtzJA6GQjt0wDQYJKoZIhvcNAQEL
 BQAwejELMAkGA1UEBhMCTkwxEjAQBgNVBAgMCUZsZXZvbGFuZDEPMA0GA1UEBwwG
@@ -139,7 +138,7 @@ j914Y+Z9bNfVAoIBAQC0vBXcePa/UcqsqlXG/si/FWQaEog5QdjObnYwlEcnnFRO
 fuQGz8zFerbTEQYVv3ek+hQiRnbNT1UNeF76OGcqccsw3+DrF0TULZl0JVVVin7y
 wU6sdAYlyqEbOGm+7AOWDc4P1JU4QwCPMkSQwLU3t2eVZHwYbddQFRUlYq4AwnFE
 cYBZ/+Vgms170iU8UY6ukDsYzuRZWZqio0edMbKLdq3FkqmTPULHtfETOmuG9+eI
-KpDwtUI8ypMxgtzvDde5J7+ZS5SpH12AFCvAYdpefTODOXaDUmVgOjtysSEDo0nl
+KpDwtUI8ypMxgtzvDde5J7+ZS5SpH12AFCvAYdpefT0D0XaDUmVgOjtysSEDo0nl
 44p2KAxn0HPhZKfCf28hz6ismtzdHBU4uzGrbXNLAoIBAEOQQzTNxgq0AnwiZ4jk
 6UEUWKP9cH5ktmjd3d5oSUMH3nx3wZtVBCFlRUngeKDOg+fHQ6rS6eu5T3H6trM/
 /8T2VWh8RKKIHNZp38Qkn8ONLA+TehS6S9dP7BagR1TR6+K9yx18pgpN2e6kQr+g
@@ -204,7 +203,15 @@ s2DsGVGfjX/LlC5WK63pBfsK3tttiIWXaOmAz29C2279l/WrZFWHQyy0DOHBQYtb
                  ConfigEntity::SCIM_ACTIVE      => false,
                  ConfigEntity::SCIM_TOKEN       => '',
                  ConfigEntity::COMMENT          => 'Azure example configuration, see: https://learn.microsoft.com/en-us/entra/identity/saas-apps/saml-toolkit-tutorial',
-                 ConfigEntity::IS_ACTIVE        => false
+                 ConfigEntity::IS_ACTIVE        => false,
+                 ConfigEntity::SYNC_ON_LOGIN    => false,
+                 ConfigEntity::SECURITY_WANTMESSAGESSIGNED => false,
+                 ConfigEntity::SECURITY_WANTASSERTIONSSIGNED => false,
+                 ConfigEntity::SECURITY_WANTASSERTIONSENCRYPTED => false,
+                 ConfigEntity::SECURITY_SIGNMETADATA => false,
+                 ConfigEntity::SECURITY_WANTNAMEID => true,
+                 ConfigEntity::REQUEST_TIMEOUT => 15,
+                 ConfigEntity::INACTIVITY_TIMEOUT => 0
         ];
     }
 }

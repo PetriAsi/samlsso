@@ -1,0 +1,353 @@
+{% import glpi_tpl_macro as fields %}
+<div class="tab-pane fade d-none" id="security" role="tabpanel" aria-labelledby="security-tab">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-lg-6 mb-4">
+                <!-- Group 1: Enforcement & Sessions -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-shield-alt me-2 text-primary"></i>{{ __('Enforcement & Sessions', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- enforce SSO -->
+                    <div class="mb-3">
+                        {% set enforce_sso_title %}
+                            {{ inputfields.enforce_sso.formtitle }}
+                            {% if inputfields.enforce_sso.errors == true %}
+                                <span class="text-danger ms-1" id="enforce_sso_warning_icon" style="cursor: pointer;">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </span>
+                                {% do call('Html::showToolTip', [
+                                    inputfields.enforce_sso.errors,
+                                    {'applyto': 'enforce_sso_warning_icon'}
+                                ]) %}
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.enforce_sso.field,
+                            inputfields.enforce_sso.value,
+                            enforce_sso_title|raw,
+                            {
+                                'add_field_html': '',
+                                helper: inputfields.enforce_sso.formexplain,
+                            }
+                        ) }}
+                    </div>
+
+                    <!-- Request Expiry Timeout -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.request_timeout.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.request_timeout.errors %}rgb(180, 120, 8){% elseif '✅' in inputfields.request_timeout.errors %}rgb(71, 180, 8){% else %}red{% endif %};">{{ inputfields.request_timeout.errors|raw }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.textField(
+                            inputfields.request_timeout.field,
+                            inputfields.request_timeout.value,
+                            inputfields.request_timeout.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                'type': 'number',
+                                helper: inputfields.request_timeout.formexplain,
+                            }
+                        ) }}
+                    </div>
+
+                    <!-- Inactivity Timeout -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.inactivity_timeout.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.inactivity_timeout.errors %}rgb(180, 120, 8){% elseif '✅' in inputfields.inactivity_timeout.errors %}rgb(71, 180, 8){% else %}red{% endif %};">{{ inputfields.inactivity_timeout.errors|raw }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.textField(
+                            inputfields.inactivity_timeout.field,
+                            inputfields.inactivity_timeout.value,
+                            inputfields.inactivity_timeout.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                'type': 'number',
+                                helper: inputfields.inactivity_timeout.formexplain,
+                            }
+                        ) }}
+                    </div>
+
+                    <!-- Strict mode -->
+                    <div class="mb-3">
+                        {% set strict_title %}
+                            {{ inputfields.strict.formtitle }}
+                            {% if inputfields.strict.value == false %}
+                                <span class="text-danger ms-1" id="strict_warning_icon" style="cursor: pointer;">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </span>
+                                {% do call('Html::showToolTip', [
+                                    __('⚠️ Your environment is at risk, make sure strict is enabled!', plugin),
+                                    {'applyto': 'strict_warning_icon'}
+                                ]) %}
+                            {% endif %}
+                        {% endset %}
+                        {% set error_helper %}
+                            {% if inputfields.strict.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.strict.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.strict.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.strict.field,
+                            inputfields.strict.value,
+                            strict_title|raw,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.strict.formexplain,
+                            }
+                        ) }}
+                    </div>
+                </div>
+
+                <!-- Group 2: User Provisioning -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-users-cog me-2 text-primary"></i>{{ __('User Provisioning', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- User JIT -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.user_jit.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.user_jit.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.user_jit.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.user_jit.field,
+                            inputfields.user_jit.value,
+                            inputfields.user_jit.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.user_jit.formexplain,
+                            }
+                        ) }}
+                    </div>
+
+                    <!-- jit_add_profiles -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.jit_add_profiles.errors == true %}
+                                <div class="form-text" style="color:red;">{{ inputfields.jit_add_profiles.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.jit_add_profiles.field,
+                            inputfields.jit_add_profiles.value,
+                            inputfields.jit_add_profiles.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.jit_add_profiles.formexplain,
+                            }
+                        ) }}
+                    </div>
+
+                    <!-- Sync on login -->
+                    <div class="mb-3">
+                        {% set sync_on_login_title %}
+                            {{ inputfields.sync_on_login.formtitle }}
+                            <span class="text-danger ms-1" id="sync_on_login_warning_icon" style="cursor: pointer;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </span>
+                            {% do call('Html::showToolTip', [
+                                __('Enabling this field might cause data leak incidents because samlSSO will apply configuration mistakes made at the IDP directly into GLPI.', plugin),
+                                {'applyto': 'sync_on_login_warning_icon'}
+                            ]) %}
+                        {% endset %}
+                        {% set error_helper %}
+                            {% if inputfields.sync_on_login.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.sync_on_login.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.sync_on_login.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.sync_on_login.field,
+                            inputfields.sync_on_login.value,
+                            sync_on_login_title|raw,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.sync_on_login.formexplain,
+                            }
+                        ) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 mb-4">
+                <!-- Group 3: Inbound Security (IdP) -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-sign-in-alt me-2 text-success"></i>{{ __('Inbound Security (IdP)', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- security_wantmessagessigned -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.security_wantmessagessigned.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.security_wantmessagessigned.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.security_wantmessagessigned.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.security_wantmessagessigned.field,
+                            inputfields.security_wantmessagessigned.value,
+                            inputfields.security_wantmessagessigned.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.security_wantmessagessigned.formexplain,
+                            }) 
+                        }}
+                    </div>
+
+                    <!-- security_wantassertionssigned -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.security_wantassertionssigned.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.security_wantassertionssigned.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.security_wantassertionssigned.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.security_wantassertionssigned.field,
+                            inputfields.security_wantassertionssigned.value,
+                            inputfields.security_wantassertionssigned.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.security_wantassertionssigned.formexplain,
+                            }) 
+                        }}
+                    </div>
+
+                    <!-- security_wantassertionsencrypted -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.security_wantassertionsencrypted.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.security_wantassertionsencrypted.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.security_wantassertionsencrypted.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.security_wantassertionsencrypted.field,
+                            inputfields.security_wantassertionsencrypted.value,
+                            inputfields.security_wantassertionsencrypted.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.security_wantassertionsencrypted.formexplain,
+                            }) 
+                        }}
+                    </div>
+
+                    <!-- security_wantnameid -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.security_wantnameid.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.security_wantnameid.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.security_wantnameid.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.security_wantnameid.field,
+                            inputfields.security_wantnameid.value,
+                            inputfields.security_wantnameid.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.security_wantnameid.formexplain,
+                            }) 
+                        }}
+                    </div>
+                </div>
+
+                <!-- Group 4: Outbound Security (SP) -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-sign-out-alt me-2 text-success"></i>{{ __('Outbound Security (SP)', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- security_nameidencrypted -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.security_nameidencrypted.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.security_nameidencrypted.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.security_nameidencrypted.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.security_nameidencrypted.field,
+                            inputfields.security_nameidencrypted.value,
+                            inputfields.security_nameidencrypted.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.security_nameidencrypted.formexplain,
+                            }) 
+                        }}
+                    </div>
+
+                    <!-- security_authnrequestssigned -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.security_authnrequestssigned.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.security_authnrequestssigned.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.security_authnrequestssigned.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.security_authnrequestssigned.field,
+                            inputfields.security_authnrequestssigned.value,
+                            inputfields.security_authnrequestssigned.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.security_authnrequestssigned.formexplain,
+                            }) 
+                        }}
+                    </div>
+
+                    <!-- security_logoutrequestsigned -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.security_logoutrequestsigned.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.security_logoutrequestsigned.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.security_logoutrequestsigned.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.security_logoutrequestsigned.field,
+                            inputfields.security_logoutrequestsigned.value,
+                            inputfields.security_logoutrequestsigned.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.security_logoutrequestsigned.formexplain,
+                            }) 
+                        }}
+                    </div>
+
+                    <!-- security_logoutresponsesigned -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.security_logoutresponsesigned.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.security_logoutresponsesigned.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.security_logoutresponsesigned.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.security_logoutresponsesigned.field,
+                            inputfields.security_logoutresponsesigned.value,
+                            inputfields.security_logoutresponsesigned.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.security_logoutresponsesigned.formexplain,
+                            }) 
+                        }}
+                    </div>
+
+                    <!-- security_signmetadata -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.security_signmetadata.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:{% if '⚠️' in inputfields.security_signmetadata.errors %}rgb(180, 120, 8){% else %}red{% endif %};">{{ inputfields.security_signmetadata.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+                        {{ fields.sliderField(
+                            inputfields.security_signmetadata.field,
+                            inputfields.security_signmetadata.value,
+                            inputfields.security_signmetadata.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.security_signmetadata.formexplain,
+                            }) 
+                        }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

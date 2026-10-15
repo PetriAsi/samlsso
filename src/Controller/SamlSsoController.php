@@ -32,7 +32,7 @@
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.9
+ *  @version    1.3.2
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -58,6 +58,8 @@ use GlpiPlugin\Samlsso\LoginFlow\Meta;                                  // Requi
 use GlpiPlugin\Samlsso\LoginFlow\Scim;                                  // Required to call the SCIM object
 use GlpiPlugin\Samlsso\Config\ConfigForm;                               // Required to call Config object
 use GlpiPlugin\Samlsso\LoginFlow\LoginFlowForm;                         //
+use Glpi\Application\View\TemplateRenderer;
+
 
 final class SamlSsoController extends AbstractController
 {
@@ -71,7 +73,8 @@ final class SamlSsoController extends AbstractController
     #[Route(self::ACS_ROUTE.self::ACS_PARAM, name: self::ACS_NAME)]     // Decorator to register route to controller
     public function acs(Request $request): Response                     // What to do if route is invoked.
     {
-        return new Response((new Acs)->init($request));                 // Call the ACS handler.
+        (new Acs)->init($request);                                     // Call the ACS handler.
+        return new Response();
     }
 
 
@@ -82,11 +85,25 @@ final class SamlSsoController extends AbstractController
     public const SLO_NAME       = 'samlsso_SLO';                        // Route name
 
     #[SecurityStrategy(Firewall::STRATEGY_NO_CHECK)]                    // Decorator to disable authentication check
-    #[Route(self::SLO_ROUTE.self::SLO_PARAM, name: self::SLO_NAME)]     // Decorator to register route to controller
+    #[Route(self::SLO_ROUTE, name: self::SLO_NAME)]
+    #[Route(self::SLO_ROUTE.self::SLO_PARAM, name: self::SLO_NAME.'_param')] // Decorator to register route to controller
     public function slo(Request $request): Response                     // What to do if route is invoked.
     {
         global $CFG_GLPI;
-        return new Response('', 307, ['location' => $CFG_GLPI['url_base'].'/']);    // Redirect back to application root.
+
+        ob_start();
+        \Html::nullHeader("SamlSSO Logout", '/');
+        
+        $tplVars = [
+            'loginPath' => $CFG_GLPI['url_base'] . '/index.php?noAuto=1'
+        ];
+        
+        echo TemplateRenderer::getInstance()->render('@samlsso/loggedOut.html.twig', $tplVars);
+        
+        \Html::nullFooter();
+        $content = ob_get_clean();
+
+        return new Response($content);
     }
 
 
@@ -110,13 +127,13 @@ final class SamlSsoController extends AbstractController
     public const SCIM_PARAM     = '/{idpId}';
     public const SCIM_NAME      = 'samlsso_SCIM';                       // Route name
 
-    #[SecurityStrategy(Firewall::STRATEGY_NO_CHECK)]                                                                       // Decorator to disable authentication check
-    #[Route(self::SCIM_ROUTE.self::SCIM_PARAM, name: self::SCIM_NAME)]                                                     // Base route: /front/scim/{idpId}
-    #[Route(self::SCIM_ROUTE.self::SCIM_PARAM.'/{scimPath}', name: self::SCIM_NAME.'_path',                                // Sub-paths: /front/scim/{idpId}/Users, /front/scim/{idpId}/Users/{id}
-        requirements: ['scimPath' => '.+'])]                                                                                // .+ allows slashes so /Users/123 is a single parameter
-    public function scim(Request $request): Response                                                                       // What to do if route is invoked.
+    #[SecurityStrategy(Firewall::STRATEGY_NO_CHECK)]                    // SCIM uses its own Bearer token authentication
+    #[Route(self::SCIM_ROUTE.self::SCIM_PARAM, name: self::SCIM_NAME)]
+    #[Route(self::SCIM_ROUTE.self::SCIM_PARAM.'/{scimPath}', name: self::SCIM_NAME.'_path',
+        requirements: ['scimPath' => '.+'])]                            // .+ allows /Users/123 as a single parameter
+    public function scim(Request $request): Response                    // What to do if route is invoked.
     {
-        return (new Scim)->init($request);                                                                                 // Call the SCIM handler.
+        return (new Scim)->init($request);                              // Call the SCIM handler.
     }
 
 
@@ -132,7 +149,11 @@ final class SamlSsoController extends AbstractController
     #[Route(self::CONFIG_FILE, name: self::CONFIG_NAME.'_file')]        // Decorator to register old route to handle GLPI generated menu's
     public function config(Request $request): Response                  // What to do if route is invoked.
     {
-        return new Response((new ConfigForm)->invoke($request));        // Call the form handler.
+        $res = (new ConfigForm)->invoke($request);
+        if ($res instanceof Response) {
+            return $res;
+        }
+        return new Response((string)$res);
     }
 
     // ConfigForm routes
@@ -160,7 +181,8 @@ final class SamlSsoController extends AbstractController
     #[Route(self::FLOWFORM_FILE, name: self::FLOWFORM_NAME.'_file')]    // Decorator to register old route to handle GLPI generated menu's
     public function loginflow(Request $request): Response               // What to do if route is invoked.
     {
-        return new Response((new LoginFlowForm)->init($request));       // Call the ACS handler.
+        (new LoginFlowForm)->init();                                   // Call the ACS handler.
+        return new Response();
     }
 
 
@@ -173,7 +195,8 @@ final class SamlSsoController extends AbstractController
     #[Route(self::EXCLUDE_ROUTE, name: self::EXCLUDE_NAME)]             // Decorator to register route to controller
     public function exclude(): Response                                 // What to do if route is invoked.
     {
-        return new Response((new Exclude)->invoke());                   // Call the ACS handler.
+        (new Exclude)->invoke();                                       // Call the ACS handler.
+        return new Response();
     }
 
 
@@ -194,7 +217,8 @@ final class SamlSsoController extends AbstractController
     #[Route(self::RULES_FILE, name: self::RULES_NAME.'_file')]          // Decorator to register route to controller
     public function __invoke(Request $request): Response                // What to do if route is invoked.
     {
-        return new Response((new RuleSaml)->invoke());                  // Call the ACS handler.
+        (new RuleSaml)->invoke();                                      // Call the ACS handler.
+        return new Response();
     }
 
     #[SecurityStrategy(Firewall::STRATEGY_NO_CHECK)]                    // Decorator to disable authentication check
@@ -202,7 +226,8 @@ final class SamlSsoController extends AbstractController
     #[Route(self::RULESFORM_FILE, name: self::RULESFORM_NAME.'_file')]  // Decorator to register route to controller
     public function itemform(Request $request): Response                // What to do if route is invoked.
     {
-        return new Response((new RuleSaml)->invokeForm());              // Call the ACS handler.
+        (new RuleSaml)->invokeForm();                                  // Call the ACS handler.
+        return new Response();
     }
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  *  ------------------------------------------------------------------------
@@ -33,7 +34,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    Samlsso
- *  @version    1.2.9
+ *  @version    1.3.2
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -51,11 +52,11 @@ declare(strict_types=1);
 namespace GlpiPlugin\Samlsso;
 
 use Html;
-use Plugin;
 use Session;
 use Toolbox;
 use Throwable;
-use CommonDBTM;
+use Migration;
+use GlpiPlugin\Samlsso\Compat\LoginFlowCompat;
 use OneLogin\Saml2\Auth as samlAuth;
 use OneLogin\Saml2\Response;
 use Glpi\Application\View\TemplateRenderer;
@@ -63,14 +64,22 @@ use GlpiPlugin\Samlsso\Config;
 use GlpiPlugin\Samlsso\LoginState;
 use GlpiPlugin\Samlsso\Config\ConfigEntity;
 use GlpiPlugin\Samlsso\LoginFlow\User;
-use GlpiPlugin\Samlsso\LoginFlow\Auth as glpiAuth;
+use GlpiPlugin\Samlsso\LoginFlow\Auth as GlpiAuth;
+
+// Version-selected compatibility layer (GLPI 11 untyped / GLPI 12 typed core
+// properties). Must be required before the class below extends LoginFlowCompat.
+require_once __DIR__ . '/compat.php';
 
 /**
  * This object brings it all together. It is responsible to handle the
  * main logic concerned with the Saml login and logout flows.
  * it will call upon various supporting objects to perform its tasks.
+ *
+ * $dohistory (true) and $rightname ('config') are carried by LoginFlowCompat,
+ * version-typed for GLPI 11 and GLPI 12; redeclaring them here would be a
+ * fatal type-invariance error on one of the two cores.
  */
-class LoginFlow extends CommonDBTM
+class LoginFlow extends LoginFlowCompat
 {
     // Database fields
     public const ID                 =   'id';
@@ -87,37 +96,37 @@ class LoginFlow extends CommonDBTM
     public const EN_IDP_LOGOUT      =   'enableIdpLogout';
     public const ENF_AUTH_AFTER     =   'enforceReAuthAfterIdle';       // Time in minutes that session is allowed to idle before forcing reAuth
     public const BLK_AFTER_LOGOUT   =   'blockAfterEnfocedLogout';      // Time to block user after he/she was forcefully logged out.
-    public const JIT_ADD_PROFILES   =   'jit_add_profiles';             // Just in time add profiles to users that are authenticated by SAML and keep existing profiles in tact.
 
     // https://codeberg.org/QuinQuies/glpisaml/issues/37
     public const POSTFIELD   = 'samlIdpId';
     public const GETFIELD    = 'samlIdpId';
     public const SAMLBYPASS  = 'bypass';
     public const SLOLOGOUT   = 'sloLogout';
+    public const LOCALLOGOUT = 'localLogout';
 
     /**
      * Holds the state object
      * @var ?LoginState
      */
-    private ?LoginState $state;
+    protected ?LoginState $state;
+
+    /**
+     * Holds the currently active state object for static error handlers to log details.
+     * @var ?LoginState
+     */
+    public static ?LoginState $activeState = null;
+
+    /**
+     * Support exception throwing in tests instead of exiting.
+     * @var bool
+     */
+    public static bool $throwOnError = false;
 
     /**
      * Holds the captured user piripheral name if any.
      * @var string subject
      */
-    private ?string $subject;
-
-     /**
-     * Tell DBTM to keep history
-     * @var    bool     $dohistory
-     */
-    public $dohistory = true;
-
-    /**
-     * Tell CommonGLPI to use config (Setup->Setup in UI) rights.
-     * @var    string   $rightname
-     */
-    public static $rightname = 'config';
+    protected ?string $subject;
 
     /**
      * Overloads missing canCreate Setup right and returns canUpdate instead
@@ -185,28 +194,47 @@ class LoginFlow extends CommonDBTM
      */
     public function doAuth()                         //NOSONAR - complexity by design
     {
-        // The plugin should remain dormant with all CLI calls.
-        // https://github.com/DonutsNL/samlsso/issues/38
-        // TODO remove all other SAPI = cli validations in the code
-        // as this renders them useless.
-        if(PHP_SAPI == 'cli') {
-            // Do nothing.
+
+
+        /**
+         * Skip authentication logic for AJAX requests to avoid session state
+         * corruption during background operations.
+         */
+        if (\Toolbox::isAjax()) {
             return;
         }
+
+        // Run invalidation logic at the earliest possible moment
+        LoginState::expireStaleAcsRequests();
+        LoginState::expireStaleGlpiSessions();
+
+        // Do not process login flow if the user is already logged in, unless they are logging out
+        $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+        if (!is_string($requestPath)) {
+            $requestPath = '';
+        }
+        $isLogout = (strpos($requestPath, 'front/logout') !== false) ||
+                    isset($_GET[self::SLOLOGOUT]) ||
+                    isset($_GET[self::LOCALLOGOUT]);
+
 
         // Dont process anything if we are handling an ACS call.
         // Generating a state in this phase will taint it because we
         // have a new sessionId that wont align with existing entries
         // and need to use the samlRequestId to populate the stateobj.
         // https://github.com/DonutsNL/samlsso/issues/29
-        if(strpos($_SERVER['REQUEST_URI'], 'front/acs') !== false ){
-                return;
+        $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+        if (!is_string($requestPath)) {
+            $requestPath = '';
+        }
+        if (strpos($requestPath, 'front/acs') !== false) {
+            return;
         }
 
         // If we hit an excluded file, we return and do nothing, not even log the
         // event. Possibly we want to enable the user to perform SIEM calls by
         // implementing this functionality prior to this validation.
-        if(Exclude::isExcluded()){
+        if (Exclude::isExcluded()) {
             return;
         }
 
@@ -217,35 +245,71 @@ class LoginFlow extends CommonDBTM
         // an existing one. The state properties tell which one we are dealing with.
         try {
             $this->state = new Loginstate();
+            self::$activeState = $this->state;
             // We need to check if this is the initial state, if so we write it to database.
             // This logic cant be part of the objects logic because its reinitialized by the
             // CommonDBTM object causing the sessions to be duplicated. This should also be
             // the only place where we call the writeState() method.
             // https://github.com/DonutsNL/samlsso/issues/26
-            if($this->state->getStateId() == -1){
+            if ($this->state->getStateId() == -1) {
                 // Dont write anything if we are in the middle of an ACS request statelessly
                 // This logic is always called by the GLPI hook this could or should also
                 // be an exclusion but this is safer.
                 $this->state->writeState();
-            }// We loaded a valid state from the database, do nothing more.
-        } catch(Throwable $e){
-            $this->printError(__("Loading login state failed with: $e", PLUGIN_NAME));
+            } // We loaded a valid state from the database, do nothing more.
+        } catch (Throwable $e) {
+            $this->printError(sprintf(__("Loading login state failed with: %s", PLUGIN_NAME), (string)$e));
+        }
+
+        if ($this->state->getPhase() === LoginState::PHASE_FORCE_LOG) {
+            $this->state->setPhase(LoginState::PHASE_LOGOFF);
+            Session::cleanOnLogout();
+            Session::addMessageAfterRedirect(__('You have been forcefully logged out by an administrator.', PLUGIN_NAME), false, ERROR);
+            header('Location: ' . $CFG_GLPI['url_base'] . '/index.php?noAuto=1');
+            exit;
+        }
+
+        if ($this->state->getPhase() === LoginState::PHASE_TIMED_OUT) {
+            $this->state->setPhase(LoginState::PHASE_LOGOFF);
+            Session::cleanOnLogout();
+            Session::addMessageAfterRedirect(__('Your session has timed out due to inactivity.', PLUGIN_NAME), false, ERROR);
+            header('Location: ' . $CFG_GLPI['url_base'] . '/index.php?noAuto=1');
+            exit;
+        }
+
+        if (!$isLogout && Session::getLoginUserID() !== false) {
+            $this->state->updateLastActivity();
+            return;
+        }
+
+        if (isset($_GET[self::LOCALLOGOUT])) {
+            $this->state->setPhase(LoginState::PHASE_LOGOFF);
+            return;
         }
 
         // Perform SLO logout with idp
         // Called by $this->performLogOff()
-        if(isset($_GET[self::SLOLOGOUT])                                    &&          // SLO was triggered and we need to process it.
-           $configEntity = new ConfigEntity($this->state->getIdpId())       ){          // Get the config so we can generate IDP logout request.
-            // We can assume GLPI session was allready destroyed and we
-            // can continue here. In worst if forced manuallu the IDP will
-            // be logged out while GLPI still has a valid session that
-            // will then be invalidated by the GLPI session manager
-            // because of the redirects performed tainting the cookie
-            // resulting in an invalid session error from GLPI.
-            $samlAuth = new samlAuth($configEntity->getPhpSamlConfig());
-            // Get the (signed) logout url.
-            $sloUrl = $samlAuth->logout();
-            header('location:'.$sloUrl);
+        if (isset($_GET[self::SLOLOGOUT])) {
+            $idpId = $this->state->getIdpId();
+            if ($idpId > 0) {
+                $configEntity = new ConfigEntity($idpId);
+                if ($configEntity->isValid() && $configEntity->isActive()) {
+                    $samlConfig = $configEntity->getPhpSamlConfig();
+                    if (!empty($samlConfig)) {
+                        $this->state->setPhase(LoginState::PHASE_LOGOFF);
+                        Session::cleanOnLogout();
+                        $samlAuth = new samlAuth($samlConfig);
+                        // Get the (signed) logout url.
+                        $sloUrl = $samlAuth->logout();
+                        header('location:' . $sloUrl);
+                        exit;
+                    }
+                }
+            }
+            // Fallback: if SLO configuration is not valid/active, clear local session and redirect to home
+            $this->state->setPhase(LoginState::PHASE_LOGOFF);
+            Session::cleanOnLogout();
+            header('Location: ' . $CFG_GLPI['url_base'] . '/');
             exit;
         }
 
@@ -255,110 +319,153 @@ class LoginFlow extends CommonDBTM
 
         // Is the LOGOUT button PRESSED?
         // https://codeberg.org/QuinQuies/glpisaml/issues/18
-        if(isset($_SERVER['REQUEST_URI'])                                   &&          // Request URI available (non CLI)
-          (strpos($_SERVER['REQUEST_URI'], 'front/logout') !== false)       ){          // font/logout part of the request URI
+        $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+        if (!is_string($requestPath)) {
+            $requestPath = '';
+        }
 
-                $this->performLogOff();
-                // If we reach this then GLPI should handle the logoff not us.
-                return;
+        if (strpos($requestPath, 'front/logout') !== false && !isset($_GET[self::LOCALLOGOUT])) {
+
+            $this->performLogOff();
+            // If we reach this then GLPI should handle the logoff not us.
+            return;
         }
 
         // Do nothing if glpi is trying to impersonate someone
         // Let GLPI handle auth in this scenario
         // https://codeberg.org/QuinQuies/glpisaml/issues/159
-        if(isset($_POST['impersonate']) &&
-           $_POST['impersonate'] == '1' &&
-           !empty($_POST['id'])         ){
+        if (
+            isset($_POST['impersonate']) &&
+            $_POST['impersonate'] == '1' &&
+            !empty($_POST['id'])
+        ) {
 
-                $this->state->addLoginFlowTrace(['Impersonated someone' => true]);
-                return;
+            $this->state->addLoginFlowTrace(['Impersonated someone' => true]);
+            return;
         }
 
         // BYPASS SAML ENFORCE OPTION
         // https://codeberg.org/QuinQuies/glpisaml/issues/35
-        if((isset($_GET[LoginFlow::SAMLBYPASS])                  &&                                             // Is ?bypass=1 set in our uri (replace with GLPIs noAuto?)
-            $_GET[LoginFlow::SAMLBYPASS] == 1)                   ||                                             // bypass key is set (drop this?)
-            isset($_GET['noAuto'])                               ){                                             // bypass is set to 1 (can be replaced with secret key)
-
-                $this->state->addLoginFlowTrace(['bypassUsed' => true]);                                        // Register the bypass was used
-                $url = $CFG_GLPI['url_base'].'/?'.LoginFlow::SAMLBYPASS.'=1&noAUTO=1';                          // Craft url with bypass make sure we land on page
-                // Perform serverside redirect.
-                header('Location:'.$url);
-        }
+        $this->interceptBypass();
 
         // CAPTURE LOGIN FIELD
         // https://codeberg.org/QuinQuies/glpisaml/issues/3
         // https://github.com/DonutsNL/samlsso/issues/16
-        // Capture the post of regular login and verify if the provided domain is SSO enabled.
-        // by evaluating the domain portion against the configured user domains.
-        // we need to iterate through the keys because of the added csrf token i.e.
-        // [fielda[csrf_token]] = value.
-        foreach($_POST as $key => $value){
-            if(strstr($key, 'login_name')                           &&                                          // Test keys if fielda[token] is present in the POST.
-              !empty($_POST[$key])                                  &&                                          // Test if fielda actually has a value we can process
-              $id = Config::getConfigIdByEmailDomain($_POST[$key])  ){                                          // If all is true try to find an matching idp id.
-
-                $this->state->addLoginFlowTrace(['loginViaUserfield' => 'user:'.$_POST[$key].',idpId:'.$id]);   // Register the userfield was used with user
-                $this->subject = $_POST[$key];                                                                  // Save the user piripheral name as samlSubject to pass to the IDP
-                $_POST[LoginFlow::POSTFIELD] = $id;                                                             // If we found an ID Set the POST phpsaml to our found ID this will trigger
-            }
+        if (($id = $this->resolveIdpFromLoginForm())) {
+            $_POST[LoginFlow::POSTFIELD] = $id;
         }
 
         // MANUAL IDP ID VIA GETTER
         // Check if the user manually provided the correct idp to use
         // this to provision Idp Initiated SAML flows.
-        if(isset($_GET[LoginFlow::GETFIELD])        &&                                                          // If correct SAML config ID was provided manually, use that
-           is_numeric($_GET[LoginFlow::GETFIELD])   ){                                                          // Make sure its a numeric value and not a string
+        if (
+            isset($_GET[LoginFlow::GETFIELD])        &&                                                          // If correct SAML config ID was provided manually, use that
+            is_numeric($_GET[LoginFlow::GETFIELD])
+        ) {                                                          // Make sure its a numeric value and not a string
 
-            $this->state->addLoginFlowTrace(['loginViaGetter' => 'getValue:'.$_GET[LoginFlow::GETFIELD]]);
+            $this->state->addLoginFlowTrace(['loginViaGetter' => 'getValue:' . $_GET[LoginFlow::GETFIELD]]);
             $_POST[LoginFlow::POSTFIELD] = $_GET[LoginFlow::GETFIELD];
         }
 
         // Check if we only have 1 configuration and its enforced
         // https://codeberg.org/QuinQuies/glpisaml/issues/61
-        if(($this->state->getPhase() == LoginState::PHASE_INITIAL   ||      // Make sure we only do this if state is initial
-            $this->state->getPhase() == LoginState::PHASE_LOGOFF)   &&      // Make sure we only do this if state is logoff
+        if (($this->state->getPhase() == LoginState::PHASE_INITIAL   ||      // Make sure we only do this if state is initial
+                $this->state->getPhase() == LoginState::PHASE_LOGOFF)   &&      // Make sure we only do this if state is logoff
             Config::getIsOnlyOneConfig()                            &&      // Only perform this login type with only one samlConfig entry
             Config::getIsEnforced()                                 &&      // Only Enforce if we have enforced option configured.
             !isset($_GET['noAuto'])                                 &&      // Only perform this if GLPI 'noAuto' is absent.
-            !isset($_GET[LoginFlow::SAMLBYPASS])                    ){      // Only perform this if user is not trying to bypass samlAuth.
+            !isset($_GET[LoginFlow::SAMLBYPASS])
+        ) {      // Only perform this if user is not trying to bypass samlAuth.
 
-                $this->state->addLoginFlowTrace(['OnlyOneIdpEnforced' => 'idpId:'.Config::getIsOnlyOneConfig()]);
-                $_POST[LoginFlow::POSTFIELD] = Config::getIsOnlyOneConfig();
+            $this->state->addLoginFlowTrace(['OnlyOneIdpEnforced' => 'idpId:' . Config::getIsOnlyOneConfig()]);
+            $_POST[LoginFlow::POSTFIELD] = Config::getIsOnlyOneConfig();
         }
 
         // https://github.com/DonutsNL/samlsso/issues/12 add typecast.
         // Check if a SAML button was pressed and handle the corresponding logon request!
-        if (isset($_POST[LoginFlow::POSTFIELD])                  &&      // Must be set
+        if (
+            isset($_POST[LoginFlow::POSTFIELD])                  &&      // Must be set
             is_numeric($_POST[LoginFlow::POSTFIELD])             &&      // Value must be numeric
-            strlen((string) $_POST[LoginFlow::POSTFIELD]) < 3    ){      // Should not exceed 999
+            strlen((string) $_POST[LoginFlow::POSTFIELD]) < 3
+        ) {      // Should not exceed 999
 
-                $this->state->addLoginFlowTrace(['finalIdp' => 'idpId:'.$_POST[LoginFlow::POSTFIELD]]);
+            $this->state->addLoginFlowTrace(['finalIdp' => 'idpId:' . $_POST[LoginFlow::POSTFIELD]]);
 
-                // Preserve a directly requested GLPI page (e.g. ticket link from an email)
-                // when no explicit ?redirect= was given.
-                if(empty($this->state->getRedirect())                                   &&
-                   ($_SERVER['REQUEST_METHOD'] ?? '') === 'GET'                         &&
-                   isset($_SERVER['REQUEST_URI'])                                       ){
-                    $path = $_SERVER['REQUEST_URI'];
-                    $root = $CFG_GLPI['root_doc'] ?? '';
-                    if($root !== '' && strpos($path, $root.'/') === 0){
-                        $path = substr($path, strlen($root));
-                    }
-                    if(strpos($path, '/front/') === 0 && strpos($path, 'login.php') === false){
-                        $this->state->setRedirect($path);
-                    }
+            // Preserve a directly requested GLPI page (e.g. ticket link from an email)
+            // when no explicit ?redirect= was given.
+            if (
+                empty($this->state->getSafeRedirect())            &&
+                ($_SERVER['REQUEST_METHOD'] ?? '') === 'GET'      &&
+                isset($_SERVER['REQUEST_URI'])
+            ) {
+                global $CFG_GLPI;
+                $path = $_SERVER['REQUEST_URI'];
+                $root = $CFG_GLPI['root_doc'] ?? '';
+                if ($root !== '' && strpos($path, $root . '/') === 0) {
+                    $path = substr($path, strlen($root));
                 }
-                // If we know the idp we register it in the login State
-                // the input is validated as is_numeric. Floats will be truncated by
-                // the cast to int (int).
-                $this->state->setIdpId((int) filter_var($_POST[LoginFlow::POSTFIELD], FILTER_SANITIZE_NUMBER_INT));
+                if (strpos($path, '/front/') === 0 && strpos($path, 'login.php') === false) {
+                    $this->state->setRedirect($path);
+                }
+            }
+            // If we know the idp we register it in the login State
+            // the input is validated as is_numeric. Floats will be truncated by
+            // the cast to int (int).
+            $this->state->setIdpId((int) filter_var($_POST[LoginFlow::POSTFIELD], FILTER_SANITIZE_NUMBER_INT));
 
-                // Actually perform SSO
-                $this->performSamlIdpRequest();
+            // Actually perform SSO
+            $this->performSamlIdpRequest();
         }
         // Do nothing and return nothing.
         // Returning an value like false breaks glpi in all kinds of nasty ways.
+    }
+
+    /**
+     * Intercept and handle bypass SAML authentication requests.
+     *
+     * @return bool True if bypass was triggered
+     */
+    private function interceptBypass(): bool
+    {
+        global $CFG_GLPI;
+
+        if (isset($_GET[LoginFlow::SAMLBYPASS]) && $_GET[LoginFlow::SAMLBYPASS] == 1) {
+            $_SESSION['glpi_plugins']['samlsso']['bypass'] = true;
+        }
+
+        $bypassRequested = (isset($_GET[LoginFlow::SAMLBYPASS]) && $_GET[LoginFlow::SAMLBYPASS] == 1);
+        $noAutoRequested = isset($_GET['noAuto']);
+        $noAutoUpperSet = isset($_GET['noAUTO']);
+
+        if ($bypassRequested || $noAutoRequested) {
+            if (!$bypassRequested || !$noAutoUpperSet) {
+                $this->state->addLoginFlowTrace(['bypassUsed' => true]);
+                $url = $CFG_GLPI['url_base'] . '/?' . LoginFlow::SAMLBYPASS . '=1&noAUTO=1';
+                header('Location:' . $url);
+                exit();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Parse the login form parameters to see if IDP matching the domain is configured.
+     *
+     * @return int|null Resolved IDP configuration ID, or null
+     */
+    private function resolveIdpFromLoginForm(): ?int
+    {
+        foreach ($_POST as $key => $value) {
+            if (strstr($key, 'login_name') && !empty($_POST[$key])) {
+                $id = Config::getConfigIdByEmailDomain($_POST[$key]);
+                if ($id) {
+                    $this->state->addLoginFlowTrace(['loginViaUserfield' => 'user:' . $_POST[$key] . ',idpId:' . $id]);
+                    $this->subject = $_POST[$key];
+                    return (int)$id;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -374,28 +481,34 @@ class LoginFlow extends CommonDBTM
     {
         global $CFG_GLPI;
 
+        $samlConfig = [];
+        $auth = null;
+        $ssoBuiltUrl = '';
+
         // Fetch the correct configEntity GLPI
-        if($configEntity = new ConfigEntity($this->state->getIdpId())){ // Get the configEntity object using our stored ID
+        if (($configEntity = new ConfigEntity($this->state->getIdpId()))) { // Get the configEntity object using our stored ID
             $samlConfig = $configEntity->getPhpSamlConfig();      // Get the correctly formatted SamlConfig array
         }
 
         // Validate if the IDP configuration is enabled
         // https://codeberg.org/QuinQuies/glpisaml/issues/4
-        if($configEntity->isActive()){                            // Validate the IdP config is activated
+        if ($configEntity->isActive()) {                            // Validate the IdP config is activated
 
             // Initialize the OneLogin phpSaml auth object
             // using the requested phpSaml configuration from
             // the samlsso config database. Catch all throwable
             // errors and exceptions.
-            try { $auth = new samlAuth($samlConfig); } catch (Throwable $e) {
-                $this->printError($e->getMessage(), 'Saml::Auth->init', var_export($auth->getErrors(), true));
+            try {
+                $auth = new samlAuth($samlConfig);
+            } catch (Throwable $e) {
+                $this->printError($e->getMessage(), 'Saml::Auth->init', var_export($samlConfig, true));
             }
 
             // Added version 1.2.0
             // Capture and register requestId in database
             // before performing the redirect so we don't need Cookies
             // https://codeberg.org/QuinQuies/glpisaml/issues/45
-            try{
+            try {
                 $ssoBuiltUrl = $auth->login(
                     $CFG_GLPI["url_base"],  // $returnTo (1st param)
                     array(),                // $parameters (2nd param, empty array)
@@ -408,16 +521,18 @@ class LoginFlow extends CommonDBTM
             } catch (Throwable $e) {
                 $this->printError($e->getMessage(), 'Saml::Auth->init', var_export($auth->getErrors(), true));
             }
-            
-            // Register the requestId in the database and $_SESSION var;
-            $this->state->setRequestId($auth->getLastRequestID());
+
+            if ($auth !== null) {
+                // Register the requestId in the database and $_SESSION var;
+                $this->state->setRequestId($auth->getLastRequestID());
+            }
 
             // Update the current phase in database. The state is verified by the Acs
             // while handling the received SamlResponse. Any other state will force Acs
             // into an error state. This is to prevent unexpected (possibly replayed)
             // samlResponses from being processed. to prevent playback attacks.
-            if(!$this->state->setPhase(LoginState::PHASE_SAML_ACS) ){
-                $this->printError(__('Could not update the loginState and therefor stopped the loginFlow for:'.$_POST[LoginFlow::POSTFIELD] , PLUGIN_NAME));
+            if (!$this->state->setPhase(LoginState::PHASE_SAML_ACS)) {
+                $this->printError(sprintf(__('Could not update the loginState and therefor stopped the loginFlow for: %s', PLUGIN_NAME), $_POST[LoginFlow::POSTFIELD]));
             }
 
             // Perform redirect to Idp using HTTP-GET
@@ -425,7 +540,6 @@ class LoginFlow extends CommonDBTM
             header('Cache-Control: no-cache, must-revalidate');
             header('Location: ' . $ssoBuiltUrl);
             exit();
-
         } // Do nothing, ignore the samlSSORequest.
     }
 
@@ -443,22 +557,22 @@ class LoginFlow extends CommonDBTM
     protected function performGlpiLogin(Response $response, LoginState $state): void
     {
         global $CFG_GLPI;
+        $auth = null;
 
         // Push the state into this objects property just in case.
         $this->state = $state;
-        
+
         // Validate samlResponse and extract provided attributes (saml claims).
         // This validation will print and exit(!) on errors because user information is mandatory
         // after this step.
-        $userFields = User::getUserInputFieldsFromSamlClaim($response);
-        // Inject the IDP ID so getOrCreateUser can load the correct config without
-        // relying on a session_id-based LoginState lookup (which fails at ACS time
-        // because the PHP session differs from the pre-redirect session stored in state).
-        $userFields[LoginState::IDP_ID] = $state->getIdpId();
-       
+        $userFields = User::getUserInputFieldsFromSamlClaim($response, $state->getIdpId());
+
+        // Resolve the ConfigEntity to propagate down the authentication chain
+        $configEntity = ($this instanceof \GlpiPlugin\Samlsso\LoginFlow\Acs) ? $this->configEntity : new ConfigEntity($state->getIdpId());
+
         // Try to populate GLPI Auth using the fetched samlResponse attributes;
         try {
-            $auth = (new GlpiAuth())->loadUser($userFields);
+            $auth = (new GlpiAuth())->loadUser($userFields, $configEntity, $state);
         } catch (Throwable $e) {
             $this->printError($e->getMessage(), 'doSamlLogin');
         }
@@ -475,12 +589,12 @@ class LoginFlow extends CommonDBTM
         Session::destroy();                 // Clean existing session
         Session::start();                   // Create a new statefull one.
 
-        // Re populate Glpi session with the populated GlpiAuth object
-        // This tells GLPI a valid GLPI user was logged in.
-        Session::init($auth);
+        if ($auth !== null) {
+            Session::init($auth);
 
-        if (!empty($auth->getErrors())) {
-            LoginFlow::PrintFatalLoginError(implode("<br />",$auth->getErrors()));
+            if (!empty($auth->getErrors())) {
+                LoginFlow::PrintFatalLoginError(implode("<br />", $auth->getErrors()));
+            }
         }
 
         // Update the samlState table with the new sessionId.
@@ -502,16 +616,13 @@ class LoginFlow extends CommonDBTM
 
         // Make sure we are looking at a logged in session
         // before showing this.
-        if(!array_key_exists('glpiID', $_SESSION) || empty($_SESSION["glpiID"])){
+        if (!array_key_exists('glpiID', $_SESSION) || empty($_SESSION["glpiID"])) {
             // Ignore the call.
             return;
         }
 
         // Update flowtrace field.
         $this->state->addLoginFlowTrace(['logoutPressed' => true]);
-
-        // Update the state indicating that logout has been pressed.
-        $this->state->setPhase(LoginState::PHASE_LOGOFF);
 
         // Get IdpConfiguration if any and figure out if we
         // need to handle some sort of logout at the IDP or
@@ -521,19 +632,45 @@ class LoginFlow extends CommonDBTM
         // If the session is samlAuthed and the SLO url was configured
         // capture the logout and present an option to logout with the
         // IDP in addition to logging out of GLPI.
-        if( $configEntity->getField(ConfigEntity::IDP_SLO_URL)  &&
-            $this->state->isSamlAuthed()                        ){
-            
+        if (
+            $configEntity->getField(ConfigEntity::IDP_SLO_URL)  &&
+            $this->state->isSamlAuthed()
+        ) {
+
+            $isEnforced = (bool) $configEntity->getField(ConfigEntity::ENFORCE_SSO);
+            $idpName = htmlentities((string) $configEntity->getField(ConfigEntity::NAME));
+
+            $returnLabel = $isEnforced ? __('Go back to GLPI', PLUGIN_NAME) : __('Continue with local logout', PLUGIN_NAME);
+            $sloLabel    = __('Log out everywhere', PLUGIN_NAME);
+
+            if ($isEnforced) {
+                $infoText = sprintf(
+                    __('You have been authenticated using the SAML2 identity provider: <b>%1$s</b>.<br><br>Because SAML authentication is enforced, logging out of GLPI locally will automatically log you back in immediately.<br><br>To sign out completely, please select <b>\'%2$s\'</b>. Note that this will also terminate your active sessions in all other applications connected to this Identity Provider.<br><br>If you want to leave GLPI, just close this browser tab.', PLUGIN_NAME),
+                    $idpName,
+                    $sloLabel
+                );
+            } else {
+                $infoText = sprintf(
+                    __('You have been authenticated using the SAML2 identity provider: <b>%1$s</b>.<br><br>You can log out permanently by also logging out with the IDP by pressing <b>\'%2$s\'</b> (which terminates active sessions in all other applications depending on it), or perform a local logout from GLPI only by pressing <b>\'%3$s\'</b>.', PLUGIN_NAME),
+                    $idpName,
+                    $sloLabel,
+                    $returnLabel
+                );
+            }
+
             // Define static translatable elements
             $tplVars = [
-                    'header'        => __('⚠️ Are you sure?', PLUGIN_NAME),
-                    'idpName'       => $configEntity->getField(ConfigEntity::NAME),
-                    'returnLabel'   => __('Continue GLPI logout', PLUGIN_NAME),
-                    'returnPath'    => $CFG_GLPI["url_base"] .'/',
-                    'sloLabel'      => __('Log out everywhere', PLUGIN_NAME),
-                    'sloPath'       =>  $CFG_GLPI["url_base"] .'/?'.self::SLOLOGOUT.'=1',
+                'header'        => __('🤔 How would you like to proceed?', PLUGIN_NAME),
+                'idpName'       => $configEntity->getField(ConfigEntity::NAME),
+                'infoText'      => $infoText,
+                'returnLabel'   => $returnLabel,
+                'returnPath'    => $isEnforced ? $CFG_GLPI["url_base"] . '/' : $CFG_GLPI["url_base"] . '/front/logout.php?' . self::LOCALLOGOUT . '=1&noAUTO=1',
+                'closeLabel'    => __('Close tab', PLUGIN_NAME),
+                'sloLabel'      => $sloLabel,
+                'sloPath'       =>  $CFG_GLPI["url_base"] . '/front/logout.php?' . self::SLOLOGOUT . '=1',
+                'isEnforced'    => $isEnforced,
             ];
-            
+
             // print GLPI headers
             Html::nullHeader("SamlSSO Logout catcher", '/');
             // Render twig template
@@ -542,11 +679,14 @@ class LoginFlow extends CommonDBTM
             // print nullFooter
             Html::nullFooter();
 
-            // Make sure the GLPI session is cleaned
-            // https://github.com/DonutsNL/samlsso/issues/35
-            Session::cleanOnLogout();
+            // Note: GLPI session is NOT cleared here; it will be cleared once the user selects localLogout or sloLogout.
             exit;
-        } // else silently ignore and continue GLPI logout.
+        } else {
+            Session::cleanOnLogout();
+            if (session_status() === PHP_SESSION_ACTIVE) {
+                session_regenerate_id(true);
+            }
+        }
     }
 
 
@@ -562,7 +702,7 @@ class LoginFlow extends CommonDBTM
     public function showLoginScreen(): void
     {
         // Validate if we need to hide the login fields?
-        if(Config::getHideLoginFields()){
+        if (Config::getHideLoginFields()) {
             echo '<style>
                    .card-body div.mb-4:has(#login_password) {
                         display: none;
@@ -575,22 +715,20 @@ class LoginFlow extends CommonDBTM
                     }
                   </style>';
         }
-        
+
         $tplVars = Config::getLoginButtons(12);         // Fetch the global DB object;
-        if(!empty($tplVars)){                           // Only show the interface if we have buttons to show.
+        if (!empty($tplVars)) {                           // Only show the interface if we have buttons to show.
             // Define static translatable elements
-            $tplVars['action']     = Plugin::getWebDir(PLUGIN_NAME, true);
+            $tplVars['action']     = samlsso_plugin_web_dir();
             $tplVars['header']     = __('Login with external provider', PLUGIN_NAME);
             $tplVars['showbuttons']    = true;
             $tplVars['postfield']  = LoginFlow::POSTFIELD;
             $tplVars['enforced']   = Config::getIsEnforced();
             // https://codeberg.org/QuinQuies/glpisaml/issues/12
             TemplateRenderer::getInstance()->display('@samlsso/loginScreen.html.twig',  $tplVars);
-        }else{
-            // We might still need to hide password, remember and database login fields
-            if($tplVars['enforced'] = Config::getIsEnforced() &&    // Validate there is 'an' enforced saml Config
-               !isset($_GET['bypass'])                        ){    // Validate we don't want to bypass our enforcement
-                
+        } else {
+            $tplVars['enforced'] = Config::getIsEnforced() && !isset($_GET['bypass']); // Validate there is 'an' enforced saml Config and we don't want to bypass
+            if ($tplVars['enforced']) { // Validate we don't want to bypass our enforcement
                 // Call the renderer to render our CSS injection.
                 TemplateRenderer::getInstance()->display('@samlsso/loginScreen.html.twig',  $tplVars);
             }
@@ -612,16 +750,40 @@ class LoginFlow extends CommonDBTM
         global $CFG_GLPI;
 
         $ip = getenv("HTTP_X_FORWARDED_FOR") ?: getenv("REMOTE_ADDR");
-        
-        // Log in file
-        Toolbox::logInFile(PLUGIN_NAME."-errors", 'FATAL SAML LOGIN ERROR:'. $errorMsg . " (IP: " . $ip . ")\n", true);
 
-        // Define static translatable elements
+        /* Log in file */
+        Toolbox::logInFile(PLUGIN_NAME . "-errors", 'FATAL SAML LOGIN ERROR:' . $errorMsg . "\n", true);
+
+        if (self::$throwOnError) {
+            throw new \Exception((string)$errorMsg);
+        }
+
+        $debug = false;
+        try {
+            $state = self::$activeState;
+            if ($state === null || $state->getStateId() <= 0) {
+                $state = new Loginstate();
+            }
+            if ($state->getStateId() > 0) {
+                $state->addLoginFlowTrace(['Fatal Error' => (string)$errorMsg]);
+                $state->setPhase(LoginState::PHASE_ERROR);
+                if ($state->getIdpId() > 0) {
+                    $configEntity = new ConfigEntity($state->getIdpId());
+                    $debug = (bool)$configEntity->getField(ConfigEntity::DEBUG);
+                }
+            }
+        } catch (\Throwable $t) {
+            /* ignore */
+        }
+
+        $displayMsg = $debug ? (string)$errorMsg : __('Something went wrong during authentication assertion and prevents you from logging in. Please contact your GLPI administrator for more information and support.', PLUGIN_NAME);
+
+        /* Define static translatable elements */
         $tplVars['header']      = __('⚠️ Sorry we are unable to log you in', PLUGIN_NAME);
-        // https://github.com/DonutsNL/samlsso/issues/21
-        // Typecast might break if the passed object doesnt have a __toString() magic method.
-        $tplVars['error']       = htmlentities((string) $errorMsg);
-        $tplVars['returnPath']  = $CFG_GLPI["url_base"] .'/';
+        /* https://github.com/DonutsNL/samlsso/issues/21 */
+        /* Typecast might break if the passed object doesnt have a __toString() magic method. */
+        $tplVars['error']       = htmlentities($displayMsg);
+        $tplVars['returnPath']  = $CFG_GLPI["url_base"] . '/';
         $tplVars['returnLabel'] = __('Return to GLPI', PLUGIN_NAME);
 
         // print header
@@ -637,7 +799,7 @@ class LoginFlow extends CommonDBTM
         exit;
     }
 
-   
+
     /**
      * Prints and logs error message with 'back' button
      *
@@ -653,17 +815,41 @@ class LoginFlow extends CommonDBTM
         // Pull GLPI config into scope.
         global $CFG_GLPI;
 
-        // Log in file
-        Toolbox::logInFile(PLUGIN_NAME."-errors", $errorMsg . "\n", true);
-        if($extended){
-            Toolbox::logInFile(PLUGIN_NAME."-errors", $extended . "\n", true);
+        /* Log in file */
+        Toolbox::logInFile(PLUGIN_NAME . "-errors", $errorMsg . "\n", true);
+        if ($extended) {
+            Toolbox::logInFile(PLUGIN_NAME . "-errors", $extended . "\n", true);
         }
 
-        // Define static translatable elements
+        if (self::$throwOnError) {
+            throw new \Exception($errorMsg);
+        }
+
+        $debug = false;
+        try {
+            $state = self::$activeState;
+            if ($state === null || $state->getStateId() <= 0) {
+                $state = new Loginstate();
+            }
+            if ($state->getStateId() > 0) {
+                $state->addLoginFlowTrace(['Error' => $errorMsg . ($extended ? ": " . $extended : "")]);
+                $state->setPhase(LoginState::PHASE_ERROR);
+                if ($state->getIdpId() > 0) {
+                    $configEntity = new ConfigEntity($state->getIdpId());
+                    $debug = (bool)$configEntity->getField(ConfigEntity::DEBUG);
+                }
+            }
+        } catch (\Throwable $t) {
+            /* ignore */
+        }
+
+        $displayMsg = $debug ? $errorMsg : __('Something went wrong during authentication assertion and prevents you from logging in. Please contact your GLPI administrator for more information and support.', PLUGIN_NAME);
+
+        /* Define static translatable elements */
         $tplVars['header']      = __('⚠️ An error occurred', PLUGIN_NAME);
-        $tplVars['leading']     = __("We are sorry, something went terribly wrong while processing your $action request!", PLUGIN_NAME);
-        $tplVars['error']       = $errorMsg;
-        $tplVars['returnPath']  = $CFG_GLPI["url_base"] .'/';
+        $tplVars['leading']     = __("We are sorry, something went wrong while processing your request!", PLUGIN_NAME);
+        $tplVars['error']       = $displayMsg;
+        $tplVars['returnPath']  = $CFG_GLPI["url_base"] . '/';
         $tplVars['returnLabel'] = __('Return to GLPI', PLUGIN_NAME);
         // print header
         http_response_code(400); // BadRequestHttpException
@@ -672,12 +858,12 @@ class LoginFlow extends CommonDBTM
         echo TemplateRenderer::getInstance()->render('@samlsso/errorScreen.html.twig',  $tplVars);
         // print footer
         Html::nullFooter();
-        
+
         // Make sure php execution is stopped.
         exit;
     }
 
-     /**
+    /**
      * Perform browser redirect to make sure we send a HTTP200 OK. The HTTP200 OK is
      * needed to ensure the browser resets the request chain originating from the IDP.
      * Not resetting the chain will invalidate the GLPI cookies.
@@ -690,22 +876,24 @@ class LoginFlow extends CommonDBTM
     {
         // reference global config;
         global $CFG_GLPI;
-        // get actual state;
+        $state = null;
         try {
             $state = new Loginstate();
-        } catch(Throwable $e){
-            LoginFlow::printError(__("Loading login state failed with: $e", PLUGIN_NAME));
+        } catch (Throwable $e) {
+            LoginFlow::printError(sprintf(__("Loading login state failed with: %s", PLUGIN_NAME), (string)$e));
         }
 
         // Restore stored redirect requests.
         // https://github.com/DonutsNL/samlsso/issues/2
-        if(!empty($state->getRedirect())){
-            $url=$CFG_GLPI['url_base'].'?redirect='.rawurlencode($state->getRedirect());
-        }else{
-            $url=$CFG_GLPI['url_base'];
+        $safeRedirect = $state !== null ? $state->getSafeRedirect() : '';
+        if (!empty($safeRedirect)) {
+            $url = $CFG_GLPI['url_base'] . '?redirect=' . rawurlencode($safeRedirect);
+        } else {
+            $url = $CFG_GLPI['url_base'];
         }
 
-        printf('<!DOCTYPE html>
+        printf(
+            '<!DOCTYPE html>
                 <html>
                     <head>
                         <meta charset="UTF-8" />
@@ -715,11 +903,12 @@ class LoginFlow extends CommonDBTM
                     </head>
                     <body>&nbsp;</body>
                 </html>',
-                \htmlescape($url),
-                'Auth succesfull');
+            \htmlescape($url),
+            'Auth successful'
+        );
         exit;
     }
-    
+
     /**
      * Install the LoginFlow DB table
      * @param   Migration $obj
@@ -741,25 +930,27 @@ class LoginFlow extends CommonDBTM
         // Create the base table if it does not yet exist;
         // Do not update this table for later versions, use the migration class;
         if (!$DB->tableExists($table)) {
-            $migration->addTable($table, [
-                'id'                      => ['type' => 'int', 'notnull' => true, 'autoincrement' => true],
-                'debug'                   => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
-                'enforced'                => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
-                'forcedIdp'               => ['type' => 'int', 'null' => true, 'value' => -1],
-                'enableGetterLogin'       => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
-                'hideGlpiLogin'           => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
-                'hideSamlButtons'         => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
-                'hideUsername'            => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
-                'useCustomLoginTemplate'  => ['type' => 'string', 'null' => true],
-                'byPassString'            => ['type' => 'string', 'null' => true, 'value' => '1'],
-                'byPassVar'               => ['type' => 'string', 'null' => true, 'value' => 'bypass'],
-                'enableIdpLogout'         => ['type' => 'tinyint', 'notnull' => true, 'value' => 0],
-                'enforceReAuthAfterIdle'  => ['type' => 'int', 'notnull' => true, 'value' => -1],
-                'blockAfterEnfocedLogout' => ['type' => 'int', 'notnull' => true, 'value' => -1],
-            ], [
-                'engine' => 'InnoDB',
-                'row_format' => 'COMPRESSED'
-            ]);
+            // Create table
+            $query = <<<SQL
+            CREATE TABLE IF NOT EXISTS `$table` (
+                `id`                        int {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                `debug`                     tinyint NOT NULL DEFAULT 0,
+                `enforced`                  tinyint NOT NULL DEFAULT 0,
+                `forcedIdp`                 int DEFAULT -1,
+                `enableGetterLogin`         tinyint NOT NULL DEFAULT 0,
+                `hideGlpiLogin`             tinyint NOT NULL DEFAULT 0,
+                `hideSamlButtons`           tinyint NOT NULL DEFAULT 0,
+                `hideUsername`              tinyint NOT NULL DEFAULT 0,
+                `useCustomLoginTemplate`    varchar(255) NULL,
+                `byPassString`              varchar(255) DEFAULT '1',
+                `byPassVar`                 varchar(255) DEFAULT 'bypass',
+                `enableIdpLogout`           tinyint NOT NULL DEFAULT 0,
+                `enforceReAuthAfterIdle`    int NOT NULL DEFAULT -1,                        // Time in minutes that session is allowed to idle before forcing reAuth
+                `blockAfterEnfocedLogout`   int NOT NULL DEFAULT -1,                        // Time to block user after he/she was forcefully logged out.
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=COMPRESSED;
+            SQL;
+            $DB->doQuery($query) or die($DB->error());
             Session::addMessageAfterRedirect("🆗 Installed: $table.");
         }
     }

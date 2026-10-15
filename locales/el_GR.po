@@ -1,0 +1,2287 @@
+# Greek translations for samlSSO package.
+# Copyright (C) 2026 Chris Gralike
+# This file is distributed under the same license as the samlSSO package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+""
+"Project-Id-Version: samlSSO 1.3.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-09 20:30+0200\n"
+"PO-Revision-Date: 2026-06-02 09:43+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: hook.php:104
+msgid "samlSSO exclusions"
+msgstr "εξαιρέσεις samlSSO"
+
+#: hook.php:163
+msgid "🆗 Installing version:"
+msgstr "🆗 Έκδοση εγκατάστασης:"
+
+#: hook.php:187
+msgid ""
+""
+"⚠️ PHP memory_limit is less than 512M. This may cause crashes during SAML "
+"Login. See: "
+msgstr "⚠️ Το όριο_μνήμης PHP είναι μικρότερο από 512M. Αυτό μπορεί να προκαλέσει σφάλματα κατά τη σύνδεση SAML. Βλέπω:"
+
+#: hook.php:198
+msgid "⚠️ OpenSSL not available, cant verify provided certificates"
+msgstr "⚠️ Το OpenSSL δεν είναι διαθέσιμο, δεν μπορώ να επαληθεύσω τα παρεχόμενα πιστοποιητικά"
+
+#: hook.php:200
+msgid "🆗 OpenSSL found!"
+msgstr "🆗 Το OpenSSL βρέθηκε!"
+
+#: setup.php:249
+msgid "Installed "
+msgstr "Εγκατεστημένο"
+
+#: src/RuleSaml.php:86
+msgid "JIT rules"
+msgstr "Κανόνες JIT"
+
+#: src/RuleSaml.php:177
+msgid "SAML Groups"
+msgstr "Ομάδες SAML"
+
+#: src/RuleSaml.php:184
+msgid "SAML Job Title"
+msgstr "Τίτλος εργασίας SAML"
+
+#: src/RuleSaml.php:191
+msgid "SAML Country"
+msgstr "Χώρα SAML"
+
+#: src/RuleSaml.php:198
+msgid "SAML City"
+msgstr "SAML City"
+
+#: src/RuleSaml.php:205
+msgid "SAML Street"
+msgstr "Οδός SAML"
+
+#: src/RuleSaml.php:226
+#, php-format
+msgid "SAML Claim: %s"
+msgstr "Αξίωση SAML: %s"
+
+#: src/RuleSamlCollection.php:73 src/Config.php:151
+msgid "JIT import rules"
+msgstr "Κανόνες εισαγωγής JIT"
+
+#: src/CronTask.php:66
+msgid "Clean old SAML sessions"
+msgstr "Καθαρίστε παλιές περιόδους λειτουργίας SAML"
+
+#: src/CronTask.php:67
+msgid "SAML sessions retention period (in days, 0 for infinite)"
+msgstr "Περίοδος διατήρησης περιόδων σύνδεσης SAML (σε ημέρες, 0 για άπειρο)"
+
+#: src/CronTask.php:69
+msgid "Update GeoIP offline database"
+msgstr "Ενημερώστε τη βάση δεδομένων GeoIP εκτός σύνδεσης"
+
+#: src/Config/ConfigItem.php:103 src/LoginFlow/LoginFlowItem.php:97
+msgid "⭕ ID must be a positive numeric value!"
+msgstr "⭕ Το αναγνωριστικό πρέπει να είναι θετική αριθμητική τιμή!"
+
+#: src/Config/ConfigItem.php:107 src/LoginFlow/LoginFlowItem.php:101
+msgid "Unique identifier for this configuration"
+msgstr "Μοναδικό αναγνωριστικό για αυτήν τη διαμόρφωση"
+
+#: src/Config/ConfigItem.php:108 src/LoginFlow/LoginFlowItem.php:102
+msgid "CONFIG ID"
+msgstr "CONFIG ID"
+
+#: src/Config/ConfigItem.php:122
+msgid ""
+""
+"This name is shown with the login button on the login page. Try to keep this "
+"name short and to the point."
+msgstr "Αυτό το όνομα εμφανίζεται με το κουμπί σύνδεσης στη σελίδα σύνδεσης. Προσπαθήστε να κρατήσετε αυτό το όνομα σύντομο έως το σημείο."
+
+#: src/Config/ConfigItem.php:123
+msgid "FRIENDLY NAME"
+msgstr "ΦΙΛΙΚΟ ΟΝΟΜΑ"
+
+#: src/Config/ConfigItem.php:128
+msgid "⭕ Name is a required field"
+msgstr "⭕ Το όνομα είναι υποχρεωτικό πεδίο"
+
+#: src/Config/ConfigItem.php:139
+msgid "USERDOMAIN"
+msgstr "USERDOMAIN"
+
+#: src/Config/ConfigItem.php:144
+msgid "⭕ "
+msgstr "⭕ "
+
+#: src/Config/ConfigItem.php:161
+msgid ""
+""
+"⭕ Provided certificate does not look like a valid (base64 encoded) "
+"certificate"
+msgstr "⭕ Το παρεχόμενο πιστοποιητικό δεν μοιάζει με έγκυρο (κωδικοποιημένο με βάση 64) πιστοποιητικό"
+
+#: src/Config/ConfigItem.php:166
+msgid ""
+""
+"The base64 encoded x509 service provider certificate. Used to sign and "
+"encrypt messages sent by the service provider to the identity provider. "
+"Required for most of the security options"
+msgstr "Το πιστοποιητικό παρόχου υπηρεσιών x509 με κωδικοποίηση base64. Χρησιμοποιείται για την υπογραφή και την κρυπτογράφηση μηνυμάτων που αποστέλλονται από τον πάροχο υπηρεσιών στον πάροχο ταυτότητας. Απαιτείται για τις περισσότερες από τις επιλογές ασφαλείας"
+
+#: src/Config/ConfigItem.php:167
+msgid "SP CERTIFICATE"
+msgstr "ΠΙΣΤΟΠΟΙΗΤΙΚΟ SP"
+
+#: src/Config/ConfigItem.php:184
+msgid ""
+""
+"The base64 encoded x509 service provider's private key. Should match the "
+"modulus of the provided X509 service provider certificate"
+msgstr "Το ιδιωτικό κλειδί παρόχων υπηρεσιών με κωδικοποίηση base64 x509. Θα πρέπει να ταιριάζει με το συντελεστή του παρεχόμενου πιστοποιητικού παρόχου υπηρεσιών X509"
+
+#: src/Config/ConfigItem.php:185
+msgid "SP PRIVATE KEY"
+msgstr "SP ΙΔΙΩΤΙΚΟ ΚΛΕΙΔΙ"
+
+#: src/Config/ConfigItem.php:198
+msgid ""
+""
+"The Service Provider nameid format specifies the constraints on the name "
+"identifier to be used to represent the requested subject."
+msgstr ""
+""
+"Η μορφή ονόματος του παρόχου υπηρεσιών καθορίζει τους περιορισμούς στο "
+"αναγνωριστικό ονόματος που θα χρησιμοποιηθεί για την αναπαράσταση του "
+"ζητούμενου θέματος."
+
+#: src/Config/ConfigItem.php:199
+msgid "NAMEID FORMAT"
+msgstr "ΜΟΡΦΗ NAMEID"
+
+#: src/Config/ConfigItem.php:204
+msgid "Service provider name id is a required field"
+msgstr "Το αναγνωριστικό ονόματος παρόχου υπηρεσιών είναι υποχρεωτικό πεδίο"
+
+#: src/Config/ConfigItem.php:213
+msgid ""
+""
+"Identifier of the IdP entity which is an URL provided by the SAML2 Identity "
+"Provider (IdP)"
+msgstr ""
+""
+"Αναγνωριστικό της οντότητας IdP που είναι μια διεύθυνση URL που παρέχεται "
+"από τον πάροχο ταυτότητας SAML2 (IdP)"
+
+#: src/Config/ConfigItem.php:214
+msgid "ENTITY ID"
+msgstr "ENTITY ID"
+
+#: src/Config/ConfigItem.php:219
+msgid "⭕ Identity provider entity id is a required field"
+msgstr "⭕ Το αναγνωριστικό οντότητας παρόχου ταυτότητας είναι υποχρεωτικό πεδίο"
+
+#: src/Config/ConfigItem.php:233
+msgid "⭕ The IdP SSO URL is a required field!<br>"
+msgstr "⭕ Η διεύθυνση URL του IdP SSO είναι υποχρεωτικό πεδίο!<br>"
+
+#: src/Config/ConfigItem.php:238
+msgid "⭕ Invalid IdP SSO URL, use: scheme://host.domain.tld/path/"
+msgstr "⭕ Μη έγκυρη διεύθυνση URL SSO IdP, χρησιμοποιήστε: scheme://host.domain.tld/path/"
+
+#: src/Config/ConfigItem.php:246
+msgid ""
+""
+"Single Sign On Service endpoint of the IdP. URL Target of the IdP where the "
+"Authentication Request Message will be sent. OneLogin PHPSAML only supports "
+"the 'HTTP-redirect' binding for this endpoint."
+msgstr ""
+""
+"Τελικό σημείο υπηρεσίας Single Sign On Service του IdP. URL Στόχος του IdP "
+"όπου θα σταλεί το Μήνυμα Αίτησης ελέγχου ταυτότητας. Το OneLogin PHPSAML "
+"υποστηρίζει μόνο τη σύνδεση «HTTP-redirect» για αυτό το τελικό σημείο."
+
+#: src/Config/ConfigItem.php:247
+msgid "SSO URL"
+msgstr "URL SSO"
+
+#: src/Config/ConfigItem.php:270
+msgid "⭕ Invalid Idp SLO URL, use: scheme://host.domain.tld/path/"
+msgstr "⭕ Μη έγκυρη διεύθυνση URL Idp SLO, χρησιμοποιήστε: scheme://host.domain.tld/path/"
+
+#: src/Config/ConfigItem.php:274
+msgid ""
+""
+"Single Logout service endpoint of the IdP. URL Location of the IdP where SLO "
+"Request will be sent.OneLogin PHPSAML only supports the 'HTTP-redirect' "
+"binding for this endpoint."
+msgstr ""
+""
+"Ενιαίο τελικό σημείο υπηρεσίας αποσύνδεσης του IdP. URL Τοποθεσία του IdP "
+"όπου θα σταλεί το αίτημα SLO. Το OneLogin PHPSAML υποστηρίζει μόνο τη "
+"δέσμευση \"HTTP-redirect\" για αυτό το τελικό σημείο."
+
+#: src/Config/ConfigItem.php:275
+msgid "SLO URL"
+msgstr "URL SLO"
+
+#: src/Config/ConfigItem.php:296
+msgid "⭕ Valid Idp X509 certificate is required! (base64 encoded)"
+msgstr "⭕ Απαιτείται έγκυρο πιστοποιητικό Idp X509! (κωδικοποιημένη βάση 64)"
+
+#: src/Config/ConfigItem.php:301
+msgid ""
+""
+"The Public Base64 encoded x509 certificate used by the IdP. Fingerprinting "
+"can be used, but is not recommended. Fingerprinting requires you to manually "
+"alter the Saml Config array located in ConfigEntity.php and provide the "
+"required configuration options"
+msgstr ""
+""
+"Το πιστοποιητικό x509 με κωδικοποίηση Public Base64 που χρησιμοποιείται από "
+"το IdP. Μπορεί να χρησιμοποιηθεί δακτυλικό αποτύπωμα, αλλά δεν συνιστάται. "
+"Το δακτυλικό αποτύπωμα απαιτεί να αλλάξετε με μη αυτόματο τρόπο τη διάταξη "
+"Saml Config που βρίσκεται στο ConfigEntity.php και να παρέχετε τις "
+"απαιτούμενες επιλογές διαμόρφωσης"
+
+#: src/Config/ConfigItem.php:302
+msgid "X509 CERTIFICATE"
+msgstr "ΠΙΣΤΟΠΟΙΗΤΙΚΟ Χ509"
+
+#: src/Config/ConfigItem.php:329
+msgid ""
+""
+"Authentication context needs to be satisfied by the IdP in order to allow "
+"Saml login. Set to \"none\" and OneLogin PHPSAML will not send an "
+"AuthContext in the AuthNRequest. Or, select one or more options using the "
+"\"control+click\" combination."
+msgstr ""
+""
+"Το πλαίσιο ελέγχου ταυτότητας πρέπει να ικανοποιείται από το IdP για να "
+"επιτρέπεται η σύνδεση Saml. Ορίστε σε \"none\" και το OneLogin PHPSAML δεν "
+"θα στείλει ένα AuthContext στο AuthNRequest. Εναλλακτικά, επιλέξτε μία ή "
+"περισσότερες επιλογές χρησιμοποιώντας το συνδυασμό \"control+click\"."
+
+#: src/Config/ConfigItem.php:330
+msgid "REQ AUTHN CONTEXT"
+msgstr "REQ AUTHN ΠΛΑΙΣΙΟ"
+
+#: src/Config/ConfigItem.php:335
+msgid "⭕ Requested authN context is a required field"
+msgstr "⭕ Το ζητούμενο πλαίσιο authN είναι υποχρεωτικό πεδίο"
+
+#: src/Config/ConfigItem.php:342
+msgid "AUTHN Comparison attribute value"
+msgstr "AUTHN Τιμή χαρακτηριστικού σύγκρισης"
+
+#: src/Config/ConfigItem.php:343
+msgid "AUTHN COMPARISON"
+msgstr "AUTHN ΣΥΓΚΡΙΣΗ"
+
+#: src/Config/ConfigItem.php:348
+msgid "⭕ Requested authN context comparison is a required field"
+msgstr "⭕ Η αιτούμενη σύγκριση περιβάλλοντος authN είναι υποχρεωτικό πεδίο"
+
+#: src/Config/ConfigItem.php:355
+#, php-format
+msgid "The FontAwesome (%s) icon to show on the button on the login page."
+msgstr ""
+""
+"Το εικονίδιο FontAwesome (%s) για εμφάνιση στο κουμπί στη σελίδα σύνδεσης."
+
+#: src/Config/ConfigItem.php:356
+msgid "LOGIN ICON"
+msgstr "ΕΙΚΟΝΙΔΙΟ ΕΙΣΟΔΟΥ"
+
+#: src/Config/ConfigItem.php:361
+msgid "⭕ Configuration icon is a required field"
+msgstr "⭕ Το εικονίδιο διαμόρφωσης είναι υποχρεωτικό πεδίο"
+
+#: src/Config/ConfigItem.php:368
+msgid "The comments"
+msgstr "Τα σχόλια"
+
+#: src/Config/ConfigItem.php:369
+msgid "COMMENTS"
+msgstr "ΣΧΟΛΙΑ"
+
+#: src/Config/ConfigItem.php:381
+msgid "The anonymized SAML response XML structure"
+msgstr "Η ανώνυμη δομή XML απόκρισης SAML"
+
+#: src/Config/ConfigItem.php:382
+msgid "SAML Response XML Structure"
+msgstr "Δομή XML απόκρισης SAML"
+
+#: src/Config/ConfigItem.php:395
+msgid "The date this configuration item was created"
+msgstr "Η ημερομηνία δημιουργίας αυτού του στοιχείου διαμόρφωσης"
+
+#: src/Config/ConfigItem.php:396
+msgid "CREATE DATE"
+msgstr "ΔΗΜΙΟΥΡΓΙΑ ΗΜΕΡΟΜΗΝΙΑΣ"
+
+#: src/Config/ConfigItem.php:410
+msgid "The date this config was modified"
+msgstr "Η ημερομηνία τροποποίησης αυτής της διαμόρφωσης"
+
+#: src/Config/ConfigItem.php:411
+msgid "MODIFICATION DATE"
+msgstr "ΗΜΕΡΟΜΗΝΙΑ ΤΡΟΠΟΠΟΙΗΣΗΣ"
+
+#: src/Config/ConfigItem.php:431
+msgid "Is this configuration marked as deleted by GLPI"
+msgstr "Έχει επισημανθεί αυτή η διαμόρφωση ως διαγραμμένη από το GLPI"
+
+#: src/Config/ConfigItem.php:432
+msgid "IS DELETED"
+msgstr "ΔΙΑΓΡΑΦΕΤΑΙ"
+
+#: src/Config/ConfigItem.php:444
+msgid ""
+""
+"Indicates if this configuration is activated. Disabled configurations cannot "
+"be used to log in to GLPI and will NOT be shown on the login page."
+msgstr "Υποδεικνύει εάν αυτή η διαμόρφωση έχει ενεργοποιηθεί. Οι απενεργοποιημένες διαμορφώσεις δεν μπορούν να χρησιμοποιηθούν για τη σύνδεση στο GLPI και ΔΕΝ θα εμφανίζονται στη σελίδα σύνδεσης."
+
+#: src/Config/ConfigItem.php:445
+msgid "IS ACTIVE"
+msgstr "ΕΙΝΑΙ ΔΡΑΣΤΗΡΙΟ"
+
+#: src/Config/ConfigItem.php:457
+msgid ""
+""
+"If enabled, PHPSAML will replace the default GLPI login screen with a "
+"version that does not have the default GLPI login options and only allows "
+"the user to authenticate using the configured SAML2 IDPs. This setting can "
+"be bypassed using a bypass URI parameter."
+msgstr "Εάν είναι ενεργοποιημένο, το PHPSAML θα αντικαταστήσει την προεπιλεγμένη οθόνη σύνδεσης GLPI με μια έκδοση που δεν έχει τις προεπιλεγμένες επιλογές σύνδεσης GLPI και επιτρέπει στον χρήστη μόνο τον έλεγχο ταυτότητας χρησιμοποιώντας τα διαμορφωμένα idps SAML2. Αυτή η ρύθμιση μπορεί να παρακαμφθεί χρησιμοποιώντας μια παράμετρο URI παράκαμψης"
+
+#: src/Config/ConfigItem.php:458
+msgid "ENFORCED"
+msgstr "ΕΠΙΒΑΛΛΟΝΤΑΙ"
+
+#: src/Config/ConfigItem.php:479
+msgid "Is GLPI positioned behind a proxy that alters the SAML response scheme?"
+msgstr ""
+""
+"Το GLPI βρίσκεται πίσω από έναν διακομιστή μεσολάβησης που αλλάζει το σχήμα "
+"απόκρισης SAML;"
+
+#: src/Config/ConfigItem.php:480
+msgid "REQUESTS PROXIED"
+msgstr "ΑΙΤΗΣΕΙΣ ΠΛΗΡΕΞΟΥΜΕΝΟΙ"
+
+#: src/Config/ConfigItem.php:492
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML Toolkit will reject unsigned or unencrypted "
+"messages if it expects them to be signed or encrypted. Also, it will reject "
+"the messages if the SAML standard is not strictly followed: Destination, "
+"NameID, and Conditions are validated too. Strongly advised in production "
+"environments."
+msgstr "Εάν είναι ενεργοποιημένο, το OneLogin PHPSAML Toolkit θα απορρίψει ανυπόγραφα ή μη κρυπτογραφημένα μηνύματα, εάν αναμένει ότι θα είναι υπογεγραμμένα ή κρυπτογραφημένα. Επίσης, θα απορρίψει τα μηνύματα εάν το πρότυπο SAML δεν τηρείται αυστηρά: Επικυρώνονται επίσης ο προορισμός, το NameId, οι συνθήκες. Συνιστάται ανεπιφύλακτα σε περιβάλλοντα παραγωγής."
+
+#: src/Config/ConfigItem.php:493
+msgid "STRICT"
+msgstr "ΑΥΣΤΗΡΟΣ"
+
+#: src/Config/ConfigItem.php:505
+msgid ""
+""
+"If enabled, it will force OneLogin PHPSAML to print status and error "
+"messages. Be aware that not all messages might be captured by samlSSO and "
+"might therefore not become visible. WARNING: Enabling debug mode will expose "
+"the Service Provider metadata publicly."
+msgstr "Εάν είναι ενεργοποιημένο, θα επιβάλει το OneLogin PHPSAML για την εκτύπωση μηνυμάτων κατάστασης και σφάλματος. Λάβετε υπόψη ότι ενδέχεται να μην καταγράφονται όλα τα μηνύματα από το samlSSO και, ως εκ τούτου, να μην γίνονται ορατά."
+
+#: src/Config/ConfigItem.php:518
+msgid ""
+""
+"If enabled, samlSSO will create new GLPI users on the fly and assign the "
+"properties defined in the samlSSO assignment rules. If disabled, users that "
+"do not have a valid GLPI user will not be able to log in to GLPI until a "
+"user is manually created."
+msgstr "Εάν ενεργοποιηθεί, το samlSSO θα δημιουργήσει νέους χρήστες GLPI εν κινήσει και θα εκχωρήσει τις ιδιότητες που ορίζονται στους κανόνες εκχώρησης samlSSO. Εάν απενεργοποιηθεί, οι χρήστες που δεν έχουν έγκυρο χρήστη GLPI δεν θα μπορούν να συνδεθούν στο GLPI μέχρι να δημιουργηθεί ένας χρήστης με μη αυτόματο τρόπο."
+
+#: src/Config/ConfigItem.php:519
+msgid "JIT USER CREATION"
+msgstr "ΔΗΜΙΟΥΡΓΙΑ ΧΡΗΣΤΗ JIT"
+
+#: src/Config/ConfigItem.php:537
+msgid ""
+""
+"If enabled, user fields mapped from SAML claims and assignment rules will be "
+"synchronized on every successful login."
+msgstr ""
+""
+"Εάν είναι ενεργοποιημένο, τα πεδία χρήστη που αντιστοιχίζονται από αξιώσεις "
+"SAML και κανόνες εκχώρησης θα συγχρονίζονται σε κάθε επιτυχημένη σύνδεση."
+
+#: src/Config/ConfigItem.php:538
+msgid "SYNC ON LOGIN"
+msgstr "ΣΥΓΧΡΟΝΙΣΜΟΣ ΣΤΗΝ ΕΙΣΟΔΟ"
+
+#: src/Config/ConfigItem.php:556
+msgid ""
+""
+"If enabled, GLPI will require all SAML protocol messages received from the "
+"Identity Provider (IdP) to be cryptographically signed."
+msgstr ""
+""
+"Εάν είναι ενεργοποιημένο, το GLPI θα απαιτήσει την κρυπτογραφική υπογραφή "
+"όλων των μηνυμάτων πρωτοκόλλου SAML που λαμβάνονται από τον πάροχο "
+"ταυτότητας (IdP)."
+
+#: src/Config/ConfigItem.php:557
+msgid "REQUIRE SIGNED MESSAGES"
+msgstr "ΑΠΑΙΤΕΙΤΑΙ ΥΠΟΓΡΑΦΕΝΑ ΜΗΝΥΜΑΤΑ"
+
+#: src/Config/ConfigItem.php:575
+msgid ""
+""
+"If enabled, GLPI will require individual SAML assertions within the SAML "
+"message to be signed. If unsigned, assertions will be rejected."
+msgstr ""
+""
+"Εάν είναι ενεργοποιημένο, το GLPI θα απαιτήσει την υπογραφή μεμονωμένων "
+"ισχυρισμών SAML εντός του μηνύματος SAML. Εάν δεν είναι υπογεγραμμένο, οι "
+"ισχυρισμοί θα απορριφθούν."
+
+#: src/Config/ConfigItem.php:576
+msgid "REQUIRE SIGNED ASSERTIONS"
+msgstr "ΑΠΑΙΤΟΥΝΤΑΙ ΥΠΟΓΡΑΦΕΙΣ ΔΗΛΩΣΕΙΣ"
+
+#: src/Config/ConfigItem.php:594
+msgid ""
+""
+"If enabled, GLPI will expect the SAML assertions containing user claims to "
+"be encrypted. GLPI will decrypt them using the SP private key."
+msgstr ""
+""
+"Εάν ενεργοποιηθεί, το GLPI θα αναμένει ότι οι ισχυρισμοί SAML που περιέχουν "
+"αξιώσεις χρηστών θα είναι κρυπτογραφημένες. Το GLPI θα τα αποκρυπτογραφήσει "
+"χρησιμοποιώντας το ιδιωτικό κλειδί SP."
+
+#: src/Config/ConfigItem.php:595
+msgid "REQUIRE ENCRYPTED ASSERTIONS"
+msgstr "ΑΠΑΙΤΟΥΝΤΑΙ ΚΡΥΠΤΩΜΕΝΕΣ ΔΗΛΩΣΕΙΣ"
+
+#: src/Config/ConfigItem.php:613
+msgid ""
+""
+"If enabled, the SAML SP metadata XML generated by GLPI will be "
+"cryptographically signed using the Service Provider certificate."
+msgstr ""
+""
+"Εάν είναι ενεργοποιημένο, το SAML SP μεταδεδομένων XML που δημιουργείται από "
+"το GLPI θα υπογραφεί κρυπτογραφικά χρησιμοποιώντας το πιστοποιητικό παρόχου "
+"υπηρεσιών."
+
+#: src/Config/ConfigItem.php:614
+msgid "SIGN SP METADATA"
+msgstr "SIGN SP METADATA"
+
+#: src/Config/ConfigItem.php:632
+msgid ""
+""
+"If enabled, GLPI will strictly require a NameID element to be present in the "
+"SAML assertion payload."
+msgstr ""
+""
+"Εάν είναι ενεργοποιημένο, το GLPI θα απαιτεί αυστηρά να υπάρχει ένα στοιχείο "
+"NameID στο ωφέλιμο φορτίο ισχυρισμών SAML."
+
+#: src/Config/ConfigItem.php:633
+msgid "REQUIRE NAMEID"
+msgstr "ΑΠΑΙΤΗΣΗ NAMEID"
+
+#: src/Config/ConfigItem.php:645
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML toolkit will encrypt the <samlp:"
+"logoutRequest> sent by this SP using the provided SP certificate and private "
+"key. This option will be toggled \"off\" automatically if no, or no valid SP "
+"certificate and key is provided."
+msgstr "Εάν είναι ενεργοποιημένο το OneLogin PHPSAML toolkit θα κρυπτογραφήσει το <samlp:logoutRequest> που αποστέλλεται από αυτό το SP χρησιμοποιώντας το παρεχόμενο πιστοποιητικό SP και το ιδιωτικό κλειδί. Αυτή η επιλογή θα απενεργοποιηθεί αυτόματα εάν δεν παρέχεται ή δεν παρέχεται έγκυρο πιστοποιητικό και κλειδί SP."
+
+#: src/Config/ConfigItem.php:646
+msgid "ENCRYPT NAMEID"
+msgstr "ΚΡΥΠΤΟΣ ΟΝΟΜΑΤΕΠΩΝΥΜΟ"
+
+#: src/Config/ConfigItem.php:658
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML toolkit will sign the <samlp:AuthnRequest> "
+"messages sent by this SP. The IDP should consult the metadata to get the "
+"information required to validate the signatures."
+msgstr "Εάν είναι ενεργοποιημένη, η εργαλειοθήκη OneLogin PHPSAML θα υπογράψει τα μηνύματα <samlp:AuthnRequest> που αποστέλλονται από αυτό το SP. Ο IDP θα πρέπει να συμβουλευτεί τα μεταδεδομένα για να λάβει τις πληροφορίες που απαιτούνται για την επικύρωση των υπογραφών."
+
+#: src/Config/ConfigItem.php:659
+msgid "SIGN AUTHN REQUEST"
+msgstr "ΥΠΟΓΡΑΦΕΙ ΑΙΤΗΣΗ AUTHN"
+
+#: src/Config/ConfigItem.php:671
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML toolkit will sign the <samlp:logoutRequest> "
+"messages sent by this SP."
+msgstr "Εάν είναι ενεργοποιημένη, η εργαλειοθήκη OneLogin PHPSAML θα υπογράψει τα μηνύματα <samlp:logoutRequest> που αποστέλλονται από αυτό το SP."
+
+#: src/Config/ConfigItem.php:672
+msgid "SIGN LOGOUT REQUEST"
+msgstr "ΑΙΤΗΣΗ ΕΓΓΡΑΦΗΣ ΕΞΟΔΟΥ"
+
+#: src/Config/ConfigItem.php:684
+msgid ""
+""
+"If enabled, the OneLogin PHPSAML toolkit will sign the <samlp:"
+"logoutResponse> messages sent by this SP."
+msgstr "Εάν είναι ενεργοποιημένη, η εργαλειοθήκη OneLogin PHPSAML θα υπογράψει τα μηνύματα <samlp:logoutResponse> που αποστέλλονται από αυτό το SP."
+
+#: src/Config/ConfigItem.php:685
+msgid "SIGN LOGOUT RESPONSE"
+msgstr "ΕΙΣΑΓΩΓΗ ΑΠΑΝΤΗΣΗ ΑΠΟΣΥΝΔΕΣΗΣ"
+
+#: src/Config/ConfigItem.php:697
+msgid ""
+""
+"If enabled, the authentication requests sent to the IdP will be compressed "
+"by the SP."
+msgstr "Εάν ενεργοποιηθεί, τα αιτήματα ελέγχου ταυτότητας που αποστέλλονται στο IdP θα συμπιεστούν από το SP."
+
+#: src/Config/ConfigItem.php:698
+msgid "COMPRESS REQUESTS"
+msgstr "ΑΙΤΗΣΕΙΣ ΣΥΜΠΙΕΣΗΣ"
+
+#: src/Config/ConfigItem.php:710
+msgid "If enabled, the SP expects responses sent by the IdP to be compressed."
+msgstr "Εάν είναι ενεργοποιημένο, το SP αναμένει ότι οι απαντήσεις που αποστέλλονται από το IdP θα συμπιεστούν."
+
+#: src/Config/ConfigItem.php:711
+msgid "COMPRESS RESPONSES"
+msgstr "ΑΠΑΝΤΗΣΕΙΣ ΣΥΜΠΙΕΣΗΣ"
+
+#: src/Config/ConfigItem.php:723
+msgid ""
+""
+"If enabled, the SP will validate all received XMLs. In order to validate the "
+"XML, the \"strict\" security setting must be enabled."
+msgstr "Εάν είναι ενεργοποιημένο, το SP θα επικυρώσει όλα τα ληφθέντα XML. Για την επικύρωση της XML\n                                                        Η \"αυστηρή\" ρύθμιση ασφαλείας πρέπει να είναι αληθής."
+
+#: src/Config/ConfigItem.php:724
+msgid "VALIDATE XML"
+msgstr "ΕΠΙΚΥΡΩΣΗ XML"
+
+#: src/Config/ConfigItem.php:736
+msgid ""
+""
+"If enabled, SAMLResponses with an empty value at its Destination attribute "
+"will not be rejected for this fact."
+msgstr ""
+""
+"Εάν είναι ενεργοποιημένη, οι απαντήσεις SAML με κενή τιμή στο χαρακτηριστικό "
+"Προορισμός δεν θα απορριφθούν για αυτό το γεγονός."
+
+#: src/Config/ConfigItem.php:737
+msgid "RELAX DEST VALIDATION"
+msgstr "RELAX DEST ΕΠΙΚΥΡΩΣΗ"
+
+#: src/Config/ConfigItem.php:749
+msgid ""
+""
+"ADFS URL-Encodes SAML data as lowercase, and the OneLogin PHPSAML toolkit by "
+"default uses uppercase. Enable this setting for ADFS compatibility on "
+"signature verification"
+msgstr ""
+""
+"Το URL ADFS Κωδικοποιεί τα δεδομένα SAML ως πεζά και η εργαλειοθήκη PHPSAML "
+"του OneLogin χρησιμοποιεί από προεπιλογή κεφαλαία. Ενεργοποιήστε αυτήν τη "
+"ρύθμιση για συμβατότητα ADFS κατά την επαλήθευση υπογραφής"
+
+#: src/Config/ConfigItem.php:750
+msgid "LOWER CASE ENCODING"
+msgstr "ΚΩΔΙΚΟΠΟΙΗΣΗ ΜΙΚΡΟΥ"
+
+#: src/Config/ConfigItem.php:813
+msgid ""
+""
+"⚠️ Warning, do not use the 'withlove.from.donuts.nl' example certificates. "
+"They offer no additional protection."
+msgstr "⚠️ Προειδοποίηση, μην χρησιμοποιείτε τα παραδείγματα πιστοποιητικών \"withlove.from.donuts.nl\". Δεν προσφέρουν πρόσθετη προστασία."
+
+#: src/Config/ConfigItem.php:823
+msgid ""
+""
+"⭕ Certificate must be wrapped in valid BEGIN CERTIFICATE and END "
+"CERTIFICATE tags"
+msgstr "⭕ Το πιστοποιητικό πρέπει να είναι τυλιγμένο σε έγκυρες ετικέτες ΠΙΣΤΟΠΟΙΗΤΙΚΟΥ ΕΝΑΡΞΗΣ και ΠΙΣΤΟΠΟΙΗΤΙΚΟΥ ΤΕΛΟΣ"
+
+#: src/Config/ConfigItem.php:829
+msgid "⭕ Certificate should not contain \"carriage returns\" [<CR>]"
+msgstr "⭕ Το πιστοποιητικό δεν πρέπει να περιέχει \"επιστροφές μεταφοράς\" [<CR>]"
+
+#: src/Config/ConfigItem.php:833
+msgid "⭕ No valid X509 certificate found"
+msgstr "⭕ Δεν βρέθηκε έγκυρο πιστοποιητικό X509"
+
+#: src/Config/ConfigItem.php:836
+msgid "⚠️ OpenSSL is not available, GLPI cant validate your certificate"
+msgstr "⚠️ Το OpenSSL δεν είναι διαθέσιμο, το GLPI δεν μπορεί να επικυρώσει το πιστοποιητικό σας"
+
+#: src/Config/ConfigItem.php:853
+msgid "⭕ Request timeout must be a positive integer (minutes)"
+msgstr "⭕ Το χρονικό όριο του αιτήματος πρέπει να είναι θετικός ακέραιος αριθμός (λεπτά)"
+
+#: src/Config/ConfigItem.php:857
+msgid ""
+""
+"The duration in minutes before an uncompleted SAML request is considered "
+"expired."
+msgstr ""
+""
+"Η διάρκεια σε λεπτά πριν από ένα μη ολοκληρωμένο αίτημα SAML θεωρείται ότι "
+"έχει λήξει."
+
+#: src/Config/ConfigItem.php:858
+msgid "REQUEST TIMEOUT (MINUTES)"
+msgstr "ΛΕΙΤΟΥΡΓΙΑ ΑΙΤΗΣΗΣ (ΛΕΠΤΑ)"
+
+#: src/Config/ConfigItem.php:883
+msgid "⭕ Inactivity timeout must be a non-negative integer (minutes)"
+msgstr "⭕ Το χρονικό όριο αδράνειας πρέπει να είναι ένας μη αρνητικός ακέραιος αριθμός (λεπτά)"
+
+#: src/Config/ConfigItem.php:887
+msgid ""
+""
+"The duration in minutes of inactivity before a session is forcefully logged "
+"out (0 to disable)."
+msgstr ""
+""
+"Η διάρκεια σε λεπτά αδράνειας πριν από την αναγκαστική αποσύνδεση μιας "
+"συνεδρίας (0 για απενεργοποίηση)."
+
+#: src/Config/ConfigItem.php:888
+msgid "INACTIVITY TIMEOUT (MINUTES)"
+msgstr "ΛΕΙΤΟΥΡΓΙΑ ΑΙΤΗΣΗΣ (ΛΕΠΤΑ)"
+
+#: src/Config/ConfigItem.php:935 src/Config/ConfigItem.php:950
+msgid "Active (Secure)"
+msgstr "Ενεργό (ασφαλές)"
+
+#: src/Config/ConfigItem.php:946
+msgid "Condition / Parameter"
+msgstr "Κατάσταση / Παράμετρος"
+
+#: src/Config/ConfigItem.php:946
+msgid "Expected"
+msgstr "Αναμένεται SAML ACS"
+
+#: src/Config/ConfigItem.php:946
+msgid "Detected"
+msgstr "Εντοπίστηκε"
+
+#: src/Config/ConfigItem.php:950
+msgid "Any"
+msgstr "Κάθε"
+
+#: src/Config/ConfigItem.php:954 src/Config/ConfigItem.php:955
+#: src/Config/ConfigItem.php:956
+#, php-format
+msgid "Detected (%s)"
+msgstr "Εντοπίστηκε (%s)"
+
+#: src/Config/ConfigItem.php:954 src/Config/ConfigItem.php:955
+#: src/Config/ConfigItem.php:956
+msgid "Not Detected"
+msgstr "Δεν εντοπίστηκε"
+
+#: src/Config/ConfigItem.php:962 src/Config/ConfigItem.php:964
+msgid "Present"
+msgstr "Εφαρμογή προεπιλογής"
+
+#: src/Config/ConfigItem.php:967
+msgid "HTTPS (Secure)"
+msgstr "HTTPS (Ασφαλές)"
+
+#: src/Config/ConfigItem.php:967
+msgid "HTTP or HTTPS"
+msgstr "HTTP ή HTTPS"
+
+#: src/Config/ConfigItem.php:972
+msgid ""
+""
+"⚠️ Conflict: Secure cookie is enabled but PHP is running in a non-secure HTTP "
+"context. Cookies will be rejected by the browser!"
+msgstr "⚠️ Σύγκρουση: Το ασφαλές cookie είναι ενεργοποιημένο αλλά η PHP εκτελείται σε μη ασφαλές περιβάλλον HTTP. Τα cookies θα απορριφθούν από το πρόγραμμα περιήγησης!"
+
+#: src/Config/ConfigItem.php:975
+msgid ""
+""
+"⚠️ Security Warning: HTTPS is detected but session.cookie_secure is disabled. "
+"Cookies are not protected!"
+msgstr "⚠️ Προειδοποίηση ασφαλείας: Το HTTPS ανιχνεύεται αλλά το session.cookie_secure είναι απενεργοποιημένο. Τα cookies δεν προστατεύονται!"
+
+#: src/Config/ConfigItem.php:977
+msgid ""
+""
+"Unsatisfied conditions might break the authentication flow in proxied or "
+"containerized environments depending on your setup and naming schemes."
+msgstr ""
+""
+"Οι μη ικανοποιημένες συνθήκες ενδέχεται να διακόψουν τη ροή ελέγχου "
+"ταυτότητας σε περιβάλλοντα μεσολάβησης ή κοντέινερ, ανάλογα με τη ρύθμιση "
+"και τα σχήματα ονοματοδοσίας σας."
+
+#: src/Config/ConfigItem.php:1037
+msgid "Current Time"
+msgstr "Τρέχουσα ώρα"
+
+#: src/Config/ConfigItem.php:1044
+msgid ""
+""
+"✅ Timezone Alignment: PHP and Database connection clocks are synchronized. "
+"(Shown because Debug mode is enabled)"
+msgstr ""
+""
+"✅ Ευθυγράμμιση ζώνης ώρας: Τα ρολόγια σύνδεσης PHP και βάσης δεδομένων "
+"συγχρονίζονται. (Εμφανίζεται επειδή η λειτουργία εντοπισμού σφαλμάτων είναι "
+"ενεργοποιημένη)"
+
+#: src/Config/ConfigItem.php:1052
+#, php-format
+msgid ""
+""
+"⚠️ Timezone Mismatch: PHP and Database connection clocks differ by %s hours "
+"(%s seconds). This will cause authentication requests to time out "
+"prematurely or linger too long."
+msgstr "⚠️ Αναντιστοιχία ζώνης ώρας: Τα ρολόγια σύνδεσης PHP και βάσης δεδομένων διαφέρουν κατά %s ώρες (%s δευτερόλεπτα). Αυτό θα προκαλέσει την πρόωρη λήξη του χρονικού διαστήματος των αιτημάτων ελέγχου ταυτότητας ή θα καθυστερήσει πολύ."
+
+#: src/Config/ConfigItem.php:1053
+msgid ""
+""
+"Ensure GLPI's timezone usage configuration is enabled (under Setup > General "
+"> System), MySQL timezone tables are loaded, or PHP's date.timezone matches "
+"the database timezone."
+msgstr ""
+""
+"Βεβαιωθείτε ότι η διαμόρφωση χρήσης ζώνης ώρας του GLPI είναι ενεργοποιημένη "
+"(στην ενότητα Ρύθμιση > Γενικά > Σύστημα), ότι έχουν φορτωθεί οι πίνακες "
+"ζώνης ώρας της MySQL ή η ημερομηνία.timezone της PHP αντιστοιχεί στη ζώνη "
+"ώρας της βάσης δεδομένων."
+
+#: src/Config/ClaimMapEntity.php:300
+msgid "Username mapping is required and cannot be removed."
+msgstr "Απαιτείται αντιστοίχιση ονόματος χρήστη και δεν μπορεί να αφαιρεθεί."
+
+#: src/Config/ClaimMapEntity.php:304
+msgid "Email mapping is required and cannot be removed."
+msgstr "Απαιτείται αντιστοίχιση email και δεν μπορεί να αφαιρεθεί."
+
+#: src/Config/ClaimMapEntity.php:329
+msgid "SAML Claim key cannot be empty for Username mapping."
+msgstr ""
+""
+"Το κλειδί αξίωσης SAML δεν μπορεί να είναι κενό για αντιστοίχιση ονόματος "
+"χρήστη."
+
+#: src/Config/ClaimMapEntity.php:337
+msgid "SAML Claim key cannot be empty for Email mapping."
+msgstr ""
+""
+"Το κλειδί αξίωσης SAML δεν μπορεί να είναι κενό για αντιστοίχιση "
+"ηλεκτρονικού ταχυδρομείου."
+
+#: src/Config/ClaimMapEntity.php:376
+#, php-format
+msgid "Duplicate mapping for %s: %s"
+msgstr "Διπλότυπη αντιστοίχιση για %s: %s"
+
+#: src/Config/ClaimMapEntity.php:483
+msgid "NameId attribute is missing in samlResponse"
+msgstr "Το χαρακτηριστικό NameId λείπει στο samlResponse"
+
+#: src/Config/ClaimMapEntity.php:489
+msgid ""
+""
+"Detected a default guest user in samlResponse, this is not supported by "
+"glpiSAML."
+msgstr ""
+""
+"Εντοπίστηκε ένας προεπιλεγμένος επισκέπτης χρήστης στο samlResponse, αυτό "
+"δεν υποστηρίζεται από το glpiSAML."
+
+#: src/Config/ClaimMapEntity.php:545
+msgid "invalid values where used to identify the user during auth"
+msgstr ""
+""
+"μη έγκυρες τιμές όταν χρησιμοποιούνται για την αναγνώριση του χρήστη κατά "
+"την πιστοποίηση"
+
+#: src/Config/ClaimMapEntity.php:561
+msgid ""
+""
+"Warning: SAML NameId format was requested as email but observed value is not "
+"a valid email. Falling back to configured email field."
+msgstr ""
+""
+"Προειδοποίηση: Η μορφή SAML NameId ζητήθηκε ως email, αλλά η παρατηρούμενη "
+"τιμή δεν είναι έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου. Επιστροφή στο "
+"διαμορφωμένο πεδίο email."
+
+#: src/Config/ClaimMapEntity.php:632
+#, php-format
+msgid "Required user field \"%s\" is missing or invalid in SAML response"
+msgstr ""
+""
+"Το απαιτούμενο πεδίο χρήστη \"%s\" λείπει ή δεν είναι έγκυρο στην απόκριση "
+"SAML"
+
+#: src/Config/ClaimMapEntity.php:674
+msgid "Required rule field \"groups\" is missing in SAML response"
+msgstr "Το απαιτούμενο πεδίο κανόνα \"ομάδες\" λείπει στην απόκριση SAML"
+
+#: src/Config/ClaimMapEntity.php:732
+#, php-format
+msgid "Required rule field \"%s\" is missing or invalid in SAML response"
+msgstr ""
+""
+"Το υποχρεωτικό πεδίο κανόνα \"%s\" λείπει ή δεν είναι έγκυρο στην απόκριση "
+"SAML"
+
+#: src/Config/ConfigForm.php:255
+msgid "Restore failed: no valid backup file was uploaded."
+msgstr ""
+""
+"Η επαναφορά απέτυχε: δεν μεταφορτώθηκε έγκυρο αρχείο αντιγράφου ασφαλείας."
+
+#: src/Config/ConfigForm.php:261
+msgid "Restore failed: unable to read the uploaded file."
+msgstr ""
+""
+"Η επαναφορά απέτυχε: δεν είναι δυνατή η ανάγνωση του μεταφορτωμένου αρχείου."
+
+#: src/Config/ConfigForm.php:272
+msgid "Restore failed: the backup file has an invalid or unrecognized format."
+msgstr ""
+""
+"Η επαναφορά απέτυχε: το αρχείο αντιγράφου ασφαλείας έχει μη έγκυρη ή μη "
+"αναγνωρισμένη μορφή."
+
+#: src/Config/ConfigForm.php:319
+#, php-format
+msgid "Restore successful: %d IDP configuration(s) restored."
+msgstr "Επιτυχής επαναφορά: Οι ρυθμίσεις παραμέτρων %d IDP αποκαταστάθηκαν."
+
+#: src/Config/ConfigForm.php:328
+msgid "Restore completed but no configurations were imported."
+msgstr "Η επαναφορά ολοκληρώθηκε αλλά δεν έγινε εισαγωγή διαμορφώσεων."
+
+#: src/Config/ConfigForm.php:384
+#, php-format
+msgid "Entry %d skipped: missing config block."
+msgstr "Παράβλεψη καταχώρισης %d: λείπει το μπλοκ διαμόρφωσης."
+
+#: src/Config/ConfigForm.php:392
+#, php-format
+msgid "Entry %d skipped: missing or invalid id."
+msgstr ""
+""
+"Καταχώριση %d παραβλέφθηκε: λείπει ή δεν είναι έγκυρο το αναγνωριστικό."
+
+#: src/Config/ConfigForm.php:413
+#, php-format
+msgid "Entry %d (%s) could not be inserted into database."
+msgstr "Η καταχώριση %d (%s) δεν μπόρεσε να εισαχθεί στη βάση δεδομένων."
+
+#: src/Config/ConfigForm.php:424
+#, php-format
+msgid "Config %s restored but claim mappings had validation errors."
+msgstr ""
+""
+"Η διαμόρφωση %s αποκαταστάθηκε, αλλά οι αντιστοιχίσεις αξιώσεων είχαν "
+"σφάλματα επικύρωσης."
+
+#: src/Config/ConfigForm.php:442
+msgid "You do not have permission to perform this action."
+msgstr "Δεν έχετε άδεια να εκτελέσετε αυτήν την ενέργεια."
+
+#: src/Config/ConfigForm.php:457
+msgid "User disabled and session forced logoff."
+msgstr "Απενεργοποίηση χρήστη και αναγκαστική αποσύνδεση σύνδεσης."
+
+#: src/Config/ConfigForm.php:459
+msgid "Login state session not found."
+msgstr "Η συνεδρία κατάστασης σύνδεσης δεν βρέθηκε."
+
+#: src/Config/ConfigForm.php:551
+msgid "Successfully added new samlSSO configuration."
+msgstr "Προστέθηκε με επιτυχία νέα διαμόρφωση samlSSO."
+
+#: src/Config/ConfigForm.php:555
+msgid "Unable to add new samlSSO configuration, please review error logging"
+msgstr ""
+""
+"Δεν είναι δυνατή η προσθήκη νέας διαμόρφωσης samlSSO, ελέγξτε την καταγραφή "
+"σφαλμάτων"
+
+#: src/Config/ConfigForm.php:560 src/Config/ConfigForm.php:605
+msgid "Configuration invalid, please correct all ⭕ errors first"
+msgstr "Η διαμόρφωση δεν είναι έγκυρη, διορθώστε πρώτα όλα τα ⭕ σφάλματα"
+
+#: src/Config/ConfigForm.php:596 src/LoginFlow/LoginFlowForm.php:107
+msgid "Configuration updated successfully"
+msgstr "Η διαμόρφωση ενημερώθηκε με επιτυχία"
+
+#: src/Config/ConfigForm.php:600 src/LoginFlow/LoginFlowForm.php:111
+msgid "Configuration update failed, check your update rights or error logging"
+msgstr ""
+""
+"Η ενημέρωση διαμόρφωσης απέτυχε, ελέγξτε τα δικαιώματα ενημέρωσης ή την "
+"καταγραφή σφαλμάτων"
+
+#: src/Config/ConfigForm.php:625
+msgid "Configuration deleted successfully"
+msgstr "Η διαμόρφωση διαγράφηκε με επιτυχία"
+
+#: src/Config/ConfigForm.php:629
+msgid "Not allowed or error deleting SAML configuration!"
+msgstr ""
+""
+"Δεν επιτρέπεται ή υπάρχει σφάλμα κατά τη διαγραφή της διαμόρφωσης SAML!"
+
+#: src/Config/ConfigForm.php:648 src/LoginFlow/LoginFlowForm.php:136
+msgid "Invalid request, redirecting back"
+msgstr "Μη έγκυρο αίτημα, ανακατεύθυνση προς τα πίσω"
+
+#: src/Config/ConfigForm.php:776
+msgid "This claim key has not been observed in any SAML responses yet."
+msgstr ""
+""
+"Αυτό το κλειδί αξίωσης δεν έχει παρατηρηθεί ακόμη σε καμία απάντηση SAML."
+
+#: src/Config/ConfigForm.php:828 src/LoginFlow/LoginFlowForm.php:187
+msgid "Email Address"
+msgstr "Διεύθυνση Email"
+
+#: src/Config/ConfigForm.php:829 src/LoginFlow/LoginFlowForm.php:188
+msgid "Transient"
+msgstr "Παροδικός"
+
+#: src/Config/ConfigForm.php:830 src/LoginFlow/LoginFlowForm.php:189
+msgid "Persistent"
+msgstr "Επίμονος"
+
+#: src/Config/ConfigForm.php:831 src/LoginFlow/LoginFlowForm.php:192
+msgid "PasswordProtectedTransport"
+msgstr "PasswordProtectedTransport"
+
+#: src/Config/ConfigForm.php:833 src/LoginFlow/LoginFlowForm.php:194
+msgid "X509"
+msgstr "Χ509"
+
+#: src/Config/ConfigForm.php:834 src/LoginFlow/LoginFlowForm.php:195
+msgid "none"
+msgstr "κανένας"
+
+#: src/Config/ConfigForm.php:835 src/LoginFlow/LoginFlowForm.php:198
+msgid "Exact"
+msgstr "Ακριβής"
+
+#: src/Config/ConfigForm.php:838 src/LoginFlow/LoginFlowForm.php:201
+msgid "Better"
+msgstr "Καλύτερα"
+
+#: src/Config/ConfigForm.php:854
+msgid "Microsoft"
+msgstr "Microsoft"
+
+#: src/Config/ConfigForm.php:855
+msgid "Google"
+msgstr "Google"
+
+#: src/Config/ConfigForm.php:856
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/Config/ConfigForm.php:857
+msgid "Apple"
+msgstr "Μήλο"
+
+#: src/Config/ConfigForm.php:858
+msgid "OpenID"
+msgstr "OpenID"
+
+#: src/Config/ConfigForm.php:860
+msgid "Shield"
+msgstr "Ασπίδα"
+
+#: src/Config/ConfigForm.php:862
+msgid "User Lock"
+msgstr "Κλείδωμα χρήστη"
+
+#: src/Config/ConfigForm.php:863
+msgid "Cloud / Azure"
+msgstr "Σύννεφο / Azure"
+
+#: src/Config/ConfigForm.php:864
+msgid "Sign In"
+msgstr "Είσοδος"
+
+#: src/Config/ConfigEntity.php:367
+msgid ""
+""
+"⚠️ SP private key does not seem to match provided SP certificates modulus."
+msgstr "⚠️ Το ιδιωτικό κλειδί SP δεν φαίνεται να ταιριάζει με τον παρεχόμενο συντελεστή πιστοποιητικών SP."
+
+#: src/Config/ConfigEntity.php:373
+msgid ""
+""
+"⚠️ Will be defaulted to \"No\" because the provided SP certificate does not "
+"look valid!"
+msgstr "⚠️ Θα οριστεί προεπιλογή σε \"Όχι\" επειδή το παρεχόμενο πιστοποιητικό SP δεν φαίνεται έγκυρο!"
+
+#: src/Config/ConfigEntity.php:403
+msgid ""
+""
+"⚠️ These fields are only enforced when strict mode is enabled. Your "
+"environment is at risk without strict mode."
+msgstr "⚠️ Αυτά τα πεδία επιβάλλονται μόνο όταν είναι ενεργοποιημένη η αυστηρή λειτουργία. Το περιβάλλον σας κινδυνεύει χωρίς αυστηρή λειτουργία."
+
+#: src/Config/ConfigEntity.php:443
+msgid "⚠️ IDPs cannot be enforced if more than one is present in the IDP list."
+msgstr "⚠️ Οι εκτοπισμένοι δεν μπορούν να επιβληθούν εάν υπάρχουν περισσότεροι από ένας στη λίστα IDP."
+
+#: src/Config/ClaimMapItem.php:120
+msgid "IDP configuration ID must be a positive integer"
+msgstr "Το αναγνωριστικό διαμόρφωσης IDP πρέπει να είναι θετικός ακέραιος"
+
+#: src/Config/ClaimMapItem.php:140
+msgid "Invalid mapping target type"
+msgstr "Μη έγκυρος τύπος στόχου αντιστοίχισης"
+
+#: src/Config/ClaimMapItem.php:162
+msgid "Invalid GLPI field selected for target type"
+msgstr "Επιλέχθηκε μη έγκυρο πεδίο GLPI για τύπο προορισμού"
+
+#: src/Config/ClaimMapItem.php:182
+msgid "SAML Claim key cannot be empty"
+msgstr "Το κλειδί αξίωσης SAML δεν μπορεί να είναι κενό"
+
+#: src/Config/ClaimMapItem.php:184
+msgid "SAML Claim key cannot exceed 255 characters"
+msgstr "Το κλειδί αξίωσης SAML δεν μπορεί να υπερβαίνει τους 255 χαρακτήρες"
+
+#: src/Config/ClaimMapItem.php:204
+msgid "Default value must be a string"
+msgstr "Η προεπιλεγμένη τιμή πρέπει να είναι μια συμβολοσειρά"
+
+#: src/Config/ClaimMapItem.php:206
+msgid "Default value cannot exceed 255 characters"
+msgstr "Η προεπιλεγμένη τιμή δεν μπορεί να υπερβαίνει τους 255 χαρακτήρες"
+
+#: src/LoginFlow.php:177
+msgid "samlFlow"
+msgstr "samlFlow"
+
+#: src/LoginFlow.php:272
+msgid "You have been forcefully logged out by an administrator."
+msgstr "Έχετε αποσυνδεθεί αναγκαστικά από έναν διαχειριστή."
+
+#: src/LoginFlow.php:280
+msgid "Your session has timed out due to inactivity."
+msgstr "Η περίοδος λειτουργίας σας έληξε λόγω αδράνειας."
+
+#: src/LoginFlow.php:523
+#, php-format
+msgid ""
+""
+"Could not update the loginState and therefor stopped the loginFlow for: %s"
+msgstr ""
+""
+"Δεν ήταν δυνατή η ενημέρωση του loginState και ως εκ τούτου διέκοψε το "
+"loginFlow για:"
+
+#: src/LoginFlow.php:631
+msgid "Continue with local logout"
+msgstr "Συνεχίστε με τοπική αποσύνδεση"
+
+#: src/LoginFlow.php:632
+msgid "Log out everywhere"
+msgstr "Αποσυνδεθείτε παντού"
+
+#: src/LoginFlow.php:636
+#, php-format
+msgid ""
+""
+"You have been authenticated using the SAML2 identity provider: <b>%1$s</b>."
+"<br><br>Because SAML authentication is enforced, logging out of GLPI locally "
+"will automatically log you back in immediately.<br><br>To sign out "
+"completely, please select <b>'%2$s'</b>. Note that this will also terminate "
+"your active sessions in all other applications connected to this Identity "
+"Provider.<br><br>If you want to leave GLPI, just close this browser tab."
+msgstr "Πραγματοποιήσατε έλεγχο ταυτότητας χρησιμοποιώντας τον πάροχο ταυτότητας SAML2: <b>%1$s</b>.<br><br>Επειδή επιβάλλεται ο έλεγχος ταυτότητας SAML, η τοπική αποσύνδεση από το GLPI θα σας επανασυνδέσει αυτόματα αμέσως.<br><br>Για να αποσυνδεθείτε πλήρως, επιλέξτε <b>'Αποσύνδεση παντού'</b>. Λάβετε υπόψη ότι αυτό θα τερματίσει επίσης τις ενεργές περιόδους σύνδεσης σε όλες τις άλλες εφαρμογές που είναι συνδεδεμένες σε αυτόν τον Παροχέα Ταυτότητας.<br><br>IΑν θέλετε να αποχωρήσετε από το GLPI, απλώς κλείστε αυτήν την καρτέλα του προγράμματος περιήγησης."
+
+#: src/LoginFlow.php:642
+#, php-format
+msgid ""
+""
+"You have been authenticated using the SAML2 identity provider: <b>%1$s</b>."
+"<br><br>You can log out permanently by also logging out with the IDP by "
+"pressing <b>'%2$s'</b> (which terminates active sessions in all other "
+"applications depending on it), or perform a local logout from GLPI only by "
+"pressing <b>'%3$s'</b>."
+msgstr "Έχετε πιστοποιηθεί χρησιμοποιώντας τον πάροχο ταυτότητας SAML2: <b>%1$s</b>.<br><br>Μπορείτε να αποσυνδεθείτε μόνιμα αποσυνδεόμενοι επίσης με το IDP πατώντας <b>'Αποσύνδεση παντού'</b> (που τερματίζει τις ενεργές περιόδους σύνδεσης σε όλες τις άλλες εφαρμογές ανάλογα με αυτό) ή να εκτελέσετε μια τοπική αποσύνδεση μόνο με το πάτημα του GPHPILConL αποσύνδεση'</b>."
+
+#: src/LoginFlow.php:651
+msgid "🤔 How would you like to proceed?"
+msgstr "🤔 Πώς θα θέλατε να προχωρήσετε;"
+
+#: src/LoginFlow.php:656
+msgid "Close tab"
+msgstr "Κλείσιμο καρτέλας"
+
+#: src/LoginFlow.php:711
+msgid "Login with external provider"
+msgstr "Συνδεθείτε με εξωτερικό πάροχο"
+
+#: src/LoginFlow.php:770 src/LoginFlow.php:837
+msgid ""
+""
+"Something went wrong during authentication assertion and prevents you from "
+"logging in. Please contact your GLPI administrator for more information and "
+"support."
+msgstr ""
+""
+"Κάτι πήγε στραβά κατά τη διεκδίκηση ελέγχου ταυτότητας και δεν σας επιτρέπει "
+"να συνδεθείτε. Επικοινωνήστε με τον διαχειριστή του GLPI για περισσότερες "
+"πληροφορίες και υποστήριξη."
+
+#: src/LoginFlow.php:773
+msgid "⚠️ Sorry we are unable to log you in"
+msgstr "⚠️ Λυπούμαστε που δεν μπορούμε να σας συνδεθούμε"
+
+#: src/LoginFlow.php:778 src/LoginFlow.php:844
+msgid "Return to GLPI"
+msgstr "Επιστροφή στο GLPI"
+
+#: src/LoginFlow.php:840
+msgid "⚠️ An error occurred"
+msgstr "⚠️ Παρουσιάστηκε σφάλμα"
+
+#: src/LoginFlow.php:841
+msgid "We are sorry, something went wrong while processing your request!"
+msgstr "Λυπούμαστε, κάτι πήγε στραβά κατά την επεξεργασία του αιτήματός σας!"
+
+#: src/Config.php:125
+msgid "samlSSO"
+msgstr "samlSSO"
+
+#: src/Config.php:149 src/Exclude.php:87
+msgid "Excluded paths"
+msgstr "Εξαιρούμενα μονοπάτια"
+
+#: src/Config.php:184
+msgid "Idp entity ID"
+msgstr "Αναγνωριστικό οντότητας Idp"
+
+#: src/LoginFlow/Acs.php:140
+#, php-format
+msgid "Unable to fetch idp configuration with id: %s from database"
+msgstr "Δεν είναι δυνατή η ανάκτηση της διαμόρφωσης idp με το αναγνωριστικό:"
+
+#: src/LoginFlow/Acs.php:141
+msgid "Samlsso->acs->init->FetchConfig"
+msgstr "Samlsso->acs->init->FetchConfig"
+
+#: src/LoginFlow/Acs.php:156
+#, php-format
+msgid ""
+""
+"The received idp response did not contain the required samlResponse POST "
+"body or idpId to authenticate the user, see: %s for more information"
+msgstr ""
+""
+"Η ληφθείσα απόκριση idp δεν περιείχε το απαιτούμενο σώμα samlResponse POST ή "
+"idpId για τον έλεγχο ταυτότητας του χρήστη, δείτε: %s για περισσότερες "
+"πληροφορίες"
+
+#: src/LoginFlow/Acs.php:157
+msgid "Samlsso->acs->init->NoSamlResponse"
+msgstr "Samlsso->acs->init->NoSamlResponse"
+
+#: src/LoginFlow/Acs.php:179
+msgid "Samlsso->acs->init->phpsaml->Utils->setProxyVars"
+msgstr "Samlsso->acs->init->phpsaml->Utils->setProxyVars"
+
+#: src/LoginFlow/Acs.php:198
+msgid ""
+""
+"PHP-SAML could not initialize the settings object using the configEntity."
+msgstr ""
+""
+"Η PHP-SAML δεν μπόρεσε να προετοιμάσει το αντικείμενο ρυθμίσεων "
+"χρησιμοποιώντας το configEntity."
+
+#: src/LoginFlow/Acs.php:199
+msgid "Samlsso->acs->init->phpsaml->initializeSettings"
+msgstr "Samlsso->acs->init->phpsaml->initializeSettings"
+
+#: src/LoginFlow/Acs.php:207
+msgid "PHP-SAML library could not process samlResponse and reported the error:"
+msgstr ""
+""
+"Η βιβλιοθήκη PHP-SAML δεν μπόρεσε να επεξεργαστεί το samlResponse και "
+"ανέφερε το σφάλμα:"
+
+#: src/LoginFlow/Acs.php:208
+msgid "Samlsso->acs->init->phpsaml->initializeResponse"
+msgstr "Samlsso->acs->init->phpsaml->initializeResponse"
+
+#: src/LoginFlow/Acs.php:228
+#, php-format
+msgid ""
+""
+"Could not fetch loginState from database with error: <br><br>%s<br><br>See: "
+"%s for more information."
+msgstr ""
+""
+"Δεν ήταν δυνατή η ανάκτηση του loginState από τη βάση δεδομένων με σφάλμα: "
+"<br><br>%s<br><br>Δείτε: %s για περισσότερες πληροφορίες."
+
+#: src/LoginFlow/Acs.php:229
+msgid "Samlsso->acs->init->LoginState::construct"
+msgstr "Samlsso->acs->init->LoginState::construct"
+
+#: src/LoginFlow/Acs.php:255
+msgid ""
+""
+" (Suggestion: check 'Want Assertions Encrypted' under Inbound Security in "
+"the Security tab)"
+msgstr ""
+""
+"(Πρόταση: επιλέξτε \"Θέλετε κρυπτογραφημένες δηλώσεις\" στην ενότητα "
+"Εισερχόμενη ασφάλεια στην καρτέλα \"Ασφάλεια\")"
+
+#: src/LoginFlow/Acs.php:257
+msgid ""
+""
+" (Suggestion: check 'Want Messages Signed' under Inbound Security in the "
+"Security tab)"
+msgstr ""
+""
+"(Πρόταση: επιλέξτε \"Θέλετε μηνύματα να έχουν υπογραφεί\" στην ενότητα "
+"Εισερχόμενη ασφάλεια στην καρτέλα \"Ασφάλεια\")"
+
+#: src/LoginFlow/Acs.php:259
+msgid ""
+""
+" (Suggestion: check 'Want Assertions Signed' under Inbound Security in the "
+"Security tab)"
+msgstr ""
+""
+"(Πρόταση: επιλέξτε «Θέλετε υπογεγραμμένες δηλώσεις» στην ενότητα Εισερχόμενη "
+"ασφάλεια στην καρτέλα Ασφάλεια)"
+
+#: src/LoginFlow/Acs.php:261
+msgid ""
+""
+" (Suggestion: check 'Want NameID Signed' under Inbound Security in the "
+"Security tab)"
+msgstr ""
+""
+"(Πρόταση: επιλέξτε \"Θέλετε να έχετε υπογράψει το αναγνωριστικό ονόματος\" "
+"στην ενότητα Εισερχόμενη ασφάλεια στην καρτέλα \"Ασφάλεια\")"
+
+#: src/LoginFlow/Acs.php:263 src/LoginFlow/Acs.php:279
+msgid " (Suggestion: verify the Identity Provider Certificates configuration)"
+msgstr ""
+""
+"(Πρόταση: επαληθεύστε τη διαμόρφωση των πιστοποιητικών παρόχου ταυτότητας)"
+
+#: src/LoginFlow/Acs.php:265
+msgid ""
+""
+" (Suggestion: check proxy settings or ensure request timeout has not expired)"
+msgstr ""
+""
+"(Πρόταση: ελέγξτε τις ρυθμίσεις διακομιστή μεσολάβησης ή βεβαιωθείτε ότι το "
+"χρονικό όριο λήξης αιτήματος δεν έχει λήξει)"
+
+#: src/LoginFlow/Acs.php:269
+msgid "Validation of the samlResponse document failed"
+msgstr ""
+""
+"Η επικύρωση του εγγράφου samlResponse απέτυχε. Ελέγξτε το αρχείο καταγραφής "
+"saml για περισσότερες λεπτομέρειες"
+
+#: src/LoginFlow/Acs.php:270 src/LoginFlow/Acs.php:284
+msgid "Samlsso->acs->assertSaml->SamlResponse::isValid"
+msgstr "Samlsso->acs->assertSaml->SamlResponse::isValid"
+
+#: src/LoginFlow/Acs.php:283
+msgid "Validation of the samlResponse document failed with a critical error"
+msgstr ""
+""
+"Η επικύρωση του εγγράφου samlResponse απέτυχε με κρίσιμο σφάλμα. Ελέγξτε το "
+"αρχείο καταγραφής saml για περισσότερες λεπτομέρειες"
+
+#: src/LoginFlow/Acs.php:291
+msgid ""
+""
+"Your SAML authentication request timed out. Please try logging in again."
+msgstr ""
+""
+"Το χρονικό όριο του αιτήματος ελέγχου ταυτότητας SAML έληξε. Δοκιμάστε να "
+"συνδεθείτε ξανά."
+
+#: src/LoginFlow/Acs.php:292
+msgid "Samlsso->acs->assertSaml->Timeout"
+msgstr "Samlsso->acs->assertSaml->PhaseMismatched"
+
+#: src/LoginFlow/Acs.php:311
+#, php-format
+msgid ""
+""
+"It looks like this samlResponse has already been used to authenticate a "
+"different user.\n"
+"                    Maybe an error occurred and you pressed F5 and "
+"accidently resend the samlResponse that is\n"
+"                    already registered as processed. For security reasons we "
+"can not allow processed samlResponses\n"
+"                    to be processed again. Please login again to generate a "
+"new samlResponse. Sorry for any inconvenience.\n"
+"                    If the problem presists, then please contact your "
+"administrator.\n"
+"                    See: %s for more information"
+msgstr ""
+""
+"Φαίνεται ότι αυτό το samlResponse έχει ήδη χρησιμοποιηθεί για τον έλεγχο "
+"ταυτότητας διαφορετικού χρήστη.\n"
+"                    Ίσως παρουσιάστηκε σφάλμα και πατήσατε το F5 και "
+"στείλατε ξανά κατά λάθος το samlResponse που είναι\n"
+"                    έχει ήδη καταχωρηθεί ως επεξεργασμένο. Για λόγους "
+"ασφαλείας δεν μπορούμε να επιτρέψουμε τα επεξεργασμένα samlResponses\n"
+"                    να υποβληθεί ξανά σε επεξεργασία. Παρακαλούμε συνδεθείτε "
+"ξανά για να δημιουργήσετε ένα νέο samlResponse. Συγγνώμη για την όποια "
+"ταλαιπωρία.\n"
+"                    Εάν το πρόβλημα παραμένει, επικοινωνήστε με τον "
+"διαχειριστή σας.\n"
+"                    Δείτε: %s για περισσότερες πληροφορίες"
+
+#: src/LoginFlow/Acs.php:317
+msgid "Samlsso->acs->assertSaml->LoginState::checkResponseIdUnique"
+msgstr "Samlsso->acs->assertSaml->LoginState::checkResponseIdUnique"
+
+#: src/LoginFlow/Acs.php:338
+msgid ""
+""
+"An error occured while trying to update the samlResponseId into the "
+"LoginState database. Review the saml log for more details"
+msgstr ""
+""
+"Παρουσιάστηκε σφάλμα κατά την προσπάθεια ενημέρωσης του samlResponseId στη "
+"βάση δεδομένων LoginState. Ελέγξτε το αρχείο καταγραφής saml για "
+"περισσότερες λεπτομέρειες"
+
+#: src/LoginFlow/Acs.php:339
+msgid "Samlsso->acs->assertSaml->LoginState::setSamlResponseId"
+msgstr "Samlsso->acs->assertSaml->LoginState::setSamlResponseId"
+
+#: src/LoginFlow/Acs.php:352
+#, php-format
+msgid ""
+""
+"GLPI did not expect an assertion from this Idp. The most likely reason is a "
+"race condition\n"
+"                    causing an inconsistant loginState in the database or "
+"software bug. Please login again via the\n"
+"                    GLPI-interface. Sorry for the inconvenience. See: %s\n"
+"                    for more information"
+msgstr ""
+""
+"Η GLPI δεν περίμενε ισχυρισμό από αυτό το Idp. Ο πιο πιθανός λόγος είναι μια "
+"κατάσταση αγώνα\n"
+"                    προκαλώντας ένα ασυνεπές loginState στη βάση δεδομένων ή "
+"σφάλμα λογισμικού. Παρακαλούμε συνδεθείτε ξανά μέσω του\n"
+"                    Διεπαφή GLPI. Συγγνώμη για την ταλαιπωρία. Δείτε: %s\n"
+"                    για περισσότερες πληροφορίες"
+
+#: src/LoginFlow/Acs.php:356
+msgid "Samlsso->acs->assertSaml->PhaseMismatched"
+msgstr "Samlsso->acs->assertSaml->PhaseMismatched"
+
+#: src/LoginFlow/Acs.php:370
+msgid ""
+""
+"An error occured while trying to update the login phase to LoginState::"
+"PHASE_SAML_AUTH  into the LoginState database.\n"
+"                                  Review the saml log for more details"
+msgstr ""
+""
+"Παρουσιάστηκε σφάλμα κατά την προσπάθεια ενημέρωσης της φάσης σύνδεσης σε "
+"LoginState::PHASE_SAML_AUTH στη βάση δεδομένων LoginState.\n"
+"                                  Ελέγξτε το αρχείο καταγραφής saml για "
+"περισσότερες λεπτομέρειες"
+
+#: src/LoginFlow/Acs.php:371
+msgid "LoginState"
+msgstr "LoginState"
+
+#: src/LoginFlow/LoginFlowItem.php:120
+msgid "⭕ IDP ID must be a positive numeric value!"
+msgstr "⭕ Το αναγνωριστικό IDP πρέπει να είναι θετική αριθμητική τιμή!"
+
+#: src/LoginFlow/LoginFlowItem.php:124
+msgid "What IDP ID should be enforced?"
+msgstr "Ποιο ID ID θα πρέπει να επιβληθεί;"
+
+#: src/LoginFlow/LoginFlowItem.php:125
+msgid "ENFORCED IDP ID"
+msgstr "ΕΠΙΒΑΛΛΟΜΕΝΗ ID ID"
+
+#: src/LoginFlow/LoginFlowItem.php:144
+msgid "Debug enabled?"
+msgstr "Ενεργοποιήθηκε ο εντοπισμός σφαλμάτων;"
+
+#: src/LoginFlow/LoginFlowItem.php:161
+msgid ""
+""
+"Should SAML SSO be enforced. This option can be bypassed by the bypass var "
+"and value"
+msgstr ""
+""
+"Θα πρέπει να επιβληθεί SAML SSO. Αυτή η επιλογή μπορεί να παρακαμφθεί από το "
+"var και την τιμή παράκαμψης"
+
+#: src/LoginFlow/LoginFlowItem.php:162
+msgid "ENFORCE SSO"
+msgstr "ΕΠΙΒΑΛΛΕΤΕ SSO"
+
+#: src/LoginFlow/LoginFlowItem.php:178
+msgid "Try to match domain in username for IDP selection"
+msgstr ""
+""
+"Προσπαθήστε να αντιστοιχίσετε τον τομέα στο όνομα χρήστη για την επιλογή IDP"
+
+#: src/LoginFlow/LoginFlowItem.php:179
+msgid "ENABLE DOMAIN BASED SSO"
+msgstr "ΕΝΕΡΓΟΠΟΙΗΣΗ SSO ΒΑΣΕΙ ΤΟΜΕΑ"
+
+#: src/LoginFlow/LoginFlowItem.php:195
+msgid "Allow the ?idpId=[val] URI to pre select IDP from URLs"
+msgstr ""
+""
+"Επιτρέψτε στο ?idpId=[val] URI να προεπιλέγει το IDP από τις διευθύνσεις URL"
+
+#: src/LoginFlow/LoginFlowItem.php:196
+msgid "Enable getter login"
+msgstr "Ενεργοποιήστε τη σύνδεση λήψης"
+
+#: src/LoginFlow/LoginFlowItem.php:212
+msgid ""
+""
+"Hide the default GLPI login options. This option can be bypassed using the "
+"bypass var and value."
+msgstr ""
+""
+"Απόκρυψη των προεπιλεγμένων επιλογών σύνδεσης GLPI. Αυτή η επιλογή μπορεί να "
+"παρακαμφθεί χρησιμοποιώντας το bypass var and value."
+
+#: src/LoginFlow/LoginFlowItem.php:213
+msgid "HIDE GLPI LOGIN"
+msgstr "ΑΠΟΚΡΥΨΗ ΕΙΣΟΔΟΥ GLPI"
+
+#: src/LoginFlow/LoginFlowItem.php:229
+msgid ""
+""
+"Hides Saml Buttons. This option cannot be used together with the Hide GLPI "
+"login."
+msgstr ""
+""
+"Κρύβει τα κουμπιά Saml. Αυτή η επιλογή δεν μπορεί να χρησιμοποιηθεί μαζί με "
+"τη σύνδεση Hide GLPI."
+
+#: src/LoginFlow/LoginFlowItem.php:230
+msgid "Hide Saml Buttons"
+msgstr "Απόκρυψη κουμπιών Saml"
+
+#: src/LoginFlow/LoginFlowItem.php:246
+msgid "Hide the GLPI password field. To be used with Enable Domain Login."
+msgstr ""
+""
+"Απόκρυψη του πεδίου κωδικού πρόσβασης GLPI. Για χρήση με το Enable Domain "
+"Login."
+
+#: src/LoginFlow/LoginFlowItem.php:247
+msgid "HIDE PASSWORD FIELD"
+msgstr "ΑΠΟΚΡΥΨΗ ΠΕΔΙΟΥ ΚΩΔΙΚΟΥ"
+
+#: src/LoginFlow/LoginFlowItem.php:263
+msgid "Forces samlSSO to (re)apply the rules on each succesfull auth."
+msgstr ""
+""
+"Αναγκάζει το samlSSO να (επανα)εφαρμόσει τους κανόνες σε κάθε επιτυχημένο "
+"πιστοποιητικό."
+
+#: src/LoginFlow/LoginFlowItem.php:264
+msgid "APPLY RULES ON AUTH"
+msgstr "ΕΦΑΡΜΟΓΗ ΚΑΝΟΝΩΝ ΣΤΟ ΑΠΘ"
+
+#: src/LoginFlow/Meta.php:76
+msgid "Error fetching spMetadata."
+msgstr "Σφάλμα κατά την ανάκτηση spMetadata."
+
+#: src/LoginFlow/Meta.php:81
+msgid "Invalid id or metadata not exposed."
+msgstr "Μη έγκυρο αναγνωριστικό ή μεταδεδομένα δεν εκτίθενται."
+
+#: src/LoginFlow/Meta.php:86
+msgid "Error fetching config."
+msgstr "Σφάλμα κατά την ανάκτηση των παραμέτρων."
+
+#: src/LoginFlow/User.php:170
+#, php-format
+msgid ""
+""
+"User with GlpiUserid: %s is marked deleted but still exists in the GLPI "
+"database. Because of this we cannot log you in as this would violate GLPI "
+"its security policies. Please contact the GLPI administrator to restore the "
+"user with provided ID or purge the user to allow the Just in Time (JIT) user "
+"creation to create a new user with the idp provided claims."
+msgstr ""
+""
+"Χρήστης με GlpiUserid: Το %s επισημαίνεται ως διαγραμμένο αλλά εξακολουθεί "
+"να υπάρχει στη βάση δεδομένων GLPI. Εξαιτίας αυτού δεν μπορούμε να σας "
+"συνδεθούμε καθώς κάτι τέτοιο θα παραβίαζε τις πολιτικές ασφαλείας της GLPI. "
+"Επικοινωνήστε με τον διαχειριστή του GLPI για να επαναφέρετε τον χρήστη με "
+"το παρεχόμενο αναγνωριστικό ή εκκαθαρίστε τον χρήστη για να επιτρέψει στη "
+"δημιουργία χρήστη Just in Time (JIT) να δημιουργήσει έναν νέο χρήστη με τις "
+"παρεχόμενες αξιώσεις idp."
+
+#: src/LoginFlow/User.php:175
+#, php-format
+msgid ""
+""
+"User with GlpiUserid: %s is disabled. Please contact your GLPI administrator "
+"and request him to reactivate your account."
+msgstr ""
+""
+"Χρήστης με GlpiUserid: Το %s είναι απενεργοποιημένο. Επικοινωνήστε με τον "
+"διαχειριστή του GLPI και ζητήστε του να ενεργοποιήσει ξανά τον λογαριασμό "
+"σας."
+
+#: src/LoginFlow/User.php:187
+msgid ""
+""
+"Your SSO login was successful but no GLPI profile was assigned to your "
+"account. Please contact your GLPI administrator to assign a profile to your "
+"account."
+msgstr ""
+""
+"Η σύνδεσή σας SSO ήταν επιτυχής, αλλά δεν εκχωρήθηκε προφίλ GLPI στον "
+"λογαριασμό σας. Επικοινωνήστε με τον διαχειριστή του GLPI για να εκχωρήσετε "
+"ένα προφίλ στον λογαριασμό σας."
+
+#: src/LoginFlow/User.php:212
+msgid ""
+""
+"Your SSO login was successful but the identity provider configuration is "
+"invalid or disabled."
+msgstr ""
+""
+"Η σύνδεσή σας SSO ήταν επιτυχής, αλλά η διαμόρφωση του παρόχου ταυτότητας "
+"δεν είναι έγκυρη ή απενεργοποιημένη."
+
+#: src/LoginFlow/User.php:221
+msgid ""
+""
+"Your SSO login was successful but there is no matching GLPI user account "
+"and\n"
+"                                                we failed to create one "
+"dynamically using Just In Time user creation. Please\n"
+"                                                request a GLPI administrator "
+"to review the logs and correct the problem or\n"
+"                                                request the administrator to "
+"create a GLPI user manually."
+msgstr ""
+""
+"Η σύνδεσή σας SSO ήταν επιτυχής αλλά δεν υπάρχει αντίστοιχος λογαριασμός "
+"χρήστη GLPI και\n"
+"                                                Δεν καταφέραμε να "
+"δημιουργήσουμε ένα δυναμικά χρησιμοποιώντας τη δημιουργία χρήστη Just In "
+"Time. Παρακαλώ\n"
+"                                                ζητήστε από έναν διαχειριστή "
+"GLPI να ελέγξει τα αρχεία καταγραφής και να διορθώσει το πρόβλημα ή\n"
+"                                                ζητήστε από τον διαχειριστή "
+"να δημιουργήσει έναν χρήστη GLPI με μη αυτόματο τρόπο."
+
+#: src/LoginFlow/User.php:234
+msgid ""
+""
+"Your SSO login was successful but no GLPI profile was assigned to your "
+"account and\n"
+"                                                    we failed to assign one "
+"dynamically using Just In Time user creation. Please\n"
+"                                                    request a GLPI "
+"administrator to review the logs and correct the problem or\n"
+"                                                    request the "
+"administrator to assign a GLPI profile manually."
+msgstr ""
+""
+"Η σύνδεσή σας SSO ήταν επιτυχής, αλλά δεν εκχωρήθηκε προφίλ GLPI στον "
+"λογαριασμό σας και\n"
+"                                                    Δεν καταφέραμε να "
+"εκχωρήσουμε ένα δυναμικά χρησιμοποιώντας τη δημιουργία χρήστη Just In Time. "
+"Παρακαλώ\n"
+"                                                    ζητήστε από έναν "
+"διαχειριστή GLPI να ελέγξει τα αρχεία καταγραφής και να διορθώσει το "
+"πρόβλημα ή\n"
+"                                                    ζητήστε από τον "
+"διαχειριστή να εκχωρήσει ένα προφίλ GLPI με μη αυτόματο τρόπο."
+
+#: src/LoginFlow/User.php:242
+msgid ""
+""
+"Critical error: samlSSO was unable to fetch newly created user from the "
+"database!"
+msgstr ""
+""
+"Κρίσιμο σφάλμα: το samlSSO δεν μπόρεσε να ανακτήσει τον νέο χρήστη από τη "
+"βάση δεδομένων!"
+
+#: src/LoginFlow/User.php:264
+msgid "JIT was called with params:"
+msgstr "Το JIT κλήθηκε με παραμέτρους:"
+
+#: src/LoginFlow/User.php:333
+msgid "Created by phpSaml Just-In-Time user creation on:"
+msgstr "Δημιουργήθηκε από το phpSaml Just-In-Time δημιουργία χρήστη σε:"
+
+#: src/LoginFlow/User.php:491
+msgid "JIT group already assigned:"
+msgstr "Η ομάδα JIT έχει ήδη εκχωρηθεί:"
+
+#: src/LoginFlow/User.php:502
+msgid "JIT failed to assign groupID:"
+msgstr "Το JIT απέτυχε να εκχωρήσει αναγνωριστικό ομάδας:"
+
+#: src/LoginFlow/User.php:507
+msgid "JIT assigned groupID:"
+msgstr "Αναγνωρισμένο στο JIT groupID:"
+
+#: src/LoginFlow/User.php:514
+msgid "JIT found no groupId to add."
+msgstr "Το JIT δεν βρήκε groupId για προσθήκη."
+
+#: src/LoginFlow/User.php:538
+msgid "JIT found entity for profile assignment:"
+msgstr "Το JIT βρήκε οντότητα για εκχώρηση προφίλ:"
+
+#: src/LoginFlow/User.php:540
+msgid ""
+""
+"JIT didnt find a profile for entity assignment. Profile asignment might not "
+"work."
+msgstr ""
+""
+"Το JIT δεν βρήκε προφίλ για ανάθεση οντοτήτων. Η αντιστοίχιση προφίλ "
+"ενδέχεται να μην λειτουργεί."
+
+#: src/LoginFlow/User.php:546
+msgid "JIT found to be assigned profile(s) to be recursive."
+msgstr "Το JIT βρέθηκε ότι του έχει εκχωρηθεί προφίλ(α) ως αναδρομικό."
+
+#: src/LoginFlow/User.php:548
+msgid "JIT didnt find to be assigned profile(s) to be recursive."
+msgstr "Το JIT δεν βρήκε ότι του έχουν εκχωρηθεί τα προφίλ ως αναδρομικά."
+
+#: src/LoginFlow/User.php:565
+msgid "JIT profile already assigned with config:"
+msgstr "Το προφίλ JIT έχει ήδη εκχωρηθεί με config:"
+
+#: src/LoginFlow/User.php:571
+msgid "JIT was not able to assign profile with config:"
+msgstr "Το JIT δεν μπόρεσε να εκχωρήσει προφίλ με config:"
+
+#: src/LoginFlow/User.php:577
+msgid "JIT remove all default profiles from newly created user:"
+msgstr "Το JIT αφαιρεί όλα τα προεπιλεγμένα προφίλ από τον νέο χρήστη:"
+
+#: src/LoginFlow/User.php:589
+msgid "JIT assigned profile with config:"
+msgstr "Προφίλ εκχωρημένου JIT με διαμόρφωση:"
+
+#: src/LoginFlow/User.php:622
+msgid "JIT found default groupID:"
+msgstr "Το JIT βρήκε το προεπιλεγμένο groupID:"
+
+#: src/LoginFlow/User.php:624
+msgid "Jit didnt find a default GroupID to assign, skipping\n"
+msgstr ""
+""
+"Το Jit δεν βρήκε ένα προεπιλεγμένο GroupID για εκχώρηση, παρακάμπτοντας\n"
+
+#: src/LoginFlow/User.php:629
+msgid "JIT found default entityID:"
+msgstr "Το JIT βρήκε το προεπιλεγμένο αναγνωριστικό οντότητας:"
+
+#: src/LoginFlow/User.php:631
+msgid "Jit didnt find a default EntityId to assign, skipping\n"
+msgstr ""
+""
+"Το Jit δεν βρήκε ένα προεπιλεγμένο EntityId για εκχώρηση, παρακάμπτοντας\n"
+
+#: src/LoginFlow/User.php:636
+msgid "JIT found default profileID:"
+msgstr "Το JIT βρήκε το προεπιλεγμένο αναγνωριστικό προφίλ:"
+
+#: src/LoginFlow/User.php:638
+msgid "Jit didnt find a default ProfileId to assign, skipping\n"
+msgstr ""
+""
+"Το Jit δεν βρήκε ένα προεπιλεγμένο ProfileId για εκχώρηση, παρακάμπτοντας\n"
+
+#: src/LoginFlow/User.php:643
+msgid "JIT found timezone:"
+msgstr "Το JIT βρήκε ζώνη ώρας:"
+
+#: src/LoginFlow/User.php:648
+msgid "JIT found is_active:"
+msgstr "Το JIT βρέθηκε is_active:"
+
+#: src/LoginFlow/User.php:653
+msgid "JIT found locations_id:"
+msgstr "Το JIT βρήκε locations_id:"
+
+#: src/LoginFlow/User.php:658
+msgid "JIT found usercategories_id:"
+msgstr "Το JIT βρήκε usercategories_id:"
+
+#: src/LoginFlow/User.php:663
+msgid "JIT found usertitles_id:"
+msgstr "Το JIT βρήκε usertitles_id:"
+
+#: src/LoginFlow/User.php:668
+msgid "JIT found language:"
+msgstr "Βρέθηκε γλώσσα JIT:"
+
+#: src/LoginFlow/User.php:673
+msgid "Jit updated user defaults\n"
+msgstr "Το Jit ενημέρωσε τις προεπιλογές χρήστη\n"
+
+#: src/LoginFlow/User.php:675
+msgid "Jit didnt update user defaults\n"
+msgstr "Το Jit δεν ενημέρωσε τις προεπιλογές χρήστη\n"
+
+#: src/LoginFlow/LoginFlowForm.php:72
+msgid "Identity providers"
+msgstr "Παρόχους ταυτότητας"
+
+#: src/LoginFlow/LoginFlowForm.php:116
+msgid "Configuration invalid please correct all ⭕ errors first"
+msgstr "Μη έγκυρη διαμόρφωση, διορθώστε πρώτα όλα τα ⭕ σφάλματα"
+
+#: src/LoginState.php:850
+msgid "ACS Timeout"
+msgstr "Λήξη χρόνου"
+
+#: src/Exclude.php:126
+msgid "samlSSO Excludes"
+msgstr "samlSSO Εξαιρείται"
+
+#: src/Exclude.php:148
+msgid "Agent contains"
+msgstr "Ο πράκτορας περιέχει"
+
+#: src/Exclude.php:154
+msgid "Bypass SAML auth"
+msgstr "Παράκαμψη SAML auth"
+
+#: src/Exclude.php:159
+msgid "Url contains path or file"
+msgstr "Το URL περιέχει διαδρομή ή αρχείο"
+
+#: src/Exclude.php:181
+msgid "Client Agent performing the call"
+msgstr "Πράκτορας πελάτη που εκτελεί την κλήση"
+
+#: src/Exclude.php:190
+msgid "To be excluded path"
+msgstr "Να αποκλειστεί διαδρομή"
+
+#: templates/loggedOut.html.twig:9
+msgid "Successfully Logged Out"
+msgstr "Έγινε επιτυχής αποσύνδεση"
+
+#: templates/loggedOut.html.twig:12
+msgid ""
+""
+"You have been successfully logged out of your session. You can now safely "
+"close this browser window/tab, or log in again using the button below."
+msgstr ""
+""
+"Έχετε αποσυνδεθεί επιτυχώς από τη συνεδρία σας. Τώρα μπορείτε να κλείσετε με "
+"ασφάλεια αυτό το παράθυρο/καρτέλα του προγράμματος περιήγησης ή να "
+"συνδεθείτε ξανά χρησιμοποιώντας το παρακάτω κουμπί."
+
+#: templates/loggedOut.html.twig:17
+msgid "Log in again"
+msgstr "Συνδεθείτε ξανά"
+
+#: templates/configForm/security.html.twig:8
+msgid "Enforcement & Sessions"
+msgstr "Επιβολή & Συνεδρίες"
+
+#: templates/configForm/security.html.twig:83
+msgid "⚠️ Your environment is at risk, make sure strict is enabled!"
+msgstr "⚠️ Το περιβάλλον σας κινδυνεύει, φροντίστε να είναι ενεργοποιημένο το αυστηρό!"
+
+#: templates/configForm/security.html.twig:107
+msgid "User Provisioning"
+msgstr "Παροχή χρηστών"
+
+#: templates/configForm/security.html.twig:136
+msgid ""
+""
+"Enabling this field might cause data leak incidents because samlSSO will "
+"apply configuration mistakes made at the IDP directly into GLPI."
+msgstr ""
+""
+"Η ενεργοποίηση αυτού του πεδίου μπορεί να προκαλέσει περιστατικά διαρροής "
+"δεδομένων, επειδή το samlSSO θα εφαρμόσει λάθη διαμόρφωσης που έγιναν στο "
+"IDP απευθείας στο GLPI."
+
+#: templates/configForm/security.html.twig:161
+msgid "Inbound Security (IdP)"
+msgstr "Εισερχόμενη ασφάλεια (IdP)"
+
+#: templates/configForm/security.html.twig:239
+msgid "Outbound Security (SP)"
+msgstr "Εξερχόμενη ασφάλεια (SP)"
+
+#: templates/configForm/transit.html.twig:9
+msgid "Compression"
+msgstr "Συμπίεση"
+
+#: templates/configForm/transit.html.twig:51
+msgid "Proxied & Encoding"
+msgstr "Proxied & Encoding"
+
+#: templates/configForm/transit.html.twig:95
+msgid "XML & Destination Validation"
+msgstr "XML & Επικύρωση προορισμού"
+
+#: templates/configForm/transit.html.twig:105
+msgid "⚠️ Strict is disabled, validate xml setting will not do anything."
+msgstr "⚠️ Το Strict είναι απενεργοποιημένο, η επικύρωση xml δεν θα κάνει τίποτα."
+
+#: templates/configForm/idp.html.twig:8
+msgid "Endpoints & Configurations"
+msgstr "Τερματικά σημεία και διαμορφώσεις"
+
+#: templates/configForm/idp.html.twig:71
+msgid "Authentication Context"
+msgstr "Αρχεία καταγραφής ελέγχου ταυτότητας SAML SSO"
+
+#: templates/configForm/idp.html.twig:161
+msgid "Identity Provider Certificates"
+msgstr "Παρόχους ταυτότητας"
+
+#: templates/configForm/provider.html.twig:8
+msgid "Endpoints & Metadata"
+msgstr "Τελικά σημεία & Μεταδεδομένα"
+
+#: templates/configForm/provider.html.twig:16
+msgid "Entity ID"
+msgstr "Αναγνωριστικό οντότητας Idp"
+
+#: templates/configForm/provider.html.twig:21
+msgid ""
+""
+"You need to configure the Entity ID at the identity provider. This value is "
+"crosschecked by the identity provider to make sure the sign-in request is "
+"originating from the correct service provider."
+msgstr ""
+""
+"Πρέπει να διαμορφώσετε το αναγνωριστικό οντότητας στον πάροχο ταυτότητας. "
+"Αυτή η τιμή ελέγχεται από τον πάροχο ταυτότητας για να βεβαιωθείτε ότι το "
+"αίτημα σύνδεσης προέρχεται από τον σωστό πάροχο υπηρεσιών."
+
+#: templates/configForm/provider.html.twig:49
+msgid "MetaUrl"
+msgstr "MetaUrl"
+
+#: templates/configForm/provider.html.twig:51
+msgid ""
+""
+"The location of the metadata provider for this service provider (GLPI). The "
+"meta location can be used by the identity provider to collect important "
+"information from this service provider like what public certificate to use "
+"for signing and encrypting the SamlResponse."
+msgstr ""
+""
+"Η τοποθεσία του παρόχου μεταδεδομένων για αυτόν τον πάροχο υπηρεσιών (GLPI). "
+"Η μετα-τοποθεσία μπορεί να χρησιμοποιηθεί από τον πάροχο ταυτότητας για τη "
+"συλλογή σημαντικών πληροφοριών από αυτόν τον πάροχο υπηρεσιών, όπως το "
+"δημόσιο πιστοποιητικό που θα χρησιμοποιηθεί για την υπογραφή και την "
+"κρυπτογράφηση του SamlResponse."
+
+#: templates/configForm/provider.html.twig:61
+msgid "AcsUrl"
+msgstr "AcsUrl"
+
+#: templates/configForm/provider.html.twig:66
+msgid ""
+""
+"The location of the Assertion Consumer Service (ACS) for this service "
+"provider (GLPI). This url is called by the identity provider after "
+"succesfull login."
+msgstr ""
+""
+"Η τοποθεσία της Υπηρεσίας Καταναλωτή (ACS) για αυτόν τον πάροχο υπηρεσιών "
+"(GLPI). Αυτή η διεύθυνση url καλείται από τον πάροχο ταυτότητας μετά την "
+"επιτυχή σύνδεση."
+
+#: templates/configForm/provider.html.twig:76
+msgid "SloUrl"
+msgstr "SloUrl"
+
+#: templates/configForm/provider.html.twig:81
+msgid ""
+""
+"The location where logout requests should be send back to from the Identity "
+"Provider."
+msgstr ""
+""
+"Η τοποθεσία στην οποία θα πρέπει να αποστέλλονται τα αιτήματα αποσύνδεσης "
+"από τον πάροχο ταυτότητας."
+
+#: templates/configForm/provider.html.twig:89
+msgid "Name ID Policy"
+msgstr "Πολιτική αναγνωριστικού ονόματος"
+
+#: templates/configForm/provider.html.twig:116
+msgid "Certificates & Keys"
+msgstr "Πιστοποιητικά & Κλειδιά"
+
+#: templates/configForm/logging.html.twig:9
+msgid "SAML SSO Authentication Logs"
+msgstr "Αρχεία καταγραφής ελέγχου ταυτότητας SAML SSO"
+
+#: templates/configForm/logging.html.twig:12
+msgid ""
+""
+"Track login phases, active sessions, assertion validations, and flow "
+"outcomes for troubleshooting."
+msgstr ""
+""
+"Παρακολουθήστε τις φάσεις σύνδεσης, τις ενεργές περιόδους σύνδεσης, τις "
+"επικυρώσεις ισχυρισμών και τα αποτελέσματα ροής για αντιμετώπιση προβλημάτων."
+
+#: templates/configForm/logging.html.twig:32
+msgid "Search"
+msgstr "Ερευνα"
+
+#: templates/configForm/logging.html.twig:37
+#, python-format
+msgid "Total records found: %s"
+msgstr "Σύνολο εγγραφών που βρέθηκαν: %s"
+
+#: templates/configForm/logging.html.twig:46
+msgid "ID"
+msgstr "ταυτότητα"
+
+#: templates/configForm/logging.html.twig:47
+msgid "IdP ID"
+msgstr "IDP ID"
+
+#: templates/configForm/logging.html.twig:48
+msgid "Username"
+msgstr "Όνομα χρήστη"
+
+#: templates/configForm/logging.html.twig:49
+#: templates/configForm/logging.html.twig:127
+msgid "GLPI Authed"
+msgstr "Πιστοποιήθηκε με GLPI"
+
+#: templates/configForm/logging.html.twig:50
+#: templates/configForm/logging.html.twig:125
+msgid "SAML Authed"
+msgstr "Πιστοποιήθηκε με SAML"
+
+#: templates/configForm/logging.html.twig:51
+msgid "Phase"
+msgstr "Φάση"
+
+#: templates/configForm/logging.html.twig:52
+msgid "Login Time"
+msgstr "Ώρα σύνδεσης"
+
+#: templates/configForm/logging.html.twig:53
+msgid "Last Click"
+msgstr "Τελευταίο κλικ"
+
+#: templates/configForm/logging.html.twig:54
+msgid "Location"
+msgstr "Τοποθεσία"
+
+#: templates/configForm/logging.html.twig:55
+msgid "Trace"
+msgstr "Ιχνος"
+
+#: templates/configForm/logging.html.twig:56
+msgid "Actions"
+msgstr "Δράσεις"
+
+#: templates/configForm/logging.html.twig:64
+msgid "No logs match the criteria."
+msgstr "Κανένα αρχείο καταγραφής δεν ταιριάζει με τα κριτήρια."
+
+#: templates/configForm/logging.html.twig:100
+#: templates/configForm/logging.html.twig:107
+msgid "Yes"
+msgstr "Ναί"
+
+#: templates/configForm/logging.html.twig:102
+#: templates/configForm/logging.html.twig:109
+msgid "No"
+msgstr "Οχι"
+
+#: templates/configForm/logging.html.twig:114
+msgid "Initial"
+msgstr "Αρχικό"
+
+#: templates/configForm/logging.html.twig:122
+msgid "SAML ACS Expected"
+msgstr "Αναμένεται SAML ACS"
+
+#: templates/configForm/logging.html.twig:129
+msgid "Reserved"
+msgstr "Δεσμευμένο"
+
+#: templates/configForm/logging.html.twig:131
+msgid "Forced Logoff"
+msgstr "Επιβεβλημένη αποσύνδεση"
+
+#: templates/configForm/logging.html.twig:133
+msgid "Timed Out"
+msgstr "Λήξη χρόνου"
+
+#: templates/configForm/logging.html.twig:135
+msgid "Logged Out"
+msgstr "Αποσυνδεδεμένος"
+
+#: templates/configForm/logging.html.twig:137
+msgid "Error"
+msgstr "Σφάλμα"
+
+#: templates/configForm/logging.html.twig:174
+msgid "Force Logoff & Disable"
+msgstr "Επιβολή αποσύνδεσης & απενεργοποίηση"
+
+#: templates/configForm/logging.html.twig:193
+msgid "Showing page %1$s of %2$s"
+msgstr "Εμφάνιση σελίδας %1$s από %2$s"
+
+#: templates/configForm/general.html.twig:9
+msgid "State & Branding"
+msgstr "State & Branding"
+
+#: templates/configForm/general.html.twig:19
+#: templates/configForm/general.html.twig:83
+msgid ""
+""
+"⚠️ Userdomain is configured. The login button will be hidden from the "
+"loginscreen. Clear the Userdomain to make the button visible again."
+msgstr "⚠️ Ο τομέας χρήστη έχει ρυθμιστεί. Το κουμπί σύνδεσης θα είναι κρυφό από την οθόνη σύνδεσης. Διαγράψτε τον τομέα χρήστη για να γίνει ξανά ορατό το κουμπί."
+
+#: templates/configForm/general.html.twig:73
+msgid "Domain & Button Configurations"
+msgstr "Διαμορφώσεις τομέα και κουμπιών"
+
+#: templates/configForm/general.html.twig:312
+#, python-brace-format
+msgid ""
+""
+"🔒 Userdomain is configured. Users can trigger a Saml Login by providing "
+"their {username}@{userdomain} in the glpi username field and pressing the "
+"login button. The password field is ignored and can be left blank. This is a "
+"more secure option that wont expose configured IDPs."
+msgstr "🔒 Ο τομέας χρήστη έχει ρυθμιστεί. Οι χρήστες μπορούν να ενεργοποιήσουν μια Σύνδεση Saml παρέχοντας το {username}@{userdomain} τους στο πεδίο ονόματος χρήστη glpi και πατώντας το κουμπί σύνδεσης. Το πεδίο κωδικού πρόσβασης αγνοείται και μπορεί να μείνει κενό. Αυτή είναι μια πιο ασφαλής επιλογή που δεν θα εκθέτει διαμορφωμένους IDP."
+
+#: templates/configForm/general.html.twig:333
+msgid "Comments"
+msgstr "Τα σχόλια"
+
+#: templates/configForm/claim_mapping.html.twig:4
+msgid "SAML Claim Mapping"
+msgstr "Αντιστοίχιση αξιώσεων SAML"
+
+#: templates/configForm/claim_mapping.html.twig:6
+msgid "Mapping Tools"
+msgstr "Εργαλεία χαρτογράφησης"
+
+#: templates/configForm/claim_mapping.html.twig:13
+msgid "Mapping Assistant"
+msgstr "Βοηθός χαρτογράφησης"
+
+#: templates/configForm/claim_mapping.html.twig:15
+msgid ""
+""
+"Map SAML response claim keys dynamically either directly to user profile "
+"fields or as JIT Rule criteria. Configure defaults and required verification "
+"checks."
+msgstr ""
+""
+"Αντιστοιχίστε τα κλειδιά αξίωσης απόκρισης SAML δυναμικά είτε απευθείας στα "
+"πεδία προφίλ χρήστη είτε ως κριτήρια του κανόνα JIT. Διαμορφώστε τις "
+"προεπιλογές και τους απαιτούμενους ελέγχους επαλήθευσης."
+
+#: templates/configForm/claim_mapping.html.twig:22
+msgid "Apply Preset"
+msgstr "Εφαρμογή προεπιλογής"
+
+#: templates/configForm/claim_mapping.html.twig:24
+msgid "Select Preset"
+msgstr "Επιλέξτε Προεπιλογή"
+
+#: templates/configForm/claim_mapping.html.twig:33
+msgid "View observed samlResponse XML"
+msgstr "Προβολή παρατηρούμενης samlResponse XML"
+
+#: templates/configForm/claim_mapping.html.twig:42
+msgid "Sanitized SAML Response XML Structure"
+msgstr "Εξυγιασμένη δομή XML απόκρισης SAML"
+
+#: templates/configForm/claim_mapping.html.twig:46
+msgid ""
+""
+"This shows the structure of the last received SAML Response. Cryptographic "
+"keys, signatures, digests, and PII text node values have been stripped."
+msgstr ""
+""
+"Αυτό δείχνει τη δομή της τελευταίας ληφθείσας απόκρισης SAML. Τα "
+"κρυπτογραφικά κλειδιά, οι υπογραφές, οι συνοπτικές πληροφορίες και οι τιμές "
+"κόμβου κειμένου PII έχουν αφαιρεθεί."
+
+#: templates/configForm/claim_mapping.html.twig:50
+msgid ""
+""
+"No SAML response has been recorded yet. Perform a successful login to "
+"populate this view."
+msgstr ""
+""
+"Δεν έχει καταγραφεί ακόμη απάντηση SAML. Πραγματοποιήστε μια επιτυχημένη "
+"σύνδεση για να συμπληρώσετε αυτήν την προβολή."
+
+#: templates/configForm/claim_mapping.html.twig:68
+msgid "Claim Mapping Validation Errors"
+msgstr "Σφάλματα επικύρωσης αντιστοίχισης αξίωσης"
+
+#: templates/configForm/claim_mapping.html.twig:81
+msgid "Target Type"
+msgstr "Τύπος στόχου"
+
+#: templates/configForm/claim_mapping.html.twig:82
+msgid "GLPI Target Field"
+msgstr "Πεδίο στόχου GLPI"
+
+#: templates/configForm/claim_mapping.html.twig:83
+msgid "SAML Response Claim Key"
+msgstr "Κλειδί αξίωσης απάντησης SAML"
+
+#: templates/configForm/claim_mapping.html.twig:84
+msgid "Default Fallback Value"
+msgstr "Προεπιλεγμένη εναλλακτική τιμή"
+
+#: templates/configForm/claim_mapping.html.twig:85
+msgid "Required"
+msgstr "Υποχρεούμαι"
+
+#: templates/configForm/claim_mapping.html.twig:86
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: templates/configForm/claim_mapping.html.twig:100
+msgid "User Field"
+msgstr "Πεδίο χρήστη"
+
+#: templates/configForm/claim_mapping.html.twig:101
+msgid "Rule Field"
+msgstr "Πεδίο κανόνων"
+
+#: templates/configForm/claim_mapping.html.twig:148
+msgid "Observed"
+msgstr "Παρατηρήθηκε"
+
+#: templates/configForm/claim_mapping.html.twig:150
+msgid "Unobserved"
+msgstr "Απαρατήρητος"
+
+#: templates/configForm/claim_mapping.html.twig:153
+msgid "Unused in Rules"
+msgstr "Δεν χρησιμοποιείται στους Κανόνες"
+
+#: templates/configForm/claim_mapping.html.twig:160
+#: templates/configForm.html.twig:780
+msgid "Delete"
+msgstr "Διαγράφω"
+
+#: templates/configForm/claim_mapping.html.twig:172
+msgid "Add Mapping"
+msgstr "Προσθήκη χαρτογράφησης"
+
+#: templates/errorScreen.html.twig:9
+msgid "The following error was reported"
+msgstr "Αναφέρθηκε το ακόλουθο σφάλμα"
+
+#: templates/configForm.html.twig:690
+msgid "General"
+msgstr "Γενικός"
+
+#: templates/configForm.html.twig:701
+msgid "Transit"
+msgstr "Διαμετακόμιση"
+
+#: templates/configForm.html.twig:712
+msgid "Service provider"
+msgstr "πάροχος υπηρεσιών"
+
+#: templates/configForm.html.twig:723
+msgid "Identity provider"
+msgstr "Πάροχος ταυτότητας"
+
+#: templates/configForm.html.twig:734
+msgid "Security"
+msgstr "Ασφάλεια"
+
+#: templates/configForm.html.twig:745
+msgid "Claim Mapping"
+msgstr "Χαρτογράφηση αξίωσης"
+
+#: templates/configForm.html.twig:756
+msgid "Logging"
+msgstr "Ξύλευση"
+
+#: templates/configForm.html.twig:774
+msgid "Save"
+msgstr "Εκτός"
+
+#: templates/configForm.html.twig:785
+msgid ""
+""
+"⚠️ Warning SP metadata exposed! - ROWID: %1$s | CREATED DATE: %2$s | LAST "
+"UPDATED: %3$s"
+msgstr "⚠️ Προειδοποίηση SP μεταδεδομένα εκτεθειμένα! - ROWID: %1$s | ΗΜΕΡΟΜΗΝΙΑ ΔΗΜΙΟΥΡΓΙΑΣ: %2$s | ΤΕΛΕΥΤΑΙΑ ΕΝΗΜΕΡΩΣΗ: %3$s"

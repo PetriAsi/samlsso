@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  *  ------------------------------------------------------------------------
@@ -33,7 +34,7 @@ declare(strict_types=1);
  * ------------------------------------------------------------------------
  *
  *  @package    samlSSO
- *  @version    1.2.9
+ *  @version    1.3.2
  *  @author     Chris Gralike
  *  @copyright  Copyright (c) 2024 by Chris Gralike
  *  @license    GPLv3+
@@ -50,7 +51,7 @@ use OneLogin\Saml2\Utils;
 use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\Response;
 use GlpiPlugin\Samlsso\LoginFlow;
-use GlpiPlugin\Samlsso\Loginstate;
+use GlpiPlugin\Samlsso\LoginState;
 use GlpiPlugin\Samlsso\Config\ConfigEntity;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -81,36 +82,49 @@ class Acs extends LoginFlow
      * Stores the loginState object.
      * @since 1.0.0
      */
-    private $state          = null;
+    protected ?LoginState $state = null;
 
     /**
      * Stores the debug param.
      * @since 1.0.0
+     * @var bool
      */
     private $debug          = null;
 
     /**
      * Stores the idpId.
      * @since 1.2.0
+     * @var int
      */
     private $idpId          = null;
 
     /**
      * Stores the samlResponse.
      * @since 1.2.0
+     * @var Response
      */
     private $samlResponse   = null;
 
     /**
      * Stores the idp configuration.
      * @since 1.2.0
+     * @var ConfigEntity
      */
-    private $configEntity   = null;
+    protected $configEntity = null;
 
 
     /**
      * Init pre fetches loginState or fails.
      *
+     * @param Request $request Incoming HTTP request
+     * @return void
+     * @since 1.0.0
+     */
+    /**
+     * Init pre fetches loginState or fails.
+     *
+     * @param Request $request Incoming HTTP request
+     * @return void
      * @since 1.0.0
      */
     public function init(Request $request)             #NOSONAR Yes TLDR not fixing it.
@@ -118,92 +132,115 @@ class Acs extends LoginFlow
         $samlResponse = $request->get('SAMLResponse');         // Get post fields if any
         $this->idpId = !empty($request->get(LoginState::IDP_ID)) ? (int) $request->get(LoginState::IDP_ID) : -1;
 
-        // If we have all required data we first need to unpack the samlResponse using
-        // the samlRequest provided idpId. If all went well, the idpId was added as an
-        // get value to the URL by the IdP using the value provided in the samlRequest
-        // @see: ConfigEntity::getPhpSamlConfig()
-        if(!empty($samlResponse)                  &&          //samlResponse post should not be empty
-           is_numeric($this->idpId)               ){          //idpId should be a nummeric value (1>)
+        if (!empty($samlResponse) && is_numeric($this->idpId)) {
+            try {
+                $this->configEntity = new ConfigEntity($this->idpId);
+            } catch (Throwable $e) {
+                $this->printError(
+                    sprintf(__("Unable to fetch idp configuration with id: %s from database", PLUGIN_NAME), $this->idpId),
+                    __('Samlsso->acs->init->FetchConfig', PLUGIN_NAME)
+                );
+            }
 
-                // We got everything we need!
-                // get the configuration using the idpId provided in the ACS call.
-                try{
-                    $this->configEntity = new ConfigEntity($this->idpId);
-                }catch (Throwable $e){
-                    $this->printError(__("Unable to fetch idp configuration with id:".$this->state->getIdpId()." from database",PLUGIN_NAME),
-                                      __('Assert saml', PLUGIN_NAME));
-                }
+            $this->debug = ($this->configEntity->getField(ConfigEntity::DEBUG)) ? true : false;
 
-                // DEBUG ENABLED?
-                // Only add extended logging with debug not to dump sensitive samlResponse data.
-                // https://github.com/DonutsNL/glpisaml/issues/12
-                $this->debug = ($this->configEntity->getField(ConfigEntity::DEBUG)) ? true : false;
+            $this->configureProxyVars();
+            
+            /**
+             * Detect LogoutResponse (SLO return from IDP) and redirect silently.
+             * Without this, the LogoutResponse is incorrectly processed as an AuthnResponse
+             * causing Utils::getStatus() to throw "Missing Status on response".
+             *
+             * @see https://github.com/DonutsNL/samlsso/issues/138
+             */
+            $decoded = base64_decode($samlResponse);
+            if (strpos($decoded, 'LogoutResponse') !== false) {
+                \Html::redirect(samlsso_webdir() . \GlpiPlugin\Samlsso\Controller\SamlSsoController::SLO_ROUTE);
+            }
+            
+            $this->setupSamlResponse($samlResponse);
+            $this->fetchRequestState();
 
-                // PROXIED RESPONSES?
-                // Does phpSaml needs to take proxy headers into account
-                // for assertion url validation
-                if($this->configEntity->getField(ConfigEntity::PROXIED)){
-                    try {
-                        $samltoolkit = new Utils();
-                        $samltoolkit::setProxyVars(true);
-                    } catch (Throwable $e) {
-                        $this->printError($e->getMessage(),
-                                    __('phpSaml::Settings->init'),
-                                    'Could not enable required phpsaml proxyVars');
-                    }
-                }
-
-                // GET POPULATED PHPSAML SETTINGS OBJECT
-                // Or show error!
-                try { $samlSettings = new Settings($this->configEntity->getPhpSamlConfig()); } catch(Throwable $e) {
-                    $extended = ($this->debug) ? Acs::EXTENDED_HEADER.
-                                Acs::ERRORS.var_export($samlSettings->getErrors(), true)."\n\n".
-                                Acs::STATE_OBJ.var_export($this->state, true)."\n\n".
-                                Acs::EXTENDED_FOOTER : '';
-
-                    $this->printError($e->getMessage(),
-                                    __('phpSaml::Settings->init'),
-                                    $extended);
-                }
-
-                // PROCESS THE SAMLRESPONSE
-                try { $this->samlResponse = new Response($samlSettings, $samlResponse); } catch(Throwable $e) {
-                    $extended = '';
-                    //if($this->debug){
-                        $extended = Acs::EXTENDED_HEADER.
-                                    Acs::ERRORS.var_export($samlSettings->getErrors(), true)."\n\n".
-                                    Acs::STATE_OBJ.var_export($this->state, true)."\n\n".
-                                    Acs::EXTENDED_FOOTER;
-                    //}
-                    $this->printError(__('Could not process samlResponse with Error:').$e->getMessage(),
-                                    __('Saml::Response->init'),
-                                    $extended);
-                }
-
-                // Get the requestId from the samlResponse and generate LoginState using
-                // the samlInResponseTo attribute. If the samlResponse was requested by
-                // GLPI we should find an existing LoginState in the LoginState database
-                // and the LoginState should be prepopulated with the 'database' marker set
-                // to true.
-                $inResponseTo = $this->samlResponse->getXMLDocument()->documentElement->getAttribute('InResponseTo');
-                try{
-                    $this->state = new LoginState($inResponseTo);
-                } catch(Throwable $e) {
-                    $this->printError(__("Could not fetch loginState from database with error: <br><br>$e<br><br>See: https://codeberg.org/QuinQuies/glpisaml/wiki/LoginState.php for more information.", PLUGIN_NAME),
-                                      __('LoginState'));
-                }
-
-                // Everything is prepared for assertion!
-                // Perform assertion on the samlResponse
-                $this->assertSaml();
-
+            // Everything is prepared for assertion!
+            // Perform assertion on the samlResponse
+            $this->assertSaml();
         } else {
-            //https://github.com/DonutsNL/samlsso/issues/5
-            $this->printError(__('The received idp response did not contain the required samlResponse POST body or idpId to authenticate the user, see: https://codeberg.org/QuinQuies/glpisaml/wiki/ACS.php for more information', PLUGIN_NAME),
-                            __('Acs assertion'),
-                            Acs::EXTENDED_HEADER.
-                            Acs::SERVER_OBJ.var_export($_SERVER, true)."\n\n".
-                            Acs::EXTENDED_FOOTER."\n");
+            $this->printError(
+                sprintf(__('The received idp response did not contain the required samlResponse POST body or idpId to authenticate the user, see: %s for more information', PLUGIN_NAME), 'https://codeberg.org/QuinQuies/glpisaml/wiki/ACS.php'),
+                __('Samlsso->acs->init->NoSamlResponse', PLUGIN_NAME),
+                Acs::EXTENDED_HEADER .
+                    Acs::SERVER_OBJ . var_export($_SERVER, true) . "\n\n" .
+                    Acs::EXTENDED_FOOTER . "\n"
+            );
+        }
+    }
+
+    /**
+     * Configure proxy variables for Utils if configured.
+     *
+     * @return void
+     */
+    private function configureProxyVars(): void
+    {
+        if ($this->configEntity->getField(ConfigEntity::PROXIED)) {
+            try {
+                $samltoolkit = new Utils();
+                $samltoolkit::setProxyVars(true);
+            } catch (Throwable $e) {
+                $this->printError(
+                    $e->getMessage(),
+                    __('Samlsso->acs->init->phpsaml->Utils->setProxyVars', PLUGIN_NAME)
+                );
+            }
+        }
+    }
+
+    /**
+     * Set up the SAML response settings and response object.
+     *
+     * @param string $samlResponse The raw SAML Response string
+     * @return void
+     */
+    private function setupSamlResponse(string $samlResponse): void
+    {
+        $samlSettings = null;
+        try {
+            $samlSettings = new Settings($this->configEntity->getPhpSamlConfig());
+        } catch (Throwable $e) {
+            $this->printError(
+                __('PHP-SAML could not initialize the settings object using the configEntity.', PLUGIN_NAME) . $e->getMessage(),
+                __('Samlsso->acs->init->phpsaml->initializeSettings', PLUGIN_NAME)
+            );
+        }
+
+        try {
+            $this->samlResponse = new Response($samlSettings, $samlResponse);
+        } catch (Throwable $e) {
+            $this->printError(
+                __('PHP-SAML library could not process samlResponse and reported the error:', PLUGIN_NAME) . $e->getMessage(),
+                __('Samlsso->acs->init->phpsaml->initializeResponse', PLUGIN_NAME)
+            );
+        }
+    }
+
+    /**
+     * Fetch the login request state from the database.
+     *
+     * @return void
+     */
+    private function fetchRequestState(): void
+    {
+        try {
+            $inResponseTo = $this->samlResponse->getXMLDocument()->documentElement->getAttribute('InResponseTo');
+            $this->state = new LoginState($inResponseTo);
+            LoginFlow::$activeState = $this->state;
+        } catch (Throwable $e) {
+            // All references to state removed when state doesnt exist yet.
+            // Fix for: https://github.com/DonutsNL/samlsso/issues/104
+            $this->printError(
+                sprintf(__("Could not fetch loginState from database with error: <br><br>%s<br><br>See: %s for more information.", PLUGIN_NAME), $e, 'https://codeberg.org/QuinQuies/glpisaml/wiki/LoginState.php'),
+                __('Samlsso->acs->init->LoginState::construct', PLUGIN_NAME)
+            );
         }
     }
 
@@ -212,39 +249,109 @@ class Acs extends LoginFlow
      * and perform a callback to the loginFlow to authorize
      * the user if the samlResponse is valid.
      *
+     * @return void
      * @since 1.0.0
      */
-    public function assertSaml() : void                // NOSONAR method complexity by design.
+    public function assertSaml(): void
     {
-        // If we fetched the state, the fetched state should not (yet) have a
-        // samlResponseId registered. If so, it should be considered a replayed
-        // response and we need to register this and invalidate the login and
-        // generate a meaningfull error. In addition the found response ID should
-        // not exist in the database (anywhere)
-        if(!$this->state->getSamlResponseId() == 0                        &&
-           !$this->state->checkResponseIdUnique($this->samlResponse->getId())   ){
-            $this->printError(__("It looks like this samlResponse has already been used to authenticate a different user.
-                                 Maybe an error occurred and you pressed F5 and accidently resend the samlResponse that is
-                                 already registered as processed. For security reasons we can not allow processed samlResponses
-                                 to be processed again. Please login again to generate a new samlResponse. Sorry for any inconvenience.
-                                 If the problem presists, then please contact your administrator.
-                                 See: https://codeberg.org/QuinQuies/glpisaml/wiki/LoginState.php for more information", PLUGIN_NAME),
-                                 'LoginState',
-                                 Acs::EXTENDED_HEADER.
-                                 "samlResponse with registered ID was replayed in acs.php. Possibly the user pressed F5 when encountering
-                                  a different error or the response was send successively to the acs\n\n".
-                                 Acs::SERVER_OBJ.var_export($_SERVER, true)."\n\n".
-                                 Acs::STATE_OBJ.var_export($this->state, true)."\n\n".
-                                 Acs::STATE_OBJ.var_export($this->samlResponse->getXMLDocument(), true)."\n\n".
-                                 Acs::EXTENDED_FOOTER."\n");
-        }else{
+        // Perform validation by phpSaml library
+        // This MUST be the first thing we do to prevent DoS attacks where an attacker
+        // triggers phase changes or response registrations without a valid signature.
+        // We pass the expected RequestID to allow phpSaml to validate the InResponseTo attribute.
+        // https://github.com/DonutsNL/samlsso/issues/104
+        try {
+            if (!$this->samlResponse->isValid($this->state->getSamlRequestId())) {
+                $errorStr = $this->samlResponse->getError(false) ?: '';
+                $suggestion = '';
+                if ($errorStr !== '') {
+                    if (stripos($errorStr, 'not encrypted') !== false) {
+                        $suggestion = __(" (Suggestion: check 'Want Assertions Encrypted' under Inbound Security in the Security tab)", PLUGIN_NAME);
+                    } elseif (stripos($errorStr, 'not signed') !== false && stripos($errorStr, 'Message') !== false) {
+                        $suggestion = __(" (Suggestion: check 'Want Messages Signed' under Inbound Security in the Security tab)", PLUGIN_NAME);
+                    } elseif (stripos($errorStr, 'not signed') !== false && stripos($errorStr, 'assertion') !== false) {
+                        $suggestion = __(" (Suggestion: check 'Want Assertions Signed' under Inbound Security in the Security tab)", PLUGIN_NAME);
+                    } elseif (stripos($errorStr, 'not signed') !== false && stripos($errorStr, 'NameID') !== false) {
+                        $suggestion = __(" (Suggestion: check 'Want NameID Signed' under Inbound Security in the Security tab)", PLUGIN_NAME);
+                    } elseif (stripos($errorStr, 'Signature validation failed') !== false || stripos($errorStr, 'signature') !== false) {
+                        $suggestion = __(" (Suggestion: verify the Identity Provider Certificates configuration)", PLUGIN_NAME);
+                    } elseif (stripos($errorStr, 'InResponseTo') !== false) {
+                        $suggestion = __(" (Suggestion: check proxy settings or ensure request timeout has not expired)", PLUGIN_NAME);
+                    }
+                }
+                $this->printError(
+                    __("Validation of the samlResponse document failed", PLUGIN_NAME),
+                    __('Samlsso->acs->assertSaml->SamlResponse::isValid', PLUGIN_NAME),
+                    $errorStr . $suggestion
+                );
+            }
+        } catch (Throwable $e) {
+            $errorMsg = $e->getMessage() ?: '';
+            $suggestion = '';
+            if ($errorMsg !== '') {
+                if (stripos($errorMsg, 'Signature validation failed') !== false || stripos($errorMsg, 'signature') !== false) {
+                    $suggestion = __(" (Suggestion: verify the Identity Provider Certificates configuration)", PLUGIN_NAME);
+                }
+            }
+            $this->printError(
+                __("Validation of the samlResponse document failed with a critical error", PLUGIN_NAME),
+                __('Samlsso->acs->assertSaml->SamlResponse::isValid', PLUGIN_NAME),
+                $errorMsg . $suggestion
+            );
+        }
+
+        if ($this->state->getPhase() == LoginState::PHASE_TIMED_OUT) {
+            $this->printError(
+                __("Your SAML authentication request timed out. Please try logging in again.", PLUGIN_NAME),
+                __('Samlsso->acs->assertSaml->Timeout', PLUGIN_NAME)
+            );
+        }
+
+        // Prevent replay attacks, check if response_id is already used
+        // The response_id is unique and should only be processed once.
+        // This is checked by comparing the response_id from the incoming
+        // samlResponse with the response_id stored in the loginState. 
+        // If the response_id is already set in the loginState, it means that
+        // the samlResponse has already been processed and we are facing a replay attack.
+        // We also check if the state is in the correct phase and that the response_id is not empty.
+        $currentResponseId = $this->samlResponse->getId();
+        if (
+            empty($currentResponseId) ||
+            $this->state->getPhase() != LoginState::PHASE_SAML_ACS ||
+            !empty($this->state->getSamlResponseId()) ||
+            !$this->state->checkResponseIdUnique($currentResponseId)
+        ) {
+            $this->printError(
+                sprintf(__("It looks like this samlResponse has already been used to authenticate a different user.
+                    Maybe an error occurred and you pressed F5 and accidently resend the samlResponse that is
+                    already registered as processed. For security reasons we can not allow processed samlResponses
+                    to be processed again. Please login again to generate a new samlResponse. Sorry for any inconvenience.
+                    If the problem presists, then please contact your administrator.
+                    See: %s for more information", PLUGIN_NAME), 'https://codeberg.org/QuinQuies/glpisaml/wiki/LoginState.php'),
+                __('Samlsso->acs->assertSaml->LoginState::checkResponseIdUnique', PLUGIN_NAME),
+                Acs::EXTENDED_HEADER .
+                    "samlResponse with registered ID was replayed in acs.php. Possibly the user pressed F5 when encountering
+                    a different error or the response was send successively to the acs\n\n" .
+                    Acs::SERVER_OBJ . var_export($_SERVER, true) . "\n\n" .
+                    Acs::STATE_OBJ . var_export($this->state->getSafeStateForLogging($this->debug), true) . "\n\n" .
+                    Acs::STATE_OBJ . var_export($this->samlResponse->getXMLDocument(), true) . "\n\n" .
+                    Acs::EXTENDED_FOOTER . "\n"
+            );
+        } else {
             // The response is unique, register it in the database
             // to prevent future replays of this document.
-            try{
-                $this->state->setSamlResponseId($this->samlResponse->getId());
-            } catch(Throwable $e ) {
-                $this->printError(__("An error occured while trying to update the samlResponseId into the LoginState database. Review the saml log for more details", PLUGIN_NAME),
-                                     'LoginState', "The following error was reported: $e");
+            try {
+                $this->state->setSamlResponseId($currentResponseId);
+
+                // Capture raw SAML response XML, anonymize it, and save its structure
+                $xml = $this->samlResponse->getXMLDocument()->saveXML();
+                $anonymizedXml = ConfigEntity::anonymizeXml($xml);
+                $this->configEntity->updateXmlStructure($anonymizedXml);
+            } catch (Throwable $e) {
+                $this->printError(
+                    __("An error occured while trying to update the samlResponseId into the LoginState database. Review the saml log for more details", PLUGIN_NAME),
+                    __('Samlsso->acs->assertSaml->LoginState::setSamlResponseId', PLUGIN_NAME),
+                    "The following error was reported: $e"
+                );
             }
         }
 
@@ -252,36 +359,32 @@ class Acs extends LoginFlow
         // processing. This check is to prevent parallel requests or intentionally created
         // race-conditions forcing the plugin into an inconsistant state possibly allowing
         // a session to forcefully being logged in.
-        if($this->state->getPhase() != LoginState::PHASE_SAML_ACS){
+        if ($this->state->getPhase() != LoginState::PHASE_SAML_ACS) {
             // Generate error and log state and response into the errorlog.
-            $this->printError(__("GLPI did not expect an assertion from this Idp. The most likely reason is a race condition
-                                  causing an inconsistant loginState in the database or software bug. Please login again via the
-                                  GLPI-interface. Sorry for the inconvenience. See: https://github.com/DonutsNL/samlsso/wiki/Unsollicited-%E2%80%90-IdP-initiated-login-flows
-                                  for more information", PLUGIN_NAME),
-                              __('samlResponse assertion'),
-                                  Acs::EXTENDED_HEADER.
-                              __("Unexpected assertion triggered while session was in a different phase then expected (2). This error was triggered by external source
-                                  with address:{$_SERVER['REMOTE_ADDR']}. Possible causes include race-conditions or parallel calls using the same samlResponse.\n").
-                                  Acs::STATE_OBJ.var_export($this->state, true)."\n\n".
-                                  Acs::EXTENDED_FOOTER."\n");
+            $this->printError(
+                sprintf(__("GLPI did not expect an assertion from this Idp. The most likely reason is a race condition
+                    causing an inconsistant loginState in the database or software bug. Please login again via the
+                    GLPI-interface. Sorry for the inconvenience. See: %s
+                    for more information", PLUGIN_NAME), 'https://github.com/DonutsNL/samlsso/wiki/Unsollicited-%E2%80%90-IdP-initiated-login-flows'),
+                __('Samlsso->acs->assertSaml->PhaseMismatched', PLUGIN_NAME),
+                Acs::EXTENDED_HEADER .
+                    __("Unexpected assertion triggered while session was in a different phase then expected (2). This error was triggered by external source
+                        with address:{$_SERVER['REMOTE_ADDR']}. Possible causes include race-conditions or parallel calls using the same samlResponse.\n", PLUGIN_NAME) .
+                    Acs::STATE_OBJ . var_export($this->state->getSafeStateForLogging($this->debug), true) . "\n\n" .
+                    Acs::EXTENDED_FOOTER . "\n"
+            );
         }
 
         // Update the state to SAML AUTH, again to prevent raceconditions or parallel calls using the same
         // samlResponse to the acs.php. This first call should complete (if everything lines up).
-        try{
+        try {
             $this->state->setPhase(LoginState::PHASE_SAML_AUTH);
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             $this->printError(__("An error occured while trying to update the login phase to LoginState::PHASE_SAML_AUTH  into the LoginState database.
-                                  Review the saml log for more details", PLUGIN_NAME), 'LoginState', "The following error was reported: $e");
+                                  Review the saml log for more details", PLUGIN_NAME), __('LoginState', PLUGIN_NAME), "The following error was reported: $e");
         }
 
-        // Perform validation by phpSaml library
-        try{
-            $this->samlResponse->isValid();
-        } catch(Throwable $e) {
-            $this->printError(__("Validation of the samlResponse document failed. Review the saml log for more details", PLUGIN_NAME),
-                                 'LoginState', "The following error was reported: $e");
-        }
+        // Perform validation check moved to top of method for security.
 
         // Call the performGlpiLogin from the LoginFlow object
         // We include the state because this session is still stateless (from GLPIs perspective).
@@ -290,4 +393,3 @@ class Acs extends LoginFlow
         $this->performGlpiLogin($this->samlResponse, $this->state);
     }
 }
-

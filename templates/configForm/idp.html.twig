@@ -1,0 +1,202 @@
+{% import glpi_tpl_macro as fields %}
+<div class="tab-pane fade d-none" id="idp" role="tabpanel" aria-labelledby="idp-tab">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-lg-6 mb-4">
+                <!-- Group 1: Endpoints & Configurations -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-network-wired me-2 text-success"></i>{{ __('Endpoints & Configurations', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                     <!-- idp_entity_id -->
+                     <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.idp_entity_id.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_entity_id.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+
+                        {{ fields.textField( 
+                            inputfields.idp_entity_id.field, 
+                            inputfields.idp_entity_id.value, 
+                            inputfields.idp_entity_id.formtitle, 
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.idp_entity_id.formexplain,
+                            }) 
+                        }}
+                    </div>
+
+                    <!-- idp_single_sign_on_service -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.idp_single_sign_on_service.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_single_sign_on_service.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+
+                        {# 'formtitle ~ helper|raw' corrected: bare 'helper' was never
+                           part of the render context (crash under Twig strict_variables);
+                           the field help text is passed via the 'helper' macro option. #}
+                        {{ fields.textField( 
+                            inputfields.idp_single_sign_on_service.field, 
+                            inputfields.idp_single_sign_on_service.value, 
+                            inputfields.idp_single_sign_on_service.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.idp_single_sign_on_service.formexplain,
+                            }) 
+                        }}
+                    </div>
+
+                    <!-- idp_single_logout_service -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.idp_single_logout_service.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_single_logout_service.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+
+                        {{ fields.textField( 
+                            inputfields.idp_single_logout_service.field, 
+                            inputfields.idp_single_logout_service.value, 
+                            inputfields.idp_single_logout_service.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.idp_single_logout_service.formexplain,
+                            }) 
+                        }}
+                    </div>
+                </div>
+
+                <!-- Group 2: Authentication Context -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-key me-2 text-success"></i>{{ __('Authentication Context', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- requested_authn_context (multiple select) -->
+                    <div class="mb-3">
+                        <div class="form-field row align-items-center col-12 mb-2">
+                            <label class="col-form-label col-xxl-5 text-xxl-end" for="keep-order">
+                                {{ inputfields.requested_authn_context.formtitle }}
+                                <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                                    data-bs-title="{{ inputfields.requested_authn_context.formexplain }}">?</span>
+                            </label>
+                            <div class="col-xxl-7 field-container">
+                                <div class="samlsso-authn-checkboxes-container">
+                                    {% for key, authn in inputOptionsAuthnContext %}
+                                        {% set checked = false %}
+                                        {% for value in inputfields.requested_authn_context.value %}
+                                            {% if value == key %}
+                                                {% set checked = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        <div class="form-check form-check-inline samlsso-authn-checkbox {% if checked %}checked{% endif %}">
+                                            <input class="form-check-input samlsso-authn-checkbox-input" type="checkbox" 
+                                                   id="authn_{{ key }}" 
+                                                   name="{{ inputfields.requested_authn_context.field }}[]" 
+                                                   value="{{ key }}"
+                                                   {% if checked %}checked="checked"{% endif %}>
+                                            <label class="form-check-label" for="authn_{{ key }}">
+                                                {{ authn }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <script>
+                                $(function() {
+                                    const $checkboxes = $('.samlsso-authn-checkbox-input');
+                                    const $noneCheckbox = $('#authn_none');
+                                    
+                                    $checkboxes.on('change', function() {
+                                        const $this = $(this);
+                                        const isChecked = $this.is(':checked');
+                                        
+                                        $this.closest('.samlsso-authn-checkbox').toggleClass('checked', isChecked);
+                                        
+                                        if ($this.attr('id') === 'authn_none') {
+                                            if (isChecked) {
+                                                $checkboxes.not($noneCheckbox).each(function() {
+                                                    $(this).prop('checked', false).closest('.samlsso-authn-checkbox').removeClass('checked');
+                                                });
+                                            }
+                                        } else {
+                                            if (isChecked) {
+                                                $noneCheckbox.prop('checked', false).closest('.samlsso-authn-checkbox').removeClass('checked');
+                                            }
+                                        }
+                                        
+                                        if ($checkboxes.filter(':checked').length === 0) {
+                                            $noneCheckbox.prop('checked', true).closest('.samlsso-authn-checkbox').addClass('checked');
+                                        }
+                                    });
+                                });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- requested_authn_context_comparison -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.requested_authn_context_comparison.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.requested_authn_context_comparison.errors }}</div>
+                            {% endif %}
+                        {% endset %}
+
+                        {{ fields.dropdownArrayField( 
+                            inputfields.requested_authn_context_comparison.field,
+                            inputfields.requested_authn_context_comparison.value,
+                            inputOptionsAuthnCompare,
+                            inputfields.requested_authn_context_comparison.formtitle,
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.requested_authn_context_comparison.formexplain,
+                            }) 
+                        }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 mb-4">
+                <!-- Group 3: Identity Provider Certificates -->
+                <div class="samlsso-category-header">
+                    <i class="fas fa-certificate me-2 text-success"></i>{{ __('Identity Provider Certificates', plugin) }}
+                </div>
+                <div class="samlsso-category-body">
+                    <!-- idp_certificate -->
+                    <div class="mb-3">
+                        {% set error_helper %}
+                            {% if inputfields.idp_certificate.errors == true %}
+                                <div id="textHelper" class="form-text" style="color:red;">{{ inputfields.idp_certificate.errors }}</div>
+                            {% endif %}
+                            {# strict-safe: same guard pattern as provider.html.twig;
+                               'validate' and its sub-keys are only populated when a
+                               certificate was actually parsed and checked #}
+                            {% set idp_validate = inputfields.idp_certificate.validate|default({}) %}
+                            {% if idp_validate.subject.CN|default(false) == true %}
+                                <div id="textHelper" class="form-text" style="color:rgb(71, 180, 8);">🆗 Valid Certificate found: {{ idp_validate.subject.CN|default('') }}</div>
+                            {% endif %}
+                            {% if idp_validate.validations.validTo|default(false) == true %}
+                                <div id="textHelper" class="form-text" style="color:rgb(180, 140, 8);">{{ idp_validate.validations.validTo|default('') }}</div>
+                            {% endif %}
+                            {% if idp_validate.validations.validFrom|default(false) == true %}
+                                <div id="textHelper" class="form-text" style="color:rgb(180, 140, 8);">{{ idp_validate.validations.validFrom|default('') }}</div>
+                            {% endif %}
+                        {% endset %}
+
+                        {{ fields.textareaField( 
+                            inputfields.idp_certificate.field, 
+                            inputfields.idp_certificate.value, 
+                            inputfields.idp_certificate.formtitle, 
+                            {
+                                'add_field_html': error_helper|raw,
+                                helper: inputfields.idp_certificate.formexplain,
+                            }) 
+                        }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
