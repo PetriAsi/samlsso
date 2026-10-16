@@ -572,6 +572,17 @@ class Config extends ConfigCompat
                 $migration->addField($table, 'jit_add_profiles', 'tinyint', ['value' => 0]);
             }
         }
+
+        // Replace the legacy user_sync column (earlier scim builds) by sync_on_login. An unknown
+        // column makes ConfigEntity invalid and getPhpSamlConfig() return an empty array.
+        if ($DB->tableExists($table) && $DB->fieldExists($table, 'user_sync')) {
+            $migration->displayMessage("Migrating legacy user_sync column of $table to sync_on_login");
+            $migration->migrationOneTable($table);
+            if ($DB->fieldExists($table, 'sync_on_login')) {
+                $DB->update($table, ['sync_on_login' => 1], ['user_sync' => 1]);
+            }
+            $migration->dropField($table, 'user_sync');
+        }
     }
 
     /**
